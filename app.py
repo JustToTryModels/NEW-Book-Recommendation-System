@@ -2,15 +2,18 @@ import streamlit as st
 import pandas as pd
 import numpy as np
 from sklearn.metrics.pairwise import cosine_similarity
+from huggingface_hub import hf_hub_download
 
 import warnings
 warnings.filterwarnings('ignore')
 
-# Load your final filtered dataframe
-final_filtered_df = pd.read_csv('final_filtered_df.csv')
+# Load your final filtered dataframe from Hugging Face
+final_filtered_df_path = hf_hub_download(repo_id="Zlib2/Data", filename="final_filtered_df.csv", repo_type="dataset")
+final_filtered_df = pd.read_csv(final_filtered_df_path)
 
-# Load the dataframe containing book URLs
-book_urls_df = pd.read_csv("Books.csv")
+# Load the dataframe containing book URLs from Hugging Face
+book_urls_df_path = hf_hub_download(repo_id="Zlib2/Data", filename="Books.csv", repo_type="dataset")
+book_urls_df = pd.read_csv(book_urls_df_path)
 book_urls_df.rename(columns={'Book-Title': 'title'}, inplace=True)
 
 # Merge the dataframes on the title
