@@ -10,11 +10,11 @@ warnings.filterwarnings('ignore')
 @st.cache_data
 def load_and_prepare_data():
     # Load your final filtered dataframe from Hugging Face
-    final_filtered_df_path = hf_hub_download(repo_id="Zlib2/Data", filename="final_filtered_df.csv", repo_type="dataset")
+    final_filtered_df_path = hf_hub_download(repo_id="IamPradeep/BRS_DATA", filename="final_filtered_df.csv", repo_type="dataset")
     final_filtered_df = pd.read_csv(final_filtered_df_path)
 
     # Load the dataframe containing book URLs from Hugging Face
-    book_urls_df_path = hf_hub_download(repo_id="Zlib2/Data", filename="Books.csv", repo_type="dataset")
+    book_urls_df_path = hf_hub_download(repo_id="IamPradeep/BRS_DATA", filename="Books.csv", repo_type="dataset")
     book_urls_df = pd.read_csv(book_urls_df_path)
     book_urls_df.rename(columns={'Book-Title': 'title'}, inplace=True)
 
