@@ -57,15 +57,20 @@ st.markdown("<h1 style='font-size: 40px;'>Book Recommendation System</h1>", unsa
 
 st.markdown("""
     <style>
+    /* Global Font Settings */
     html, body, [class*="css"], [class*="st-"], h1, h2, h3, h4, h5, h6, p, div, span, label, input, button, select, option, textarea {
         font-family: 'Tiempos', 'Tiempos Text', Georgia, 'Times New Roman', serif !important;
     }
+
+    /* Subheader Style */
     .subheader {
         font-size: 22px;
         font-weight: bold;
         margin-bottom: 20px;
         color: #1a73e8;
     }
+
+    /* Button Style */
     .stButton > button {
         font-family: 'Tiempos', 'Tiempos Text', Georgia, 'Times New Roman', serif !important;
         font-size: 16px;
@@ -92,111 +97,136 @@ st.markdown("""
     .stButton > button:active {
         transform: scale(0.98);
     }
-    .book-info {
-        line-height: 1.2;
-        margin: 0;
-        padding: 12px 15px;
-        background: #2b2b2b;
-        border-radius: 0 0 10px 10px;
-        border-top: 3px solid #e52e71;
-    }
-    
-    .scroll-title {
-        display: block;
-        font-size: 16px;
-        font-weight: bold;
-        white-space: nowrap;
-        overflow-x: auto;
-        padding-bottom: 5px;
-        margin-bottom: 5px;
-        color: #f0e68c;
-        text-align: center;
-    }
-    .scroll-title::-webkit-scrollbar {
-        height: 6px;
-    }
-    .scroll-title::-webkit-scrollbar-thumb {
-        background: #ccc;
-        border-radius: 10px;
-    }
 
-    .info-container {
-        border-left: 3px solid white;
-        padding-left: 8px;
-        margin-left: 10px;
-        margin-top: 5px;
-    }
-
-    .author-info {
-        font-size: 12px;
-        color: #b0c4de;
-    }
-    .year-info {
-        font-size: 11px;
-        margin-top: 3px;
-        color: #b0c4de;
-    }
-    img {
-        object-fit: contain;
-        max-height: 300px;
-        width: auto;
-        display: block;
-        margin: 0 auto;
-    }
-    hr {
-        border: none !important;
-        border-top: 10px solid #B2BEB5 !important;
-        margin-top: 25px !important;
-        margin-bottom: 25px !important;
-        opacity: 1 !important;
-        border-radius: 999px !important;
-    }
+    /* Card Container */
     .book-column {
         position: relative;
         padding: 0;
-        border: 2px solid #2b2b2b;
+        border: 1px solid #e0e0e0;
         border-radius: 12px;
-        background-color: rgba(128, 128, 128, 0.05);
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        background-color: #ffffff;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
         margin-top: 28px;
         margin-bottom: 15px;
-        transition: transform 0.2s ease, box-shadow 0.2s ease;
-        overflow: visible;
+        transition: all 0.3s ease;
+        overflow: hidden; /* Ensures content stays inside rounded corners */
     }
     .book-column:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+        transform: translateY(-8px);
+        box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+        border-color: #e52e71;
     }
+
+    /* Image Area */
     .book-image-area {
-        padding: 35px 20px 20px 20px;
+        padding: 35px 10px 15px 10px;
+        background-color: #f9f9f9;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border-bottom: 1px solid #eee;
     }
+    img {
+        object-fit: contain;
+        max-height: 250px;
+        width: auto;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.2); /* Shadow for the book cover itself */
+        border-radius: 4px;
+        transition: transform 0.3s ease;
+    }
+    .book-column:hover img {
+        transform: scale(1.03);
+    }
+
+    /* Text Info Area - Redesigned */
+    .book-info {
+        padding: 15px;
+        background: #2b2b2b; /* Dark footer for the card */
+        color: white;
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        min-height: 100px;
+    }
+    
+    .book-title {
+        font-size: 16px;
+        font-weight: 700;
+        color: #fff;
+        margin-bottom: 8px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis; /* Adds '...' if text is too long */
+        line-height: 1.4;
+    }
+
+    .meta-data-container {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .author-text {
+        font-size: 13px;
+        color: #d1d1d1;
+        font-weight: 500;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+    }
+
+    .year-text {
+        font-size: 12px;
+        color: #9e9e9e;
+        font-style: italic;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+    }
+
+    /* Badge */
     .recommendation-badge {
         position: absolute;
-        top: -22px;
-        left: 50%;
-        transform: translateX(-50%);
-        width: 48px;
-        height: 48px;
+        top: 10px;
+        right: 10px; /* Moved to right for better aesthetics */
+        width: 40px;
+        height: 40px;
         border-radius: 50%;
-        background: #28a745;
+        background: linear-gradient(135deg, #28a745, #20c997);
         color: white;
-        border: 2px solid #2b2b2b;
         display: flex;
         align-items: center;
         justify-content: center;
-        font-size: 18px;
+        font-size: 16px;
         font-weight: bold;
         z-index: 10;
-        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+    }
+
+    /* Separator */
+    hr {
+        border: none !important;
+        border-top: 1px solid #e0e0e0 !important;
+        margin-top: 30px !important;
+        margin-bottom: 30px !important;
+        width: 80%;
+        margin-left: auto;
+        margin-right: auto;
+    }
+    
+    .recommendation-header {
+        font-size: 18px;
+        border-left: 5px solid #e52e71;
+        padding-left: 12px;
+        margin-left: 5px;
+        margin-bottom: 20px;
+        font-weight: 600;
     }
     .extra-space {
         margin-top: 50px;
-    }
-    .recommendation-header {
-        font-size: 15px;
-        border-left: 5px solid #B2BEB5;
-        padding-left: 12px;
-        margin-left: 5px;
     }
     </style>
 """, unsafe_allow_html=True)
@@ -235,32 +265,47 @@ if st.session_state.recommendations is not None:
         st.write(similar_books)
     else:
         st.markdown(f"<div class='recommendation-header'>Top {rec_num} recommendations for '<strong>{rec_book}</strong>':</div>", unsafe_allow_html=True)
-        st.write("")
         
         for i in range(0, len(similar_books), 3):
             cols = st.columns(3)
             for j in range(3):
                 if i + j < len(similar_books):
                     book = similar_books.index[i + j]
-                    book_info = final_filtered_df[final_filtered_df['title'] == book].iloc[0]
+                    # Get book info safely
+                    book_data = final_filtered_df[final_filtered_df['title'] == book]
+                    
+                    if not book_data.empty:
+                        book_info = book_data.iloc[0]
+                        img_url = book_info['Image-URL-L']
+                        author = book_info['Book-Author']
+                        year = book_info['Year-Of-Publication']
+                    else:
+                        img_url = "https://via.placeholder.com/150"
+                        author = "Unknown"
+                        year = "N/A"
+
                     with cols[j]:
                         st.markdown(f"""
                         <div class='book-column'>
                             <div class='recommendation-badge'>{i + j + 1}</div>
                             <div class='book-image-area'>
-                                <img src='{book_info['Image-URL-L']}' style='height:290px; width:auto; display:block;'>
+                                <img src='{img_url}' alt='{book}'>
                             </div>
                             <div class='book-info'>
-                                <div class='scroll-title'>{book}</div>
-                                <div class='info-container'>
-                                    <div class='author-info'>👤 {book_info['Book-Author']}</div>
-                                    <div class='year-info'>📅 {book_info['Year-Of-Publication']}</div>
+                                <div class='book-title' title='{book}'>{book}</div>
+                                <div class='meta-data-container'>
+                                    <div class='author-text'>
+                                        <span>👤</span> {author}
+                                    </div>
+                                    <div class='year-text'>
+                                        <span>📅</span> {year}
+                                    </div>
                                 </div>
                             </div>
                         </div>
                         """, unsafe_allow_html=True)
             if i < len(similar_books) - 3:
-                st.markdown("<br><hr><br>", unsafe_allow_html=True)
+                st.markdown("<hr>", unsafe_allow_html=True)
 
-        st.markdown("<div class='extra-space'></div><div class='extra-space'></div>", unsafe_allow_html=True)
+        st.markdown("<div class='extra-space'></div>", unsafe_allow_html=True)
         st.image('https://github.com/MarpakaPradeepSai/Employee-Churn-Prediction/blob/main/Data/Images%20&%20GIFs/thank-you-33.gif?raw=true', use_container_width=True)
