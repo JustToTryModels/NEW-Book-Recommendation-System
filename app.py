@@ -123,10 +123,11 @@ st.markdown("""
     }
 
     .info-container {
-        border-left: 3px solid white;
-        padding-left: 8px;
+        background-color: #1E3A5F;
+        padding: 8px 10px;
         margin-left: 10px;
         margin-top: 5px;
+        border-radius: 6px;
     }
 
     .author-info {
