@@ -57,10 +57,8 @@ st.markdown("<h1 style='font-size: 40px;'>Book Recommendation System</h1>", unsa
 
 st.markdown("""
     <style>
-    @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Cormorant+Garamond:wght@400;500;600;700&family=Lora:wght@400;500;600;700&display=swap');
-    
     html, body, [class*="css"], [class*="st-"], h1, h2, h3, h4, h5, h6, p, div, span, label, input, button, select, option, textarea {
-        font-family: 'Playfair Display', 'Cormorant Garamond', 'Lora', Georgia, serif !important;
+        font-family: 'Tiempos', 'Tiempos Text', Georgia, 'Times New Roman', serif !important;
     }
     .subheader {
         font-size: 22px;
@@ -69,348 +67,94 @@ st.markdown("""
         color: #1a73e8;
     }
     .stButton > button {
-        font-family: 'Playfair Display', Georgia, serif !important;
+        font-family: 'Tiempos', 'Tiempos Text', Georgia, 'Times New Roman', serif !important;
         font-size: 16px;
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+        background: linear-gradient(90deg, #ff8a00, #e52e71);
         color: white !important;
         border: none;
-        border-radius: 30px;
-        padding: 12px 28px;
-        font-weight: 600;
+        border-radius: 25px;
+        padding: 10px 20px;
+        font-weight: bold;
         cursor: pointer;
-        transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
         display: inline-flex;
         align-items: center;
         justify-content: center;
         margin: 4px 2px;
         width: auto;
         min-width: 100px;
-        box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
-        letter-spacing: 0.5px;
-        text-transform: uppercase;
     }
     .stButton > button:hover {
-        transform: translateY(-3px) scale(1.02);
-        box-shadow: 0 8px 25px rgba(102, 126, 234, 0.6);
+        transform: scale(1.05);
+        box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.3);
         color: white !important;
-        background: linear-gradient(135deg, #764ba2 0%, #667eea 50%, #f093fb 100%);
     }
     .stButton > button:active {
-        transform: translateY(0) scale(0.98);
+        transform: scale(0.98);
     }
     
-    /* Ultra Premium Book Card */
-    .book-column {
-        position: relative;
-        padding: 0;
-        border-radius: 24px;
-        background: linear-gradient(145deg, #1a1a2e 0%, #16213e 50%, #0f0f23 100%);
-        margin-top: 35px;
-        margin-bottom: 20px;
-        transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
-        overflow: visible;
-        border: 1px solid rgba(255, 255, 255, 0.08);
-        box-shadow: 
-            0 10px 40px rgba(0, 0, 0, 0.4),
-            0 0 0 1px rgba(255, 255, 255, 0.05),
-            inset 0 1px 0 rgba(255, 255, 255, 0.1);
-    }
-    
-    .book-column::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        border-radius: 24px;
-        background: linear-gradient(135deg, 
-            rgba(102, 126, 234, 0.1) 0%, 
-            rgba(118, 75, 162, 0.05) 50%, 
-            rgba(240, 147, 251, 0.1) 100%);
-        opacity: 0;
-        transition: opacity 0.5s ease;
-        pointer-events: none;
-    }
-    
-    .book-column:hover {
-        transform: translateY(-12px) scale(1.02);
-        box-shadow: 
-            0 25px 60px rgba(102, 126, 234, 0.3),
-            0 15px 40px rgba(0, 0, 0, 0.4),
-            0 0 60px rgba(240, 147, 251, 0.15),
-            inset 0 1px 0 rgba(255, 255, 255, 0.2);
-        border-color: rgba(102, 126, 234, 0.3);
-    }
-    
-    .book-column:hover::before {
-        opacity: 1;
-    }
-    
-    /* Premium Book Image Area */
-    .book-image-area {
-        padding: 45px 25px 25px 25px;
-        position: relative;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        min-height: 320px;
-    }
-    
-    .book-image-area::after {
-        content: '';
-        position: absolute;
-        bottom: 0;
-        left: 10%;
-        right: 10%;
-        height: 20px;
-        background: radial-gradient(ellipse at center, rgba(0,0,0,0.3) 0%, transparent 70%);
-        filter: blur(8px);
-    }
-    
-    .book-image-area img {
-        height: 280px !important;
-        width: auto !important;
-        max-width: 100%;
-        object-fit: contain;
-        display: block;
-        border-radius: 8px;
-        box-shadow: 
-            0 15px 35px rgba(0, 0, 0, 0.5),
-            0 5px 15px rgba(0, 0, 0, 0.3),
-            -5px 0 20px rgba(0, 0, 0, 0.2),
-            5px 0 20px rgba(0, 0, 0, 0.2);
-        transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
-        position: relative;
-        z-index: 2;
-    }
-    
-    .book-column:hover .book-image-area img {
-        transform: scale(1.05) rotateY(-5deg);
-        box-shadow: 
-            0 25px 50px rgba(0, 0, 0, 0.6),
-            0 10px 25px rgba(102, 126, 234, 0.2),
-            -8px 0 25px rgba(0, 0, 0, 0.3),
-            8px 0 25px rgba(0, 0, 0, 0.3);
-    }
-    
-    /* Luxurious Book Info Section */
+    /* Updated Premium Book Info Block */
     .book-info {
-        background: linear-gradient(180deg, 
-            rgba(26, 26, 46, 0.95) 0%, 
-            rgba(15, 15, 35, 0.98) 100%);
-        padding: 28px 20px 32px 20px;
-        border-radius: 0 0 24px 24px;
+        background: #1e1e1e;
+        padding: 20px 15px;
+        border-radius: 0 0 10px 10px;
+        border-top: 3px solid #e52e71;
         text-align: center;
         display: flex;
         flex-direction: column;
         justify-content: flex-start;
         align-items: center;
-        min-height: 160px;
-        position: relative;
-        border-top: 1px solid rgba(255, 255, 255, 0.05);
+        min-height: 140px;
     }
     
-    .book-info::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 20%;
-        right: 20%;
-        height: 1px;
-        background: linear-gradient(90deg, 
-            transparent, 
-            rgba(102, 126, 234, 0.5), 
-            rgba(240, 147, 251, 0.5), 
-            transparent);
-    }
-    
-    /* Premium Title Styling */
     .premium-title {
-        font-family: 'Playfair Display', Georgia, serif !important;
-        font-size: 17px;
-        font-weight: 600;
+        font-size: 16px;
+        font-weight: bold;
         color: #ffffff;
-        margin-bottom: 12px;
-        line-height: 1.5;
+        margin-bottom: 8px;
+        line-height: 1.4;
         width: 100%;
         white-space: nowrap;
         overflow-x: auto;
         overflow-y: hidden;
         display: block;
-        padding-bottom: 8px;
-        text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
-        letter-spacing: 0.3px;
+        padding-bottom: 5px;
     }
 
     .premium-title::-webkit-scrollbar {
-        height: 4px;
-    }
-
-    .premium-title::-webkit-scrollbar-track {
-        background: rgba(255, 255, 255, 0.05);
-        border-radius: 10px;
+        height: 6px;
     }
 
     .premium-title::-webkit-scrollbar-thumb {
-        background: linear-gradient(90deg, #667eea, #764ba2);
+        background: #ccc;
         border-radius: 10px;
     }
 
-    /* Elegant Divider */
     .premium-divider {
-        width: 50px;
+        width: 35px;
         height: 3px;
-        background: linear-gradient(90deg, #667eea, #764ba2, #f093fb);
-        margin: 8px 0 16px 0;
-        border-radius: 10px;
-        position: relative;
-        box-shadow: 0 0 15px rgba(102, 126, 234, 0.5);
-    }
-    
-    .premium-divider::before,
-    .premium-divider::after {
-        content: '◆';
-        position: absolute;
-        top: 50%;
-        transform: translateY(-50%);
-        font-size: 6px;
-        color: #f093fb;
-    }
-    
-    .premium-divider::before {
-        left: -12px;
-    }
-    
-    .premium-divider::after {
-        right: -12px;
+        background: linear-gradient(90deg, #ff8a00, #e52e71);
+        margin: 6px 0 12px 0;
+        border-radius: 5px;
     }
 
-    /* Author Styling */
     .premium-author {
-        font-family: 'Cormorant Garamond', Georgia, serif !important;
-        font-size: 15px;
-        color: #b8c5d6;
+        font-size: 13.5px;
+        color: #c4c4c4;
         font-style: italic;
-        margin-bottom: 10px;
+        margin-bottom: 6px;
         width: 100%;
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
-        letter-spacing: 0.5px;
-        text-shadow: 0 1px 5px rgba(0, 0, 0, 0.2);
     }
 
-    /* Year Badge Styling */
     .premium-year {
-        font-family: 'Lora', Georgia, serif !important;
-        font-size: 11px;
-        color: #8892a6;
+        font-size: 11.5px;
+        color: #888888;
         text-transform: uppercase;
-        letter-spacing: 2.5px;
+        letter-spacing: 1.2px;
         font-weight: 600;
-        padding: 6px 16px;
-        background: linear-gradient(135deg, rgba(102, 126, 234, 0.15), rgba(118, 75, 162, 0.15));
-        border-radius: 20px;
-        border: 1px solid rgba(102, 126, 234, 0.2);
-        margin-top: 5px;
-    }
-    
-    /* Spectacular Recommendation Badge */
-    .recommendation-badge {
-        position: absolute;
-        top: -18px;
-        left: 50%;
-        transform: translateX(-50%);
-        width: 56px;
-        height: 56px;
-        border-radius: 50%;
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
-        color: white;
-        border: 4px solid #0f0f23;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-family: 'Playfair Display', Georgia, serif !important;
-        font-size: 20px;
-        font-weight: 700;
-        z-index: 15;
-        box-shadow: 
-            0 8px 25px rgba(102, 126, 234, 0.5),
-            0 4px 15px rgba(0, 0, 0, 0.3),
-            inset 0 2px 4px rgba(255, 255, 255, 0.3);
-        transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
-    }
-    
-    .recommendation-badge::before {
-        content: '';
-        position: absolute;
-        width: 100%;
-        height: 100%;
-        border-radius: 50%;
-        background: linear-gradient(135deg, rgba(255,255,255,0.3), transparent);
-        top: 0;
-        left: 0;
-    }
-    
-    .recommendation-badge::after {
-        content: '';
-        position: absolute;
-        width: 68px;
-        height: 68px;
-        border-radius: 50%;
-        border: 2px solid rgba(102, 126, 234, 0.3);
-        animation: pulse-ring 2s ease-out infinite;
-    }
-    
-    @keyframes pulse-ring {
-        0% {
-            transform: scale(0.9);
-            opacity: 1;
-        }
-        100% {
-            transform: scale(1.3);
-            opacity: 0;
-        }
-    }
-    
-    .book-column:hover .recommendation-badge {
-        transform: translateX(-50%) scale(1.1) rotate(5deg);
-        box-shadow: 
-            0 12px 35px rgba(102, 126, 234, 0.6),
-            0 6px 20px rgba(240, 147, 251, 0.4);
-    }
-    
-    /* Premium Horizontal Divider */
-    hr {
-        border: none !important;
-        height: 4px !important;
-        background: linear-gradient(90deg, 
-            transparent, 
-            rgba(102, 126, 234, 0.3), 
-            rgba(118, 75, 162, 0.5), 
-            rgba(240, 147, 251, 0.3), 
-            transparent) !important;
-        margin-top: 35px !important;
-        margin-bottom: 35px !important;
-        opacity: 1 !important;
-        border-radius: 999px !important;
-        position: relative;
-    }
-    
-    .extra-space {
-        margin-top: 50px;
-    }
-    
-    .recommendation-header {
-        font-family: 'Playfair Display', Georgia, serif !important;
-        font-size: 16px;
-        border-left: 4px solid;
-        border-image: linear-gradient(180deg, #667eea, #764ba2, #f093fb) 1;
-        padding-left: 15px;
-        margin-left: 5px;
-        color: #e0e0e0;
-        text-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
     }
     
     img {
@@ -420,42 +164,60 @@ st.markdown("""
         display: block;
         margin: 0 auto;
     }
-    
-    /* Shine Animation on Hover */
-    .book-column::after {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: -100%;
-        width: 100%;
-        height: 100%;
-        background: linear-gradient(
-            90deg,
-            transparent,
-            rgba(255, 255, 255, 0.05),
-            transparent
-        );
-        transition: left 0.7s ease;
-        border-radius: 24px;
-        pointer-events: none;
+    hr {
+        border: none !important;
+        border-top: 10px solid #B2BEB5 !important;
+        margin-top: 25px !important;
+        margin-bottom: 25px !important;
+        opacity: 1 !important;
+        border-radius: 999px !important;
     }
-    
-    .book-column:hover::after {
-        left: 100%;
+    .book-column {
+        position: relative;
+        padding: 0;
+        border: 2px solid #2b2b2b;
+        border-radius: 12px;
+        background-color: rgba(128, 128, 128, 0.05);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        margin-top: 28px;
+        margin-bottom: 15px;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+        overflow: visible;
     }
-    
-    /* Star decoration for top cards */
-    .book-column[data-rank="1"]::before,
-    .book-column[data-rank="2"]::before,
-    .book-column[data-rank="3"]::before {
-        content: '★';
+    .book-column:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    }
+    .book-image-area {
+        padding: 35px 20px 20px 20px;
+    }
+    .recommendation-badge {
         position: absolute;
-        top: 8px;
-        right: 12px;
-        font-size: 14px;
-        color: gold;
-        text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
-        z-index: 5;
+        top: -22px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 48px;
+        height: 48px;
+        border-radius: 50%;
+        background: #28a745;
+        color: white;
+        border: 2px solid #2b2b2b;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 18px;
+        font-weight: bold;
+        z-index: 10;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
+    }
+    .extra-space {
+        margin-top: 50px;
+    }
+    .recommendation-header {
+        font-size: 15px;
+        border-left: 5px solid #B2BEB5;
+        padding-left: 12px;
+        margin-left: 5px;
     }
     </style>
 """, unsafe_allow_html=True)
@@ -506,20 +268,19 @@ if st.session_state.recommendations is not None:
                     # Prevent quotes in variables from breaking HTML attributes occasionally
                     safe_title = str(book).replace('"', '&quot;').replace("'", "&#39;")
                     safe_author = str(book_info['Book-Author']).replace('"', '&quot;').replace("'", "&#39;")
-                    rank = i + j + 1
                     
                     with cols[j]:
                         st.markdown(f"""
-                        <div class='book-column' data-rank="{rank}">
-                            <div class='recommendation-badge'>{rank}</div>
+                        <div class='book-column'>
+                            <div class='recommendation-badge'>{i + j + 1}</div>
                             <div class='book-image-area'>
-                                <img src='{book_info['Image-URL-L']}'>
+                                <img src='{book_info['Image-URL-L']}' style='height:290px; width:auto; display:block;'>
                             </div>
                             <div class='book-info'>
                                 <div class='premium-title' title="{safe_title}">{book}</div>
                                 <div class='premium-divider'></div>
                                 <div class='premium-author' title="{safe_author}">By {book_info['Book-Author']}</div>
-                                <div class='premium-year'>Published {book_info['Year-Of-Publication']}</div>
+                                <div class='premium-year'>{book_info['Year-Of-Publication']}</div>
                             </div>
                         </div>
                         """, unsafe_allow_html=True)
