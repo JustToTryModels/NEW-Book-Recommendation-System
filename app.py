@@ -110,7 +110,7 @@ st.markdown("""
     .premium-title {
         font-size: 16px;
         font-weight: bold;
-        color: #EEDC82;
+        color: #F2E394;
         margin-bottom: 8px;
         line-height: 1.4;
         width: 100%;
