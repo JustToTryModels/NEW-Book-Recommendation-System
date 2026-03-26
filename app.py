@@ -55,7 +55,6 @@ def get_top_similar_books(book_title, n=10):
 # Streamlit app
 st.markdown("<h1 style='font-size: 40px;'>Book Recommendation System</h1>", unsafe_allow_html=True)
 
-# Updated CSS with solid color instead of gradient for highlighted text section
 st.markdown("""
     <style>
     html, body, [class*="css"], [class*="st-"], h1, h2, h3, h4, h5, h6, p, div, span, label, input, button, select, option, textarea {
@@ -158,8 +157,8 @@ st.markdown("""
         border-radius: 12px;
         background-color: rgba(128, 128, 128, 0.05);
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        margin-top: 28px;
         margin-bottom: 15px;
-        margin-top: 22px;
         transition: transform 0.2s ease, box-shadow 0.2s ease;
         overflow: visible;
     }
@@ -167,30 +166,27 @@ st.markdown("""
         transform: translateY(-5px);
         box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
     }
-    .book-number-circle {
+    .book-image-area {
+        padding: 35px 20px 20px 20px;
+    }
+    .recommendation-badge {
         position: absolute;
-        top: -18px;
+        top: -22px;
         left: 50%;
         transform: translateX(-50%);
-        width: 36px;
-        height: 36px;
-        background-color: #28a745;
-        color: white;
+        width: 48px;
+        height: 48px;
         border-radius: 50%;
+        background: #28a745;
+        color: white;
+        border: 2px solid #2b2b2b;
         display: flex;
         align-items: center;
         justify-content: center;
-        font-size: 15px;
+        font-size: 18px;
         font-weight: bold;
         z-index: 10;
-        border: 3px solid #1e7e34;
-        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
-    }
-    .book-image-area {
-        padding: 20px;
-        padding-top: 25px;
-        border-radius: 12px 12px 0 0;
-        overflow: hidden;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
     }
     .extra-space {
         margin-top: 50px;
@@ -243,7 +239,7 @@ if st.session_state.recommendations is not None:
                     with cols[j]:
                         st.markdown(f"""
                         <div class='book-column'>
-                            <div class='book-number-circle'>{i + j + 1}</div>
+                            <div class='recommendation-badge'>{i + j + 1}</div>
                             <div class='book-image-area'>
                                 <img src='{book_info['Image-URL-L']}' style='height:290px; width:auto; display:block;'>
                             </div>
