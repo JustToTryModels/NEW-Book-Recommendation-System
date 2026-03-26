@@ -124,6 +124,7 @@ st.markdown("""
         height: 38px; /* FIX: reserve scrollbar/title space equally for all cards */
         box-sizing: border-box;
         scrollbar-gutter: stable;
+        text-align: center; /* FIX: keep shorter titles horizontally centered */
     }
 
     .premium-title::-webkit-scrollbar {
