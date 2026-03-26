@@ -121,7 +121,7 @@ st.markdown("""
         margin-top: 5px;
         font-size: 12px;
         border-left: 3px solid #1a73e8;
-        padding-left: 10px;
+        padding-left: 8px;
         margin-left: 10px;
     }
     .year-info {
@@ -130,7 +130,7 @@ st.markdown("""
         margin-left: 10px;
         color: #777;
         border-left: 3px solid #1a73e8;
-        padding-left: 10px;
+        padding-left: 8px;
     }
     img {
         object-fit: contain;
