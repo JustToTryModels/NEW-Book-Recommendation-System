@@ -120,7 +120,7 @@ st.markdown("""
     .author-info {
         margin-top: 5px;
         font-size: 12px;
-        border-left: 3px solid #1a73e8;
+        border-left: 3px solid #888888;  /* hash-like gray color */
         padding-left: 8px;
         margin-left: 10px;
     }
@@ -129,7 +129,7 @@ st.markdown("""
         margin-top: 3px;
         margin-left: 10px;
         color: #777;
-        border-left: 3px solid #1a73e8;
+        border-left: 3px solid #888888;  /* same gray vertical bar */
         padding-left: 8px;
     }
     img {
