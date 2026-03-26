@@ -97,7 +97,7 @@ st.markdown("""
         line-height: 1.2;
         margin: 0;
         padding: 12px 15px;
-        background: linear-gradient(135deg, #1a1a2e, #16213e);
+        background: linear-gradient(135deg, #4a4a4a, #6b6b6b);
         border-radius: 0 0 10px 10px;
         border-top: 3px solid #e52e71;
     }
