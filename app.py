@@ -154,7 +154,7 @@ st.markdown("""
     .book-column {
         position: relative;
         padding: 0;
-        border: 2px solid #ddd;
+        border: 2px solid #2b2b2b;
         border-radius: 12px;
         background-color: rgba(128, 128, 128, 0.05);
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
