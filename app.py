@@ -105,32 +105,38 @@ st.markdown("""
         justify-content: flex-start;
         align-items: center;
         min-height: 150px;
-        height: 150px; /* FIX: keep all cards same height */
+        height: 150px;
         box-sizing: border-box;
     }
     
     .premium-title {
+        width: 100%;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 8px;
+    }
+
+    .premium-title-scroll {
         font-size: 16px;
         font-weight: bold;
         color: #F7E7A1;
-        margin-bottom: 8px;
         line-height: 1.4;
         width: 100%;
         white-space: nowrap;
         overflow-x: auto;
         overflow-y: hidden;
         display: block;
-        padding-bottom: 5px;
-        height: 38px; /* FIX: reserve scrollbar/title space equally for all cards */
+        text-align: center;
         box-sizing: border-box;
-        scrollbar-gutter: stable;
     }
 
-    .premium-title::-webkit-scrollbar {
+    .premium-title-scroll::-webkit-scrollbar {
         height: 6px;
     }
 
-    .premium-title::-webkit-scrollbar-thumb {
+    .premium-title-scroll::-webkit-scrollbar-thumb {
         background: #ccc;
         border-radius: 10px;
     }
@@ -282,7 +288,9 @@ if st.session_state.recommendations is not None:
                                 <img src='{book_info['Image-URL-L']}' style='height:290px; width:auto; display:block;'>
                             </div>
                             <div class='book-info'>
-                                <div class='premium-title' title="{safe_title}">{book}</div>
+                                <div class='premium-title' title="{safe_title}">
+                                    <div class='premium-title-scroll'>{book}</div>
+                                </div>
                                 <div class='premium-divider'></div>
                                 <div class='premium-author' title="{safe_author}">By {book_info['Book-Author']}</div>
                                 <div class='premium-year'>{book_info['Year-Of-Publication']}</div>
