@@ -208,8 +208,8 @@ if st.session_state.recommendations is not None:
                         <div class='book-column'>
                             <div class='book-info'>
                                 <div class='scroll-title'>{i + j + 1}. {book}</div>
-                                <div class='author-info' style='margin-left: 10px;'>by {book_info['Book-Author']}</div>
-                                <div class='year-info'>{book_info['Year-Of-Publication']}</div>
+                                <div class='author-info' style='margin-left: 10px;'>&gt; by {book_info['Book-Author']}</div>
+                                <div class='year-info'>&gt; {book_info['Year-Of-Publication']}</div>
                             </div>
                             <img src='{book_info['Image-URL-L']}' style='height:290px; width:auto; display:block;'>
                         </div>
