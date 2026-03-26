@@ -151,6 +151,7 @@ st.markdown("""
         margin-top: 25px !important;
         margin-bottom: 25px !important;
         opacity: 1 !important;
+        border-radius: 999px !important;
     }
     .book-column {
         position: relative;
