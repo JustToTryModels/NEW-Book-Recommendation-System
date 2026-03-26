@@ -144,7 +144,7 @@ st.markdown("""
     }
     hr {
         border: none !important;
-        border-top: 10px solid #B2BEB5 !important;
+        border-top: 10px solid #808080 !important;
         margin-top: 25px !important;
         margin-bottom: 25px !important;
         opacity: 1 !important;
