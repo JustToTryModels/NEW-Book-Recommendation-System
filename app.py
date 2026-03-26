@@ -213,7 +213,7 @@ if st.session_state.recommendations is not None:
                         st.markdown(f"""
                         <div class='book-column'>
                             <img src='{book_info['Image-URL-L']}' style='height:290px; width:auto; display:block;'>
-                            <div class='book-info'>
+                            <div class='book-info' style='margin-top:12px;'>
                                 <div class='scroll-title'>{i + j + 1}. {book}</div>
                                 <div class='info-container'>
                                     <div class='author-info'>👤 {book_info['Book-Author']}</div>
