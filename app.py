@@ -156,7 +156,7 @@ st.markdown("""
         flex-direction: column;
         justify-content: space-between;
         gap: 12px;
-        min-height: 165px;
+        min-height: 185px;
         margin: 0;
         padding: 16px 16px 18px 16px;
         background: linear-gradient(180deg, #242424 0%, #171717 100%);
@@ -209,9 +209,19 @@ st.markdown("""
 
     .book-footer {
         display: flex;
+        flex-direction: column;
         justify-content: center;
         align-items: center;
+        gap: 6px;
         margin-top: 2px;
+    }
+
+    .book-year-label {
+        font-size: 10px;
+        font-weight: 700;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: #8fb8ff;
     }
 
     .year-pill {
@@ -219,15 +229,16 @@ st.markdown("""
         align-items: center;
         justify-content: center;
         gap: 6px;
-        padding: 8px 14px;
+        padding: 8px 16px;
         border-radius: 999px;
-        background: rgba(255, 255, 255, 0.08);
-        border: 1px solid rgba(255, 255, 255, 0.12);
+        background: linear-gradient(90deg, rgba(255,138,0,0.18), rgba(229,46,113,0.18));
+        border: 1px solid rgba(255, 255, 255, 0.14);
         color: #f4f6f8;
         font-size: 12px;
-        font-weight: 600;
-        letter-spacing: 0.02em;
+        font-weight: 700;
+        letter-spacing: 0.03em;
         white-space: nowrap;
+        box-shadow: inset 0 0 0 1px rgba(255,255,255,0.03);
     }
 
     img {
@@ -331,6 +342,7 @@ if st.session_state.recommendations is not None:
                                     <div class='book-author'>{book_info['Book-Author']}</div>
                                 </div>
                                 <div class='book-footer'>
+                                    <div class='book-year-label'>Published</div>
                                     <div class='year-pill'>📅 {book_info['Year-Of-Publication']}</div>
                                 </div>
                             </div>
