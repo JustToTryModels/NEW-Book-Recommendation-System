@@ -95,7 +95,11 @@ st.markdown("""
     }
     .book-info {
         line-height: 1.2;
-        margin-bottom: 15px;
+        margin: 0;
+        padding: 12px 15px;
+        background: linear-gradient(135deg, #1a1a2e, #16213e);
+        border-radius: 0 0 10px 10px;
+        border-top: 3px solid #e52e71;
     }
     
     /* NEW: Horizontal Scroll styling for the Title */
@@ -107,6 +111,7 @@ st.markdown("""
         overflow-x: auto;
         padding-bottom: 5px;
         margin-bottom: 5px;
+        color: #f0e68c;
     }
     /* Styling the scrollbar for the title */
     .scroll-title::-webkit-scrollbar {
@@ -118,7 +123,7 @@ st.markdown("""
     }
 
     .info-container {
-        border-left: 3px solid #888888;
+        border-left: 3px solid #e52e71;
         padding-left: 8px;
         margin-left: 10px;
         margin-top: 5px;
@@ -126,12 +131,12 @@ st.markdown("""
 
     .author-info {
         font-size: 12px;
-        color: #777;
+        color: #b0c4de;
     }
     .year-info {
         font-size: 11px;
         margin-top: 3px;
-        color: #777;
+        color: #b0c4de;
     }
     img {
         object-fit: contain;
@@ -149,17 +154,21 @@ st.markdown("""
     }
     .book-column {
         position: relative;
-        padding: 20px;
+        padding: 0;
         border: 2px solid #ddd;
         border-radius: 12px;
         background-color: rgba(128, 128, 128, 0.05);
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         margin-bottom: 15px;
         transition: transform 0.2s ease, box-shadow 0.2s ease;
+        overflow: hidden;
     }
     .book-column:hover {
         transform: translateY(-5px);
         box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    }
+    .book-image-area {
+        padding: 20px;
     }
     .extra-space {
         margin-top: 50px;
@@ -212,8 +221,10 @@ if st.session_state.recommendations is not None:
                     with cols[j]:
                         st.markdown(f"""
                         <div class='book-column'>
-                            <img src='{book_info['Image-URL-L']}' style='height:290px; width:auto; display:block;'>
-                            <div class='book-info' style='margin-top:12px;'>
+                            <div class='book-image-area'>
+                                <img src='{book_info['Image-URL-L']}' style='height:290px; width:auto; display:block;'>
+                            </div>
+                            <div class='book-info'>
                                 <div class='scroll-title'>{i + j + 1}. {book}</div>
                                 <div class='info-container'>
                                     <div class='author-info'>👤 {book_info['Book-Author']}</div>
