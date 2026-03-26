@@ -104,7 +104,9 @@ st.markdown("""
         flex-direction: column;
         justify-content: flex-start;
         align-items: center;
-        min-height: 140px;
+        min-height: 150px;
+        height: 150px; /* FIX: keep all cards same height */
+        box-sizing: border-box;
     }
     
     .premium-title {
@@ -119,6 +121,9 @@ st.markdown("""
         overflow-y: hidden;
         display: block;
         padding-bottom: 5px;
+        height: 38px; /* FIX: reserve scrollbar/title space equally for all cards */
+        box-sizing: border-box;
+        scrollbar-gutter: stable;
     }
 
     .premium-title::-webkit-scrollbar {
