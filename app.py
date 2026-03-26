@@ -9,27 +9,34 @@ warnings.filterwarnings('ignore')
 
 @st.cache_data
 def load_and_prepare_data():
+    # Load your final filtered dataframe from Hugging Face
     final_filtered_df_path = hf_hub_download(repo_id="IamPradeep/BRS_DATA", filename="final_filtered_df.csv", repo_type="dataset")
     final_filtered_df = pd.read_csv(final_filtered_df_path)
 
+    # Load the dataframe containing book URLs from Hugging Face
     book_urls_df_path = hf_hub_download(repo_id="IamPradeep/BRS_DATA", filename="Books.csv", repo_type="dataset")
     book_urls_df = pd.read_csv(book_urls_df_path)
     book_urls_df.rename(columns={'Book-Title': 'title'}, inplace=True)
 
+    # Merge the dataframes on the title
     final_filtered_df = final_filtered_df.merge(book_urls_df, on='title', how='left')
 
-    # Replace broken image URLs
+    # URL to replace
     url1 = 'http://images.amazon.com/images/P/0690040784.01.LZZZZZZZ.jpg'
     url2 = 'http://images.amazon.com/images/P/0451172817.01.LZZZZZZZ.jpg'
     url3 = 'http://images.amazon.com/images/P/0312084986.01.LZZZZZZZ.jpg'
     url4 = 'http://images.amazon.com/images/P/1590400356.01.LZZZZZZZ.jpg'
 
+    # Replace URL based on condition
     final_filtered_df.loc[final_filtered_df['title'] == 'Jacob Have I Loved', 'Image-URL-L'] = url1
     final_filtered_df.loc[final_filtered_df['title'] == 'Needful Things', 'Image-URL-L'] = url2
     final_filtered_df.loc[final_filtered_df['title'] == 'All Creatures Great and Small', 'Image-URL-L'] = url3
     final_filtered_df.loc[final_filtered_df['title'] == "The Kitchen God's Wife", 'Image-URL-L'] = url4
 
+    # Create the book-user matrix
     book_user_mat = final_filtered_df.pivot_table(index='title', columns='userId', values='rating').fillna(0)
+
+    # Calculate the cosine similarity matrix
     cosine_sim = cosine_similarity(book_user_mat)
     cosine_sim_df = pd.DataFrame(cosine_sim, index=book_user_mat.index, columns=book_user_mat.index)
 
@@ -45,15 +52,17 @@ def get_top_similar_books(book_title, n=10):
     similar_books = similar_scores.sort_values(ascending=False)[1:n+1]
     return similar_books
 
-# ====================== STREAMLIT APP ======================
+# Streamlit app
 st.markdown("<h1 style='font-size: 40px;'>Book Recommendation System</h1>", unsafe_allow_html=True)
 
 st.markdown("""
     <style>
+    /* Global Font Settings */
     html, body, [class*="css"], [class*="st-"], h1, h2, h3, h4, h5, h6, p, div, span, label, input, button, select, option, textarea {
         font-family: 'Tiempos', 'Tiempos Text', Georgia, 'Times New Roman', serif !important;
     }
-    
+
+    /* Subheader Style */
     .subheader {
         font-size: 22px;
         font-weight: bold;
@@ -61,6 +70,7 @@ st.markdown("""
         color: #1a73e8;
     }
 
+    /* Button Style */
     .stButton > button {
         font-family: 'Tiempos', 'Tiempos Text', Georgia, 'Times New Roman', serif !important;
         font-size: 16px;
@@ -72,116 +82,151 @@ st.markdown("""
         font-weight: bold;
         cursor: pointer;
         transition: transform 0.2s ease, box-shadow 0.2s ease;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        margin: 4px 2px;
+        width: auto;
+        min-width: 100px;
     }
     .stButton > button:hover {
         transform: scale(1.05);
         box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.3);
+        color: white !important;
+    }
+    .stButton > button:active {
+        transform: scale(0.98);
     }
 
-    /* ============== PREMIUM BOOK CARD ============== */
+    /* Card Container */
     .book-column {
         position: relative;
         padding: 0;
-        border: 2px solid #2b2b2b;
+        border: 1px solid #e0e0e0;
         border-radius: 12px;
-        background-color: rgba(128, 128, 128, 0.05);
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        background-color: #ffffff;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
         margin-top: 28px;
         margin-bottom: 15px;
         transition: all 0.3s ease;
-        overflow: hidden;
+        overflow: hidden; /* Ensures content stays inside rounded corners */
     }
     .book-column:hover {
         transform: translateY(-8px);
-        box-shadow: 0 12px 25px rgba(0, 0, 0, 0.25);
+        box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+        border-color: #e52e71;
     }
 
-    .recommendation-badge {
-        position: absolute;
-        top: -22px;
-        left: 50%;
-        transform: translateX(-50%);
-        width: 48px;
-        height: 48px;
-        border-radius: 50%;
-        background: linear-gradient(135deg, #28a745, #20c997);
-        color: white;
-        border: 3px solid #1e1e1e;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 20px;
-        font-weight: bold;
-        z-index: 10;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-    }
-
+    /* Image Area */
     .book-image-area {
-        padding: 35px 20px 20px 20px;
-        background: #1e1e1e;
-        text-align: center;
+        padding: 35px 10px 15px 10px;
+        background-color: #f9f9f9;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border-bottom: 1px solid #eee;
     }
-
-    .book-image-area img {
-        max-height: 285px;
+    img {
+        object-fit: contain;
+        max-height: 250px;
         width: auto;
-        max-width: 100%;
-        border-radius: 6px;
-        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+        box-shadow: 0 5px 15px rgba(0,0,0,0.2); /* Shadow for the book cover itself */
+        border-radius: 4px;
         transition: transform 0.3s ease;
     }
-
-    .book-column:hover .book-image-area img {
+    .book-column:hover img {
         transform: scale(1.03);
     }
 
+    /* Text Info Area - Redesigned */
     .book-info {
-        padding: 20px 22px;
-        background: #2b2b2b;
-        border-top: 4px solid #e52e71;
+        padding: 15px;
+        background: #2b2b2b; /* Dark footer for the card */
+        color: white;
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        min-height: 100px;
     }
-
+    
     .book-title {
-        font-size: 16.2px;
+        font-size: 16px;
         font-weight: 700;
-        line-height: 1.3;
-        color: #ffeb9f;
-        margin-bottom: 10px;
-        display: -webkit-box;
-        -webkit-line-clamp: 2;
-        -webkit-box-orient: vertical;
-        overflow: hidden;
-        text-overflow: ellipsis;
-    }
-
-    .book-author {
-        font-size: 14px;
-        color: #b8d0ff;
+        color: #fff;
         margin-bottom: 8px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis; /* Adds '...' if text is too long */
+        line-height: 1.4;
+    }
+
+    .meta-data-container {
         display: flex;
+        flex-direction: column;
+        gap: 4px;
         align-items: center;
-        gap: 8px;
+        justify-content: center;
+    }
+
+    .author-text {
+        font-size: 13px;
+        color: #d1d1d1;
         font-weight: 500;
-    }
-
-    .book-year {
-        font-size: 12.8px;
-        color: #9ab3d0;
         display: flex;
         align-items: center;
-        gap: 6px;
+        gap: 5px;
     }
 
-    .extra-space {
-        margin-top: 50px;
+    .year-text {
+        font-size: 12px;
+        color: #9e9e9e;
+        font-style: italic;
+        display: flex;
+        align-items: center;
+        gap: 5px;
     }
 
+    /* Badge */
+    .recommendation-badge {
+        position: absolute;
+        top: 10px;
+        right: 10px; /* Moved to right for better aesthetics */
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #28a745, #20c997);
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 16px;
+        font-weight: bold;
+        z-index: 10;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+    }
+
+    /* Separator */
+    hr {
+        border: none !important;
+        border-top: 1px solid #e0e0e0 !important;
+        margin-top: 30px !important;
+        margin-bottom: 30px !important;
+        width: 80%;
+        margin-left: auto;
+        margin-right: auto;
+    }
+    
     .recommendation-header {
-        font-size: 15px;
-        border-left: 5px solid #B2BEB5;
+        font-size: 18px;
+        border-left: 5px solid #e52e71;
         padding-left: 12px;
         margin-left: 5px;
-        margin-bottom: 10px;
+        margin-bottom: 20px;
+        font-weight: 600;
+    }
+    .extra-space {
+        margin-top: 50px;
     }
     </style>
 """, unsafe_allow_html=True)
@@ -220,32 +265,47 @@ if st.session_state.recommendations is not None:
         st.write(similar_books)
     else:
         st.markdown(f"<div class='recommendation-header'>Top {rec_num} recommendations for '<strong>{rec_book}</strong>':</div>", unsafe_allow_html=True)
-        st.write("")
         
         for i in range(0, len(similar_books), 3):
             cols = st.columns(3)
             for j in range(3):
                 if i + j < len(similar_books):
                     book = similar_books.index[i + j]
-                    book_info = final_filtered_df[final_filtered_df['title'] == book].iloc[0]
+                    # Get book info safely
+                    book_data = final_filtered_df[final_filtered_df['title'] == book]
                     
+                    if not book_data.empty:
+                        book_info = book_data.iloc[0]
+                        img_url = book_info['Image-URL-L']
+                        author = book_info['Book-Author']
+                        year = book_info['Year-Of-Publication']
+                    else:
+                        img_url = "https://via.placeholder.com/150"
+                        author = "Unknown"
+                        year = "N/A"
+
                     with cols[j]:
                         st.markdown(f"""
                         <div class='book-column'>
                             <div class='recommendation-badge'>{i + j + 1}</div>
                             <div class='book-image-area'>
-                                <img src='{book_info['Image-URL-L']}' alt='{book}'>
+                                <img src='{img_url}' alt='{book}'>
                             </div>
                             <div class='book-info'>
-                                <div class='book-title'>{book}</div>
-                                <div class='book-author'>👤 {book_info['Book-Author']}</div>
-                                <div class='book-year'>📅 Published in {book_info['Year-Of-Publication']}</div>
+                                <div class='book-title' title='{book}'>{book}</div>
+                                <div class='meta-data-container'>
+                                    <div class='author-text'>
+                                        <span>👤</span> {author}
+                                    </div>
+                                    <div class='year-text'>
+                                        <span>📅</span> {year}
+                                    </div>
+                                </div>
                             </div>
                         </div>
                         """, unsafe_allow_html=True)
-            
             if i < len(similar_books) - 3:
-                st.markdown("<br><hr><br>", unsafe_allow_html=True)
+                st.markdown("<hr>", unsafe_allow_html=True)
 
         st.markdown("<div class='extra-space'></div>", unsafe_allow_html=True)
         st.image('https://github.com/MarpakaPradeepSai/Employee-Churn-Prediction/blob/main/Data/Images%20&%20GIFs/thank-you-33.gif?raw=true', use_container_width=True)
