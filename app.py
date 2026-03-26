@@ -105,6 +105,7 @@ st.markdown("""
         justify-content: flex-start;
         align-items: center;
         min-height: 140px;
+        flex-grow: 1;
     }
     
     .premium-title {
@@ -183,6 +184,9 @@ st.markdown("""
         margin-bottom: 15px;
         transition: transform 0.2s ease, box-shadow 0.2s ease;
         overflow: visible;
+        display: flex;
+        flex-direction: column;
+        flex-grow: 1;
     }
     .book-column:hover {
         transform: translateY(-5px);
@@ -218,6 +222,26 @@ st.markdown("""
         border-left: 5px solid #B2BEB5;
         padding-left: 12px;
         margin-left: 5px;
+    }
+
+    /* ===== Equal-height columns fix ===== */
+    [data-testid="stHorizontalBlock"] {
+        align-items: stretch !important;
+    }
+
+    [data-testid="stHorizontalBlock"] > div[data-testid="column"] {
+        display: flex !important;
+        flex-direction: column !important;
+    }
+
+    [data-testid="column"] > div,
+    [data-testid="column"] > div > div,
+    [data-testid="column"] > div > div > div,
+    [data-testid="column"] > div > div > div > div,
+    [data-testid="column"] > div > div > div > div > div {
+        display: flex !important;
+        flex-direction: column !important;
+        flex-grow: 1 !important;
     }
     </style>
 """, unsafe_allow_html=True)
