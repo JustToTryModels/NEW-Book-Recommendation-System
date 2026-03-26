@@ -9,34 +9,27 @@ warnings.filterwarnings('ignore')
 
 @st.cache_data
 def load_and_prepare_data():
-    # Load your final filtered dataframe from Hugging Face
     final_filtered_df_path = hf_hub_download(repo_id="IamPradeep/BRS_DATA", filename="final_filtered_df.csv", repo_type="dataset")
     final_filtered_df = pd.read_csv(final_filtered_df_path)
 
-    # Load the dataframe containing book URLs from Hugging Face
     book_urls_df_path = hf_hub_download(repo_id="IamPradeep/BRS_DATA", filename="Books.csv", repo_type="dataset")
     book_urls_df = pd.read_csv(book_urls_df_path)
     book_urls_df.rename(columns={'Book-Title': 'title'}, inplace=True)
 
-    # Merge the dataframes on the title
     final_filtered_df = final_filtered_df.merge(book_urls_df, on='title', how='left')
 
-    # URL to replace
     url1 = 'http://images.amazon.com/images/P/0690040784.01.LZZZZZZZ.jpg'
     url2 = 'http://images.amazon.com/images/P/0451172817.01.LZZZZZZZ.jpg'
     url3 = 'http://images.amazon.com/images/P/0312084986.01.LZZZZZZZ.jpg'
     url4 = 'http://images.amazon.com/images/P/1590400356.01.LZZZZZZZ.jpg'
 
-    # Replace URL based on condition
     final_filtered_df.loc[final_filtered_df['title'] == 'Jacob Have I Loved', 'Image-URL-L'] = url1
     final_filtered_df.loc[final_filtered_df['title'] == 'Needful Things', 'Image-URL-L'] = url2
     final_filtered_df.loc[final_filtered_df['title'] == 'All Creatures Great and Small', 'Image-URL-L'] = url3
     final_filtered_df.loc[final_filtered_df['title'] == "The Kitchen God's Wife", 'Image-URL-L'] = url4
 
-    # Create the book-user matrix
     book_user_mat = final_filtered_df.pivot_table(index='title', columns='userId', values='rating').fillna(0)
 
-    # Calculate the cosine similarity matrix
     cosine_sim = cosine_similarity(book_user_mat)
     cosine_sim_df = pd.DataFrame(cosine_sim, index=book_user_mat.index, columns=book_user_mat.index)
 
@@ -47,15 +40,12 @@ final_filtered_df, cosine_sim_df = load_and_prepare_data()
 def get_top_similar_books(book_title, n=10):
     if book_title not in cosine_sim_df.index:
         return "⚠️ Book not found in the database."
-    
     similar_scores = cosine_sim_df[book_title]
     similar_books = similar_scores.sort_values(ascending=False)[1:n+1]
     return similar_books
 
-# Streamlit app
 st.markdown("<h1 style='font-size: 40px;'>Book Recommendation System</h1>", unsafe_allow_html=True)
 
-# Updated CSS with Horizontal Scrolling for Titles
 st.markdown("""
     <style>
     html, body, [class*="css"], [class*="st-"], h1, h2, h3, h4, h5, h6, p, div, span, label, input, button, select, option, textarea {
@@ -95,10 +85,9 @@ st.markdown("""
     }
     .book-info {
         line-height: 1.2;
-        margin-top: 15px;
+        margin-top: 12px;
     }
-    
-    /* NEW: Horizontal Scroll styling for the Title */
+
     .scroll-title {
         display: block;
         font-size: 16px;
@@ -108,7 +97,6 @@ st.markdown("""
         padding-bottom: 5px;
         margin-bottom: 5px;
     }
-    /* Styling the scrollbar for the title */
     .scroll-title::-webkit-scrollbar {
         height: 6px;
     }
@@ -133,9 +121,10 @@ st.markdown("""
         margin-top: 3px;
         color: #777;
     }
-    img {
+    .book-image {
         object-fit: contain;
         max-height: 300px;
+        height: 290px;
         width: auto;
         display: block;
         margin: 0 auto;
@@ -202,7 +191,7 @@ if st.session_state.recommendations is not None:
     else:
         st.markdown(f"<div style='font-size:15px;'>Top {rec_num} recommendations for '<strong>{rec_book}</strong>':</div>", unsafe_allow_html=True)
         st.write("")
-        
+
         for i in range(0, len(similar_books), 3):
             cols = st.columns(3)
             for j in range(3):
@@ -212,11 +201,9 @@ if st.session_state.recommendations is not None:
                     with cols[j]:
                         st.markdown(f"""
                         <div class='book-column'>
-                            <img src='{book_info['Image-URL-L']}' style='height:290px; width:auto; display:block;'>
-                            
+                            <img src='{book_info['Image-URL-L']}' class='book-image'>
                             <div class='book-info'>
                                 <div class='scroll-title'>{i + j + 1}. {book}</div>
-                                
                                 <div class='info-container'>
                                     <div class='author-info'>👤 {book_info['Book-Author']}</div>
                                     <div class='year-info'>📅 {book_info['Year-Of-Publication']}</div>
