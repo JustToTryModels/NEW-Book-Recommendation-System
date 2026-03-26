@@ -52,230 +52,421 @@ def get_top_similar_books(book_title, n=10):
     similar_books = similar_scores.sort_values(ascending=False)[1:n+1]
     return similar_books
 
-# Streamlit app configuration
+# Streamlit app
+st.markdown("<h1 style='font-size: 40px;'>Book Recommendation System</h1>", unsafe_allow_html=True)
+
 st.markdown("""
     <style>
-    /* IMPORT PREMIUM FONTS */
-    @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Lato:wght@300;400;700&display=swap');
-
-    /* GLOBAL STYLES */
-    html, body, [class*="css"], [class*="st-"] {
-        font-family: 'Lato', sans-serif;
-    }
+    @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Cormorant+Garamond:wght@400;500;600;700&family=Lora:wght@400;500;600;700&display=swap');
     
-    h1, h2, h3 {
-        font-family: 'Playfair Display', serif;
+    html, body, [class*="css"], [class*="st-"], h1, h2, h3, h4, h5, h6, p, div, span, label, input, button, select, option, textarea {
+        font-family: 'Playfair Display', 'Cormorant Garamond', 'Lora', Georgia, serif !important;
     }
-
-    /* MAIN TITLE STYLING */
-    .main-title {
-        font-family: 'Playfair Display', serif;
-        font-size: 3.5rem;
-        background: linear-gradient(90deg, #FFD700, #E5E4E2);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
-        margin-bottom: 10px;
-    }
-
     .subheader {
-        font-size: 1.5rem;
-        color: #B0B0B0;
-        font-weight: 300;
-        margin-bottom: 30px;
-        letter-spacing: 1px;
+        font-size: 22px;
+        font-weight: bold;
+        margin-bottom: 20px;
+        color: #1a73e8;
     }
-
-    /* BUTTON STYLING */
     .stButton > button {
-        font-family: 'Lato', sans-serif;
+        font-family: 'Playfair Display', Georgia, serif !important;
         font-size: 16px;
-        background: linear-gradient(135deg, #d4af37 0%, #a67c00 100%);
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
         color: white !important;
         border: none;
-        border-radius: 5px;
-        padding: 12px 30px;
-        font-weight: bold;
-        text-transform: uppercase;
-        letter-spacing: 2px;
+        border-radius: 30px;
+        padding: 12px 28px;
+        font-weight: 600;
         cursor: pointer;
-        transition: all 0.3s ease;
-        box-shadow: 0 4px 15px rgba(212, 175, 55, 0.4);
+        transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        margin: 4px 2px;
+        width: auto;
+        min-width: 100px;
+        box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        letter-spacing: 0.5px;
+        text-transform: uppercase;
     }
     .stButton > button:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 6px 20px rgba(212, 175, 55, 0.6);
-        background: linear-gradient(135deg, #ebd174 0%, #b88a00 100%);
+        transform: translateY(-3px) scale(1.02);
+        box-shadow: 0 8px 25px rgba(102, 126, 234, 0.6);
+        color: white !important;
+        background: linear-gradient(135deg, #764ba2 0%, #667eea 50%, #f093fb 100%);
     }
-
-    /* CARD CONTAINER */
-    .premium-card {
-        background: #1a1a1a;
-        border: 1px solid #333;
-        border-radius: 12px;
-        overflow: hidden;
-        position: relative;
-        transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        box-shadow: 0 10px 20px rgba(0,0,0,0.3);
-        height: 100%;
-        display: flex;
-        flex-direction: column;
+    .stButton > button:active {
+        transform: translateY(0) scale(0.98);
     }
     
-    .premium-card:hover {
-        transform: translateY(-10px);
-        box-shadow: 0 20px 40px rgba(0,0,0,0.6);
-        border-color: #d4af37; /* Gold border on hover */
-    }
-
-    /* IMAGE AREA */
-    .card-img-wrapper {
-        width: 100%;
-        height: 280px;
-        background-color: #121212;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        padding: 20px;
+    /* Ultra Premium Book Card */
+    .book-column {
         position: relative;
-        overflow: hidden;
+        padding: 0;
+        border-radius: 24px;
+        background: linear-gradient(145deg, #1a1a2e 0%, #16213e 50%, #0f0f23 100%);
+        margin-top: 35px;
+        margin-bottom: 20px;
+        transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+        overflow: visible;
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        box-shadow: 
+            0 10px 40px rgba(0, 0, 0, 0.4),
+            0 0 0 1px rgba(255, 255, 255, 0.05),
+            inset 0 1px 0 rgba(255, 255, 255, 0.1);
     }
-
-    .card-img-wrapper img {
-        height: 100%;
-        width: auto;
-        object-fit: contain;
-        box-shadow: 0 10px 25px rgba(0,0,0,0.5);
-        transition: transform 0.5s ease;
-        z-index: 1;
-    }
-
-    .premium-card:hover .card-img-wrapper img {
-        transform: scale(1.08);
-    }
-
-    /* RANK BADGE */
-    .rank-badge {
+    
+    .book-column::before {
+        content: '';
         position: absolute;
-        top: 15px;
-        left: 15px;
-        width: 40px;
-        height: 40px;
-        background: linear-gradient(135deg, #d4af37, #f3e5ab, #a67c00);
-        color: #222;
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-family: 'Playfair Display', serif;
-        font-weight: 900;
-        font-size: 18px;
-        z-index: 10;
-        box-shadow: 0 4px 10px rgba(0,0,0,0.5);
-        border: 2px solid #fff;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        border-radius: 24px;
+        background: linear-gradient(135deg, 
+            rgba(102, 126, 234, 0.1) 0%, 
+            rgba(118, 75, 162, 0.05) 50%, 
+            rgba(240, 147, 251, 0.1) 100%);
+        opacity: 0;
+        transition: opacity 0.5s ease;
+        pointer-events: none;
     }
-
-    /* CONTENT AREA */
-    .card-content {
-        padding: 18px 15px;
+    
+    .book-column:hover {
+        transform: translateY(-12px) scale(1.02);
+        box-shadow: 
+            0 25px 60px rgba(102, 126, 234, 0.3),
+            0 15px 40px rgba(0, 0, 0, 0.4),
+            0 0 60px rgba(240, 147, 251, 0.15),
+            inset 0 1px 0 rgba(255, 255, 255, 0.2);
+        border-color: rgba(102, 126, 234, 0.3);
+    }
+    
+    .book-column:hover::before {
+        opacity: 1;
+    }
+    
+    /* Premium Book Image Area */
+    .book-image-area {
+        padding: 45px 25px 25px 25px;
+        position: relative;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 320px;
+    }
+    
+    .book-image-area::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 10%;
+        right: 10%;
+        height: 20px;
+        background: radial-gradient(ellipse at center, rgba(0,0,0,0.3) 0%, transparent 70%);
+        filter: blur(8px);
+    }
+    
+    .book-image-area img {
+        height: 280px !important;
+        width: auto !important;
+        max-width: 100%;
+        object-fit: contain;
+        display: block;
+        border-radius: 8px;
+        box-shadow: 
+            0 15px 35px rgba(0, 0, 0, 0.5),
+            0 5px 15px rgba(0, 0, 0, 0.3),
+            -5px 0 20px rgba(0, 0, 0, 0.2),
+            5px 0 20px rgba(0, 0, 0, 0.2);
+        transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+        position: relative;
+        z-index: 2;
+    }
+    
+    .book-column:hover .book-image-area img {
+        transform: scale(1.05) rotateY(-5deg);
+        box-shadow: 
+            0 25px 50px rgba(0, 0, 0, 0.6),
+            0 10px 25px rgba(102, 126, 234, 0.2),
+            -8px 0 25px rgba(0, 0, 0, 0.3),
+            8px 0 25px rgba(0, 0, 0, 0.3);
+    }
+    
+    /* Luxurious Book Info Section */
+    .book-info {
+        background: linear-gradient(180deg, 
+            rgba(26, 26, 46, 0.95) 0%, 
+            rgba(15, 15, 35, 0.98) 100%);
+        padding: 28px 20px 32px 20px;
+        border-radius: 0 0 24px 24px;
         text-align: center;
-        background: linear-gradient(to bottom, #1e1e1e, #141414);
-        flex-grow: 1;
         display: flex;
         flex-direction: column;
         justify-content: flex-start;
-        border-top: 1px solid #333;
+        align-items: center;
+        min-height: 160px;
+        position: relative;
+        border-top: 1px solid rgba(255, 255, 255, 0.05);
     }
-
-    /* SCROLLABLE TITLE */
-    .book-title {
-        font-family: 'Playfair Display', serif;
-        font-size: 18px;
+    
+    .book-info::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 20%;
+        right: 20%;
+        height: 1px;
+        background: linear-gradient(90deg, 
+            transparent, 
+            rgba(102, 126, 234, 0.5), 
+            rgba(240, 147, 251, 0.5), 
+            transparent);
+    }
+    
+    /* Premium Title Styling */
+    .premium-title {
+        font-family: 'Playfair Display', Georgia, serif !important;
+        font-size: 17px;
+        font-weight: 600;
         color: #ffffff;
-        margin-bottom: 8px;
+        margin-bottom: 12px;
+        line-height: 1.5;
+        width: 100%;
         white-space: nowrap;
         overflow-x: auto;
         overflow-y: hidden;
-        padding-bottom: 5px;
+        display: block;
+        padding-bottom: 8px;
+        text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+        letter-spacing: 0.3px;
     }
-    
-    /* Custom Scrollbar for Title */
-    .book-title::-webkit-scrollbar {
+
+    .premium-title::-webkit-scrollbar {
         height: 4px;
     }
-    .book-title::-webkit-scrollbar-track {
-        background: #2a2a2a; 
-        border-radius: 2px;
-    }
-    .book-title::-webkit-scrollbar-thumb {
-        background: #555; 
-        border-radius: 2px;
-    }
-    .book-title::-webkit-scrollbar-thumb:hover {
-        background: #d4af37; 
+
+    .premium-title::-webkit-scrollbar-track {
+        background: rgba(255, 255, 255, 0.05);
+        border-radius: 10px;
     }
 
-    /* DECORATIVE DIVIDER */
-    .gold-divider {
-        height: 2px;
-        width: 40px;
-        background: linear-gradient(90deg, transparent, #d4af37, transparent);
-        margin: 5px auto 10px auto;
+    .premium-title::-webkit-scrollbar-thumb {
+        background: linear-gradient(90deg, #667eea, #764ba2);
+        border-radius: 10px;
     }
 
-    /* AUTHOR & YEAR */
-    .book-author {
-        font-family: 'Lato', sans-serif;
-        font-size: 14px;
-        color: #aaa;
+    /* Elegant Divider */
+    .premium-divider {
+        width: 50px;
+        height: 3px;
+        background: linear-gradient(90deg, #667eea, #764ba2, #f093fb);
+        margin: 8px 0 16px 0;
+        border-radius: 10px;
+        position: relative;
+        box-shadow: 0 0 15px rgba(102, 126, 234, 0.5);
+    }
+    
+    .premium-divider::before,
+    .premium-divider::after {
+        content: '◆';
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        font-size: 6px;
+        color: #f093fb;
+    }
+    
+    .premium-divider::before {
+        left: -12px;
+    }
+    
+    .premium-divider::after {
+        right: -12px;
+    }
+
+    /* Author Styling */
+    .premium-author {
+        font-family: 'Cormorant Garamond', Georgia, serif !important;
+        font-size: 15px;
+        color: #b8c5d6;
         font-style: italic;
-        margin-bottom: 5px;
+        margin-bottom: 10px;
+        width: 100%;
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
+        letter-spacing: 0.5px;
+        text-shadow: 0 1px 5px rgba(0, 0, 0, 0.2);
     }
 
-    .book-year {
-        font-family: 'Lato', sans-serif;
+    /* Year Badge Styling */
+    .premium-year {
+        font-family: 'Lora', Georgia, serif !important;
         font-size: 11px;
-        color: #666;
-        font-weight: 700;
-        letter-spacing: 1.5px;
+        color: #8892a6;
         text-transform: uppercase;
-        margin-top: auto; /* Pushes to bottom if flex spacing needed */
-    }
-
-    /* SEPARATOR BETWEEN ROWS */
-    hr.fancy-hr {
-        border: 0;
-        height: 1px;
-        background-image: linear-gradient(to right, rgba(255, 255, 255, 0), rgba(212, 175, 55, 0.75), rgba(255, 255, 255, 0));
-        margin: 40px 0;
+        letter-spacing: 2.5px;
+        font-weight: 600;
+        padding: 6px 16px;
+        background: linear-gradient(135deg, rgba(102, 126, 234, 0.15), rgba(118, 75, 162, 0.15));
+        border-radius: 20px;
+        border: 1px solid rgba(102, 126, 234, 0.2);
+        margin-top: 5px;
     }
     
-    .results-header {
-        font-family: 'Playfair Display', serif;
-        font-size: 24px;
-        color: #fff;
-        border-left: 4px solid #d4af37;
+    /* Spectacular Recommendation Badge */
+    .recommendation-badge {
+        position: absolute;
+        top: -18px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 56px;
+        height: 56px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+        color: white;
+        border: 4px solid #0f0f23;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-family: 'Playfair Display', Georgia, serif !important;
+        font-size: 20px;
+        font-weight: 700;
+        z-index: 15;
+        box-shadow: 
+            0 8px 25px rgba(102, 126, 234, 0.5),
+            0 4px 15px rgba(0, 0, 0, 0.3),
+            inset 0 2px 4px rgba(255, 255, 255, 0.3);
+        transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+    }
+    
+    .recommendation-badge::before {
+        content: '';
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+        background: linear-gradient(135deg, rgba(255,255,255,0.3), transparent);
+        top: 0;
+        left: 0;
+    }
+    
+    .recommendation-badge::after {
+        content: '';
+        position: absolute;
+        width: 68px;
+        height: 68px;
+        border-radius: 50%;
+        border: 2px solid rgba(102, 126, 234, 0.3);
+        animation: pulse-ring 2s ease-out infinite;
+    }
+    
+    @keyframes pulse-ring {
+        0% {
+            transform: scale(0.9);
+            opacity: 1;
+        }
+        100% {
+            transform: scale(1.3);
+            opacity: 0;
+        }
+    }
+    
+    .book-column:hover .recommendation-badge {
+        transform: translateX(-50%) scale(1.1) rotate(5deg);
+        box-shadow: 
+            0 12px 35px rgba(102, 126, 234, 0.6),
+            0 6px 20px rgba(240, 147, 251, 0.4);
+    }
+    
+    /* Premium Horizontal Divider */
+    hr {
+        border: none !important;
+        height: 4px !important;
+        background: linear-gradient(90deg, 
+            transparent, 
+            rgba(102, 126, 234, 0.3), 
+            rgba(118, 75, 162, 0.5), 
+            rgba(240, 147, 251, 0.3), 
+            transparent) !important;
+        margin-top: 35px !important;
+        margin-bottom: 35px !important;
+        opacity: 1 !important;
+        border-radius: 999px !important;
+        position: relative;
+    }
+    
+    .extra-space {
+        margin-top: 50px;
+    }
+    
+    .recommendation-header {
+        font-family: 'Playfair Display', Georgia, serif !important;
+        font-size: 16px;
+        border-left: 4px solid;
+        border-image: linear-gradient(180deg, #667eea, #764ba2, #f093fb) 1;
         padding-left: 15px;
-        margin: 30px 0 20px 0;
+        margin-left: 5px;
+        color: #e0e0e0;
+        text-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+    }
+    
+    img {
+        object-fit: contain;
+        max-height: 300px;
+        width: auto;
+        display: block;
+        margin: 0 auto;
+    }
+    
+    /* Shine Animation on Hover */
+    .book-column::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(
+            90deg,
+            transparent,
+            rgba(255, 255, 255, 0.05),
+            transparent
+        );
+        transition: left 0.7s ease;
+        border-radius: 24px;
+        pointer-events: none;
+    }
+    
+    .book-column:hover::after {
+        left: 100%;
+    }
+    
+    /* Star decoration for top cards */
+    .book-column[data-rank="1"]::before,
+    .book-column[data-rank="2"]::before,
+    .book-column[data-rank="3"]::before {
+        content: '★';
+        position: absolute;
+        top: 8px;
+        right: 12px;
+        font-size: 14px;
+        color: gold;
+        text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+        z-index: 5;
     }
     </style>
 """, unsafe_allow_html=True)
 
-# App Header
-st.markdown("<h1 class='main-title'>Literary Compass</h1>", unsafe_allow_html=True)
-st.markdown("<p class='subheader'>Curating your next masterpiece reading experience.</p>", unsafe_allow_html=True)
+st.markdown("<p class='subheader'>Let Us Help You Choose Your Next Book!</p>", unsafe_allow_html=True)
 st.image('https://img.freepik.com/premium-vector/bookcase-with-books_182089-197.jpg', use_container_width=True)
 
-# Input Section
-col1, col2 = st.columns([3, 1])
-with col1:
-    all_books = final_filtered_df['title'].unique().tolist()
-    book_title = st.selectbox('Select a Masterpiece:', all_books, index=None, placeholder="Search your library...", key='book_title')
-with col2:
-    num_recommendations = st.number_input('Count:', min_value=1, max_value=50, value=10)
+all_books = final_filtered_df['title'].unique().tolist()
+book_title = st.selectbox('Enter a book title:', all_books, index=None, placeholder="Choose or enter a book title...", key='book_title')
+
+num_recommendations = st.number_input('Enter the number of recommendations:', min_value=1, max_value=50, value=10)
 
 if 'recommendations' not in st.session_state:
     st.session_state.recommendations = None
@@ -284,7 +475,7 @@ if 'recommended_book' not in st.session_state:
 if 'recommended_num' not in st.session_state:
     st.session_state.recommended_num = None
 
-if st.button('Discover Recommendations'):
+if st.button('Recommend books'):
     if book_title:
         similar_books = get_top_similar_books(book_title, num_recommendations)
         st.session_state.recommendations = similar_books
@@ -292,52 +483,48 @@ if st.button('Discover Recommendations'):
         st.session_state.recommended_num = num_recommendations
     else:
         st.session_state.recommendations = None
-        st.warning("Please select a book title to proceed.")
+        st.write("⚠️ Please select or enter a book title.")
 
-# Results Display
 if st.session_state.recommendations is not None:
     similar_books = st.session_state.recommendations
     rec_book = st.session_state.recommended_book
     rec_num = st.session_state.recommended_num
 
     if isinstance(similar_books, str):
-        st.error(similar_books)
+        st.write(similar_books)
     else:
-        # Styled Header for Results
-        st.markdown(f"<div class='results-header'>Curated Selections based on '<em>{rec_book}</em>'</div>", unsafe_allow_html=True)
+        st.markdown(f"<div class='recommendation-header'>Top {rec_num} recommendations for '<strong>{rec_book}</strong>':</div>", unsafe_allow_html=True)
+        st.write("")
         
-        # Grid System
         for i in range(0, len(similar_books), 3):
             cols = st.columns(3)
             for j in range(3):
                 if i + j < len(similar_books):
-                    book_idx = i + j
-                    book_name = similar_books.index[book_idx]
-                    book_info = final_filtered_df[final_filtered_df['title'] == book_name].iloc[0]
+                    book = similar_books.index[i + j]
+                    book_info = final_filtered_df[final_filtered_df['title'] == book].iloc[0]
                     
-                    # Safe strings for HTML attributes
-                    safe_title = str(book_name).replace('"', '&quot;').replace("'", "&#39;")
+                    # Prevent quotes in variables from breaking HTML attributes occasionally
+                    safe_title = str(book).replace('"', '&quot;').replace("'", "&#39;")
                     safe_author = str(book_info['Book-Author']).replace('"', '&quot;').replace("'", "&#39;")
+                    rank = i + j + 1
                     
                     with cols[j]:
                         st.markdown(f"""
-                        <div class='premium-card'>
-                            <div class='rank-badge'>{book_idx + 1}</div>
-                            <div class='card-img-wrapper'>
-                                <img src='{book_info['Image-URL-L']}' alt="Book Cover">
+                        <div class='book-column' data-rank="{rank}">
+                            <div class='recommendation-badge'>{rank}</div>
+                            <div class='book-image-area'>
+                                <img src='{book_info['Image-URL-L']}'>
                             </div>
-                            <div class='card-content'>
-                                <div class='book-title' title="{safe_title}">{book_name}</div>
-                                <div class='gold-divider'></div>
-                                <div class='book-author' title="{safe_author}">By {book_info['Book-Author']}</div>
-                                <div class='book-year'>{book_info['Year-Of-Publication']}</div>
+                            <div class='book-info'>
+                                <div class='premium-title' title="{safe_title}">{book}</div>
+                                <div class='premium-divider'></div>
+                                <div class='premium-author' title="{safe_author}">By {book_info['Book-Author']}</div>
+                                <div class='premium-year'>Published {book_info['Year-Of-Publication']}</div>
                             </div>
                         </div>
                         """, unsafe_allow_html=True)
-            
-            # Add fancy divider between rows (except last row)
             if i < len(similar_books) - 3:
-                st.markdown("<hr class='fancy-hr'>", unsafe_allow_html=True)
+                st.markdown("<br><hr><br>", unsafe_allow_html=True)
 
-        st.markdown("<br><br>", unsafe_allow_html=True)
+        st.markdown("<div class='extra-space'></div><div class='extra-space'></div>", unsafe_allow_html=True)
         st.image('https://github.com/MarpakaPradeepSai/Employee-Churn-Prediction/blob/main/Data/Images%20&%20GIFs/thank-you-33.gif?raw=true', use_container_width=True)
