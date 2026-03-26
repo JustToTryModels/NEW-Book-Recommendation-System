@@ -159,15 +159,38 @@ st.markdown("""
         background-color: rgba(128, 128, 128, 0.05);
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         margin-bottom: 15px;
+        margin-top: 22px;
         transition: transform 0.2s ease, box-shadow 0.2s ease;
-        overflow: hidden;
+        overflow: visible;
     }
     .book-column:hover {
         transform: translateY(-5px);
         box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
     }
+    .book-number-circle {
+        position: absolute;
+        top: -18px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 36px;
+        height: 36px;
+        background-color: #28a745;
+        color: white;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 15px;
+        font-weight: bold;
+        z-index: 10;
+        border: 3px solid #1e7e34;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+    }
     .book-image-area {
         padding: 20px;
+        padding-top: 25px;
+        border-radius: 12px 12px 0 0;
+        overflow: hidden;
     }
     .extra-space {
         margin-top: 50px;
@@ -220,11 +243,12 @@ if st.session_state.recommendations is not None:
                     with cols[j]:
                         st.markdown(f"""
                         <div class='book-column'>
+                            <div class='book-number-circle'>{i + j + 1}</div>
                             <div class='book-image-area'>
                                 <img src='{book_info['Image-URL-L']}' style='height:290px; width:auto; display:block;'>
                             </div>
                             <div class='book-info'>
-                                <div class='scroll-title'>{i + j + 1}. {book}</div>
+                                <div class='scroll-title'>{book}</div>
                                 <div class='info-container'>
                                     <div class='author-info'>👤 {book_info['Book-Author']}</div>
                                     <div class='year-info'>📅 {book_info['Year-Of-Publication']}</div>
