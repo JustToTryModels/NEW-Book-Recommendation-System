@@ -55,7 +55,7 @@ def get_top_similar_books(book_title, n=10):
 # Streamlit app
 st.markdown("<h1 style='font-size: 40px;'>Book Recommendation System</h1>", unsafe_allow_html=True)
 
-# Updated CSS with Distinct Bottom Strip for Text Data
+# Updated CSS with Horizontal Scrolling for Titles
 st.markdown("""
     <style>
     html, body, [class*="css"], [class*="st-"], h1, h2, h3, h4, h5, h6, p, div, span, label, input, button, select, option, textarea {
@@ -93,8 +93,12 @@ st.markdown("""
     .stButton > button:active {
         transform: scale(0.98);
     }
+    .book-info {
+        line-height: 1.2;
+        margin-bottom: 15px;
+    }
     
-    /* Horizontal Scroll styling for the Title */
+    /* NEW: Horizontal Scroll styling for the Title */
     .scroll-title {
         display: block;
         font-size: 16px;
@@ -122,12 +126,12 @@ st.markdown("""
 
     .author-info {
         font-size: 12px;
-        color: #555;
+        color: #777;
     }
     .year-info {
         font-size: 11px;
         margin-top: 3px;
-        color: #555;
+        color: #777;
     }
     img {
         object-fit: contain;
@@ -143,40 +147,20 @@ st.markdown("""
         margin-bottom: 25px !important;
         opacity: 1 !important;
     }
-    
-    /* NEW: Updated Book Card Structure */
     .book-column {
         position: relative;
+        padding: 20px;
         border: 2px solid #ddd;
         border-radius: 12px;
-        background-color: #ffffff;
+        background-color: rgba(128, 128, 128, 0.05);
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         margin-bottom: 15px;
-        overflow: hidden; /* Ensures the bottom colored strip stays within rounded corners */
         transition: transform 0.2s ease, box-shadow 0.2s ease;
-        display: flex;
-        flex-direction: column;
     }
     .book-column:hover {
         transform: translateY(-5px);
         box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
     }
-    
-    /* Dedicated Image wrapper (Top section) */
-    .img-wrapper {
-        padding: 20px;
-        background-color: rgba(128, 128, 128, 0.05);
-    }
-
-    /* Colored Strip for Text Data (Bottom section) */
-    .book-info {
-        line-height: 1.2;
-        padding: 15px 20px;
-        background-color: #e9ecef; /* Distinct color strip */
-        border-top: 2px solid #ddd; /* Separator line mimicking your sketch */
-        margin: 0; 
-    }
-
     .extra-space {
         margin-top: 50px;
     }
@@ -226,13 +210,10 @@ if st.session_state.recommendations is not None:
                     book = similar_books.index[i + j]
                     book_info = final_filtered_df[final_filtered_df['title'] == book].iloc[0]
                     with cols[j]:
-                        # Using the new HTML structure for distinct color separation
                         st.markdown(f"""
                         <div class='book-column'>
-                            <div class='img-wrapper'>
-                                <img src='{book_info['Image-URL-L']}' style='height:290px; width:auto; display:block;'>
-                            </div>
-                            <div class='book-info'>
+                            <img src='{book_info['Image-URL-L']}' style='height:290px; width:auto; display:block;'>
+                            <div class='book-info' style='margin-top:12px;'>
                                 <div class='scroll-title'>{i + j + 1}. {book}</div>
                                 <div class='info-container'>
                                     <div class='author-info'>👤 {book_info['Book-Author']}</div>
