@@ -150,6 +150,11 @@ st.markdown("""
         opacity: 1 !important;
         border-radius: 999px !important;
     }
+    .recommendation-header {
+        font-size: 15px;
+        border-left: 5px solid #B2BEB5;
+        padding-left: 10px;
+    }
     .book-column {
         position: relative;
         padding: 0;
@@ -227,7 +232,7 @@ if st.session_state.recommendations is not None:
     if isinstance(similar_books, str):
         st.write(similar_books)
     else:
-        st.markdown(f"<div style='font-size:15px;'>Top {rec_num} recommendations for '<strong>{rec_book}</strong>':</div>", unsafe_allow_html=True)
+        st.markdown(f"<div class='recommendation-header'>Top {rec_num} recommendations for '<strong>{rec_book}</strong>':</div>", unsafe_allow_html=True)
         st.write("")
         
         for i in range(0, len(similar_books), 3):
