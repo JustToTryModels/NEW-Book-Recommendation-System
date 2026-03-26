@@ -280,7 +280,7 @@ if st.session_state.recommendations is not None:
                                 <div class='premium-title' title="{safe_title}">{book}</div>
                                 <div class='premium-divider'></div>
                                 <div class='premium-author' title="{safe_author}">By {book_info['Book-Author']}</div>
-                                <div class='premium-year'> {book_info['Year-Of-Publication']}</div>
+                                <div class='premium-year'>{book_info['Year-Of-Publication']}</div>
                             </div>
                         </div>
                         """, unsafe_allow_html=True)
