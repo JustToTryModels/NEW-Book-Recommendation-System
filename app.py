@@ -97,7 +97,7 @@ st.markdown("""
         line-height: 1.2;
         margin: 0;
         padding: 12px 15px;
-        background: linear-gradient(135deg, #1a1a2e, #16213e);
+        background: linear-gradient(135deg, #3a3a3a, #4a4a4a);
         border-radius: 0 0 10px 10px;
         border-top: 3px solid #e52e71;
     }
@@ -112,6 +112,7 @@ st.markdown("""
         padding-bottom: 5px;
         margin-bottom: 5px;
         color: #f0e68c;
+        text-align: center;
     }
     /* Styling the scrollbar for the title */
     .scroll-title::-webkit-scrollbar {
