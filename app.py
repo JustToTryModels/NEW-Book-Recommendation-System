@@ -117,21 +117,21 @@ st.markdown("""
         border-radius: 10px;
     }
 
-    .author-info {
-        margin-top: 5px;
-        font-size: 12px;
-        color: #777;
+    .info-container {
         border-left: 3px solid #888888;
         padding-left: 8px;
         margin-left: 10px;
+        margin-top: 5px;
+    }
+
+    .author-info {
+        font-size: 12px;
+        color: #777;
     }
     .year-info {
         font-size: 11px;
         margin-top: 3px;
-        margin-left: 10px;
         color: #777;
-        border-left: 3px solid #888888;
-        padding-left: 8px;
     }
     img {
         object-fit: contain;
@@ -214,8 +214,10 @@ if st.session_state.recommendations is not None:
                         <div class='book-column'>
                             <div class='book-info'>
                                 <div class='scroll-title'>{i + j + 1}. {book}</div>
-                                <div class='author-info'>👤 {book_info['Book-Author']}</div>
-                                <div class='year-info'>📅 {book_info['Year-Of-Publication']}</div>
+                                <div class='info-container'>
+                                    <div class='author-info'>👤 {book_info['Book-Author']}</div>
+                                    <div class='year-info'>📅 {book_info['Year-Of-Publication']}</div>
+                                </div>
                             </div>
                             <img src='{book_info['Image-URL-L']}' style='height:290px; width:auto; display:block;'>
                         </div>
