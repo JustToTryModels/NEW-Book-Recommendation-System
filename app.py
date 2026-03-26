@@ -150,6 +150,11 @@ st.markdown("""
         opacity: 1 !important;
         border-radius: 999px !important;
     }
+    .recommendation-header {
+        font-size: 15px;
+        border-left: 5px solid #B2BEB5;
+        padding-left: 10px;
+    }
     .book-column {
         position: relative;
         padding: 0;
@@ -190,12 +195,6 @@ st.markdown("""
     }
     .extra-space {
         margin-top: 50px;
-    }
-    .recommendation-header {
-        font-size: 15px;
-        border-left: 5px solid #B2BEB5;
-        padding-left: 12px;
-        margin-left: 5px;
     }
     </style>
 """, unsafe_allow_html=True)
