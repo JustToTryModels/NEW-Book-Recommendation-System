@@ -151,7 +151,7 @@ st.markdown("""
 
     .premium-year {
         font-size: 11.5px;
-        color: #888888;
+        color: gold;
         text-transform: uppercase;
         letter-spacing: 1.2px;
         font-weight: 600;
