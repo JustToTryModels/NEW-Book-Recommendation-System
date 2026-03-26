@@ -92,50 +92,71 @@ st.markdown("""
     .stButton > button:active {
         transform: scale(0.98);
     }
+    
+    /* Updated Premium Book Info Block */
     .book-info {
-        line-height: 1.2;
-        margin: 0;
-        padding: 12px 15px;
-        background: #2b2b2b;
+        background: #1e1e1e;
+        padding: 20px 15px;
         border-radius: 0 0 10px 10px;
         border-top: 3px solid #e52e71;
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: center;
+        min-height: 140px;
     }
     
-    .scroll-title {
-        display: block;
+    .premium-title {
         font-size: 16px;
         font-weight: bold;
+        color: #ffffff;
+        margin-bottom: 8px;
+        line-height: 1.4;
+        width: 100%;
         white-space: nowrap;
         overflow-x: auto;
+        overflow-y: hidden;
+        display: block;
         padding-bottom: 5px;
-        margin-bottom: 5px;
-        color: #f0e68c;
-        text-align: center;
     }
-    .scroll-title::-webkit-scrollbar {
+
+    .premium-title::-webkit-scrollbar {
         height: 6px;
     }
-    .scroll-title::-webkit-scrollbar-thumb {
+
+    .premium-title::-webkit-scrollbar-thumb {
         background: #ccc;
         border-radius: 10px;
     }
 
-    .info-container {
-        border-left: 3px solid white;
-        padding-left: 8px;
-        margin-left: 10px;
-        margin-top: 5px;
+    .premium-divider {
+        width: 35px;
+        height: 3px;
+        background: linear-gradient(90deg, #ff8a00, #e52e71);
+        margin: 6px 0 12px 0;
+        border-radius: 5px;
     }
 
-    .author-info {
-        font-size: 12px;
-        color: #b0c4de;
+    .premium-author {
+        font-size: 13.5px;
+        color: #c4c4c4;
+        font-style: italic;
+        margin-bottom: 6px;
+        width: 100%;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
     }
-    .year-info {
-        font-size: 11px;
-        margin-top: 3px;
-        color: #b0c4de;
+
+    .premium-year {
+        font-size: 11.5px;
+        color: #888888;
+        text-transform: uppercase;
+        letter-spacing: 1.2px;
+        font-weight: 600;
     }
+    
     img {
         object-fit: contain;
         max-height: 300px;
@@ -243,6 +264,11 @@ if st.session_state.recommendations is not None:
                 if i + j < len(similar_books):
                     book = similar_books.index[i + j]
                     book_info = final_filtered_df[final_filtered_df['title'] == book].iloc[0]
+                    
+                    # Prevent quotes in variables from breaking HTML attributes occasionally
+                    safe_title = str(book).replace('"', '&quot;').replace("'", "&#39;")
+                    safe_author = str(book_info['Book-Author']).replace('"', '&quot;').replace("'", "&#39;")
+                    
                     with cols[j]:
                         st.markdown(f"""
                         <div class='book-column'>
@@ -251,11 +277,10 @@ if st.session_state.recommendations is not None:
                                 <img src='{book_info['Image-URL-L']}' style='height:290px; width:auto; display:block;'>
                             </div>
                             <div class='book-info'>
-                                <div class='scroll-title'>{book}</div>
-                                <div class='info-container'>
-                                    <div class='author-info'>👤 {book_info['Book-Author']}</div>
-                                    <div class='year-info'>📅 {book_info['Year-Of-Publication']}</div>
-                                </div>
+                                <div class='premium-title' title="{safe_title}">{book}</div>
+                                <div class='premium-divider'></div>
+                                <div class='premium-author' title="{safe_author}">By {book_info['Book-Author']}</div>
+                                <div class='premium-year'>{book_info['Year-Of-Publication']}</div>
                             </div>
                         </div>
                         """, unsafe_allow_html=True)
