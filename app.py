@@ -92,110 +92,62 @@ st.markdown("""
     .stButton > button:active {
         transform: scale(0.98);
     }
-
-    /* ── Book Info Section (Premium Redesign) ── */
+    
+    /* Updated Premium Book Info Block */
     .book-info {
-        margin: 0;
-        padding: 0;
-        background: linear-gradient(180deg, #1e1e2f 0%, #2b2b3d 100%);
+        background: #1e1e1e;
+        padding: 20px 15px;
         border-radius: 0 0 10px 10px;
         border-top: 3px solid #e52e71;
-        overflow: hidden;
-    }
-
-    .book-title-area {
-        padding: 14px 14px 10px 14px;
         text-align: center;
-    }
-
-    .scroll-title {
-        display: block;
-        font-size: 15px;
-        font-weight: 700;
-        white-space: nowrap;
-        overflow-x: auto;
-        color: #f5e6a3;
-        letter-spacing: 0.3px;
-        line-height: 1.3;
-        padding-bottom: 4px;
-    }
-    .scroll-title::-webkit-scrollbar {
-        height: 5px;
-    }
-    .scroll-title::-webkit-scrollbar-track {
-        background: transparent;
-    }
-    .scroll-title::-webkit-scrollbar-thumb {
-        background: rgba(245, 230, 163, 0.3);
-        border-radius: 10px;
-    }
-
-    .info-separator {
-        height: 1px;
-        margin: 0 14px;
-        background: linear-gradient(90deg, transparent, rgba(245, 230, 163, 0.35), transparent);
-    }
-
-    .book-meta {
-        padding: 10px 14px 14px 14px;
         display: flex;
         flex-direction: column;
-        gap: 7px;
-    }
-
-    .meta-item {
-        display: flex;
-        align-items: flex-start;
-        gap: 9px;
-    }
-
-    .meta-icon {
-        flex-shrink: 0;
-        width: 26px;
-        height: 26px;
-        border-radius: 6px;
-        background: rgba(255, 255, 255, 0.07);
-        display: flex;
+        justify-content: flex-start;
         align-items: center;
-        justify-content: center;
-        font-size: 13px;
-        border: 1px solid rgba(255, 255, 255, 0.08);
+        min-height: 140px;
+    }
+    
+    .premium-title {
+        font-size: 16px;
+        font-weight: bold;
+        color: #ffffff;
+        margin-bottom: 8px;
+        line-height: 1.4;
+        width: 100%;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        text-overflow: ellipsis;
     }
 
-    .meta-text-block {
-        display: flex;
-        flex-direction: column;
-        min-width: 0;
+    .premium-divider {
+        width: 35px;
+        height: 3px;
+        background: linear-gradient(90deg, #ff8a00, #e52e71);
+        margin: 6px 0 12px 0;
+        border-radius: 5px;
     }
 
-    .meta-label {
-        font-size: 9px;
-        font-weight: 600;
-        text-transform: uppercase;
-        letter-spacing: 1px;
-        color: rgba(176, 196, 222, 0.55);
-        line-height: 1.2;
-    }
-
-    .meta-value {
-        font-size: 13px;
-        font-weight: 500;
-        color: #d0d8e8;
-        line-height: 1.35;
+    .premium-author {
+        font-size: 13.5px;
+        color: #c4c4c4;
+        font-style: italic;
+        margin-bottom: 6px;
+        width: 100%;
         white-space: nowrap;
-        overflow-x: auto;
-    }
-    .meta-value::-webkit-scrollbar {
-        height: 4px;
-    }
-    .meta-value::-webkit-scrollbar-track {
-        background: transparent;
-    }
-    .meta-value::-webkit-scrollbar-thumb {
-        background: rgba(208, 216, 232, 0.2);
-        border-radius: 10px;
+        overflow: hidden;
+        text-overflow: ellipsis;
     }
 
+    .premium-year {
+        font-size: 11.5px;
+        color: #888888;
+        text-transform: uppercase;
+        letter-spacing: 1.2px;
+        font-weight: 600;
+    }
+    
     img {
         object-fit: contain;
         max-height: 300px;
@@ -303,6 +255,11 @@ if st.session_state.recommendations is not None:
                 if i + j < len(similar_books):
                     book = similar_books.index[i + j]
                     book_info = final_filtered_df[final_filtered_df['title'] == book].iloc[0]
+                    
+                    # Prevent quotes in variables from breaking HTML attributes occasionally
+                    safe_title = str(book).replace('"', '&quot;').replace("'", "&#39;")
+                    safe_author = str(book_info['Book-Author']).replace('"', '&quot;').replace("'", "&#39;")
+                    
                     with cols[j]:
                         st.markdown(f"""
                         <div class='book-column'>
@@ -311,26 +268,10 @@ if st.session_state.recommendations is not None:
                                 <img src='{book_info['Image-URL-L']}' style='height:290px; width:auto; display:block;'>
                             </div>
                             <div class='book-info'>
-                                <div class='book-title-area'>
-                                    <div class='scroll-title'>{book}</div>
-                                </div>
-                                <div class='info-separator'></div>
-                                <div class='book-meta'>
-                                    <div class='meta-item'>
-                                        <div class='meta-icon'>👤</div>
-                                        <div class='meta-text-block'>
-                                            <span class='meta-label'>Author</span>
-                                            <span class='meta-value'>{book_info['Book-Author']}</span>
-                                        </div>
-                                    </div>
-                                    <div class='meta-item'>
-                                        <div class='meta-icon'>📅</div>
-                                        <div class='meta-text-block'>
-                                            <span class='meta-label'>Published</span>
-                                            <span class='meta-value'>{book_info['Year-Of-Publication']}</span>
-                                        </div>
-                                    </div>
-                                </div>
+                                <div class='premium-title' title="{safe_title}">{book}</div>
+                                <div class='premium-divider'></div>
+                                <div class='premium-author' title="{safe_author}">By {book_info['Book-Author']}</div>
+                                <div class='premium-year'>Published {book_info['Year-Of-Publication']}</div>
                             </div>
                         </div>
                         """, unsafe_allow_html=True)
