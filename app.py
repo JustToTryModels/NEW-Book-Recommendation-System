@@ -92,131 +92,50 @@ st.markdown("""
     .stButton > button:active {
         transform: scale(0.98);
     }
-
-    /* ── Book Info Section (Premium Redesign) ── */
     .book-info {
+        line-height: 1.2;
         margin: 0;
-        padding: 0;
-        background: linear-gradient(180deg, #1e1e2f 0%, #2b2b3d 100%);
+        padding: 12px 15px;
+        background: #2b2b2b;
         border-radius: 0 0 10px 10px;
         border-top: 3px solid #e52e71;
-        overflow: hidden;
     }
-
-    .book-title-area {
-        padding: 14px 14px 10px 14px;
-        text-align: center;
-    }
-
+    
     .scroll-title {
         display: block;
-        font-size: 15px;
-        font-weight: 700;
+        font-size: 16px;
+        font-weight: bold;
         white-space: nowrap;
         overflow-x: auto;
-        color: #f5e6a3;
-        letter-spacing: 0.3px;
-        line-height: 1.3;
-        padding-bottom: 4px;
+        padding-bottom: 5px;
+        margin-bottom: 5px;
+        color: #f0e68c;
+        text-align: center;
     }
     .scroll-title::-webkit-scrollbar {
-        height: 5px;
-    }
-    .scroll-title::-webkit-scrollbar-track {
-        background: transparent;
+        height: 6px;
     }
     .scroll-title::-webkit-scrollbar-thumb {
-        background: rgba(245, 230, 163, 0.3);
+        background: #ccc;
         border-radius: 10px;
     }
 
-    .info-separator {
-        height: 1px;
-        margin: 0 14px;
-        background: linear-gradient(90deg, transparent, rgba(245, 230, 163, 0.35), transparent);
+    .info-container {
+        border-left: 3px solid white;
+        padding-left: 8px;
+        margin-left: 10px;
+        margin-top: 5px;
     }
 
-    .book-meta {
-        padding: 10px 14px 14px 14px;
-        display: flex;
-        flex-direction: column;
-        gap: 7px;
+    .author-info {
+        font-size: 12px;
+        color: #b0c4de;
     }
-
-    .meta-item {
-        display: flex;
-        align-items: flex-start;
-        gap: 9px;
+    .year-info {
+        font-size: 11px;
+        margin-top: 3px;
+        color: #b0c4de;
     }
-
-    .meta-icon {
-        flex-shrink: 0;
-        width: 26px;
-        height: 26px;
-        border-radius: 6px;
-        background: rgba(255, 255, 255, 0.07);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 13px;
-        border: 1px solid rgba(255, 255, 255, 0.08);
-    }
-
-    .meta-text-block {
-        display: flex;
-        flex-direction: column;
-        min-width: 0;
-    }
-
-    .meta-label {
-        font-size: 9px;
-        font-weight: 600;
-        text-transform: uppercase;
-        letter-spacing: 1px;
-        color: rgba(176, 196, 222, 0.55);
-        line-height: 1.2;
-    }
-
-    .meta-value {
-        font-size: 13px;
-        font-weight: 500;
-        color: #d0d8e8;
-        line-height: 1.35;
-        white-space: nowrap;
-        overflow-x: auto;
-    }
-    .meta-value::-webkit-scrollbar {
-        height: 4px;
-    }
-    .meta-value::-webkit-scrollbar-track {
-        background: transparent;
-    }
-    .meta-value::-webkit-scrollbar-thumb {
-        background: rgba(208, 216, 232, 0.2);
-        border-radius: 10px;
-    }
-
-    /* ── Year Highlight Badge ── */
-    .year-highlight {
-        margin-top: 4px;
-        padding: 6px 14px;
-        display: inline-block;
-        background: rgba(255, 138, 0, 0.12);
-        border: 1px solid rgba(255, 138, 0, 0.25);
-        border-radius: 20px;
-        font-size: 11.5px;
-        font-weight: 600;
-        color: #f0c060;
-        letter-spacing: 1.2px;
-        text-transform: uppercase;
-        text-align: center;
-    }
-
-    .year-section {
-        text-align: center;
-        padding: 2px 14px 14px 14px;
-    }
-
     img {
         object-fit: contain;
         max-height: 300px;
@@ -332,21 +251,10 @@ if st.session_state.recommendations is not None:
                                 <img src='{book_info['Image-URL-L']}' style='height:290px; width:auto; display:block;'>
                             </div>
                             <div class='book-info'>
-                                <div class='book-title-area'>
-                                    <div class='scroll-title'>{book}</div>
-                                </div>
-                                <div class='info-separator'></div>
-                                <div class='book-meta'>
-                                    <div class='meta-item'>
-                                        <div class='meta-icon'>👤</div>
-                                        <div class='meta-text-block'>
-                                            <span class='meta-label'>Author</span>
-                                            <span class='meta-value'>{book_info['Book-Author']}</span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class='year-section'>
-                                    <span class='year-highlight'>📅 Published · {book_info['Year-Of-Publication']}</span>
+                                <div class='scroll-title'>{book}</div>
+                                <div class='info-container'>
+                                    <div class='author-info'>👤 {book_info['Book-Author']}</div>
+                                    <div class='year-info'>📅 {book_info['Year-Of-Publication']}</div>
                                 </div>
                             </div>
                         </div>
