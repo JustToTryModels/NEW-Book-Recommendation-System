@@ -123,7 +123,7 @@ st.markdown("""
     }
 
     .info-container {
-        border-left: 3px solid #e52e71;
+        border-left: 3px solid white;
         padding-left: 8px;
         margin-left: 10px;
         margin-top: 5px;
