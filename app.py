@@ -110,6 +110,7 @@ st.markdown("""
         padding-bottom: 5px;
         margin-bottom: 5px;
         color: #f0e68c;
+        text-align: center;
     }
     .scroll-title::-webkit-scrollbar {
         height: 6px;
