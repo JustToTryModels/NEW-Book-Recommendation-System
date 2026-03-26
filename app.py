@@ -97,7 +97,7 @@ st.markdown("""
         line-height: 1.2;
         margin: 0;
         padding: 12px 15px;
-        background: linear-gradient(135deg, #4a4a4a, #2b2b2b); /* Changed to dark ash color */
+        background: linear-gradient(135deg, #1a1a2e, #16213e);
         border-radius: 0 0 10px 10px;
         border-top: 3px solid #e52e71;
     }
@@ -105,7 +105,6 @@ st.markdown("""
     /* NEW: Horizontal Scroll styling for the Title */
     .scroll-title {
         display: block;
-        text-align: center; /* Centered the title */
         font-size: 16px;
         font-weight: bold;
         white-space: nowrap;
