@@ -114,11 +114,20 @@ st.markdown("""
         margin-bottom: 8px;
         line-height: 1.4;
         width: 100%;
-        display: -webkit-box;
-        -webkit-line-clamp: 2;
-        -webkit-box-orient: vertical;
-        overflow: hidden;
-        text-overflow: ellipsis;
+        white-space: nowrap;
+        overflow-x: auto;
+        overflow-y: hidden;
+        display: block;
+        padding-bottom: 5px;
+    }
+
+    .premium-title::-webkit-scrollbar {
+        height: 6px;
+    }
+
+    .premium-title::-webkit-scrollbar-thumb {
+        background: #ccc;
+        border-radius: 10px;
     }
 
     .premium-divider {
