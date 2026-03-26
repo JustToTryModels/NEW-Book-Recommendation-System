@@ -18,7 +18,6 @@ def load_and_prepare_data():
 
     final_filtered_df = final_filtered_df.merge(book_urls_df, on='title', how='left')
 
-    # URL fixes
     url1 = 'http://images.amazon.com/images/P/0690040784.01.LZZZZZZZ.jpg'
     url2 = 'http://images.amazon.com/images/P/0451172817.01.LZZZZZZZ.jpg'
     url3 = 'http://images.amazon.com/images/P/0312084986.01.LZZZZZZZ.jpg'
@@ -46,108 +45,129 @@ def get_top_similar_books(book_title, n=10):
     return similar_books
 
 # ====================== PREMIUM STREAMLIT APP ======================
-st.markdown("<h1 style='font-size: 42px; text-align: center; margin-bottom: 8px;'>Book Recommendation System</h1>", unsafe_allow_html=True)
-st.markdown("<p style='text-align: center; font-size: 20px; color: #b8b8b8; margin-bottom: 30px;'>Discover your next literary obsession</p>", unsafe_allow_html=True)
+st.set_page_config(page_title="BRS • Luxe", layout="wide", initial_sidebar_state="collapsed")
 
 st.markdown("""
     <style>
     @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Inter:wght@300;400;500;600&display=swap');
 
     html, body, [class*="css"], [class*="st-"] {
-        font-family: 'Inter', system-ui, sans-serif;
+        font-family: 'Inter', system-ui, sans-serif !important;
     }
     
-    h1, h2, h3 {
+    h1 {
         font-family: 'Playfair Display', serif !important;
+        font-size: 58px !important;
+        font-weight: 700;
+        background: linear-gradient(90deg, #d4af77, #f5e8c7, #d4af77);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        letter-spacing: -2.5px;
+        margin-bottom: 8px !important;
+    }
+    
+    .subheader {
+        font-size: 24px;
+        color: #c9b89f;
+        font-weight: 400;
+        letter-spacing: 4px;
+        margin-bottom: 30px !important;
     }
 
+    /* Premium Button */
     .stButton > button {
-        font-family: 'Inter', sans-serif;
+        font-family: 'Inter', sans-serif !important;
+        font-size: 17px;
         font-weight: 600;
-        background: linear-gradient(90deg, #c9a227, #e8c670);
-        color: #1a1a1a !important;
-        border: none;
-        border-radius: 30px;
-        padding: 12px 28px;
-        font-size: 16px;
-        transition: all 0.3s ease;
+        background: linear-gradient(135deg, #2c1810, #5c4033);
+        color: #f5e8c7 !important;
+        border: 2px solid #d4af77;
+        border-radius: 50px;
+        padding: 14px 42px;
+        letter-spacing: 2px;
+        box-shadow: 0 10px 35px rgba(212, 175, 119, 0.25);
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     }
+    
     .stButton > button:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 10px 25px rgba(201, 162, 39, 0.3);
+        transform: translateY(-4px) scale(1.03);
+        box-shadow: 0 20px 45px rgba(212, 175, 119, 0.35);
+        border-color: #e8d5a8;
     }
 
+    /* Premium Book Card */
     .book-column {
-        background: linear-gradient(145deg, #1c1c1c, #282828);
-        border: 1px solid #3a3a3a;
+        background: #161618;
         border-radius: 20px;
         overflow: hidden;
-        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.7);
-        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        box-shadow: 0 15px 40px rgba(0, 0, 0, 0.7),
+                    inset 0 0 0 1px rgba(212, 175, 119, 0.15);
+        transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
         position: relative;
+        margin-top: 38px;
         height: 100%;
     }
     
     .book-column:hover {
-        transform: translateY(-15px);
-        box-shadow: 0 30px 60px rgba(201, 162, 39, 0.2);
-        border-color: #d4af37;
+        transform: translateY(-12px);
+        box-shadow: 0 25px 60px rgba(0, 0, 0, 0.8),
+                    inset 0 0 0 1px rgba(212, 175, 119, 0.4);
     }
 
     .recommendation-badge {
         position: absolute;
-        top: -18px;
+        top: -24px;
         left: 50%;
         transform: translateX(-50%);
         width: 52px;
         height: 52px;
-        background: linear-gradient(135deg, #d4af37, #f0d48a);
-        color: #1a1a1a;
-        border: 3px solid #1c1c1c;
+        background: linear-gradient(135deg, #d4af77, #f5e8c7);
+        color: #1a1208;
+        border: 3px solid #161618;
         border-radius: 50%;
         display: flex;
         align-items: center;
         justify-content: center;
-        font-size: 20px;
-        font-weight: 800;
+        font-size: 22px;
+        font-weight: 700;
+        box-shadow: 0 8px 25px rgba(212, 175, 119, 0.5);
         z-index: 20;
-        box-shadow: 0 8px 20px rgba(212, 175, 55, 0.4);
         font-family: 'Playfair Display', serif;
     }
 
     .book-image-area {
         padding: 35px 25px 20px 25px;
-        background: #161616;
+        background: #0f0f11;
         position: relative;
     }
-
+    
     .book-image-area img {
         border-radius: 12px;
         box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
-        transition: transform 0.5s ease;
-        width: 100% !important;
-        height: 310px !important;
-        object-fit: cover;
+        transition: transform 0.6s ease;
+        height: 310px;
+        object-fit: contain;
+        width: 100%;
     }
-
+    
     .book-column:hover .book-image-area img {
         transform: scale(1.04);
     }
 
     .book-info {
+        background: #161618;
         padding: 24px 20px 28px 20px;
         text-align: center;
-        background: linear-gradient(to bottom, #1f1f1f, #1a1a1a);
-        border-top: 1px solid #3a3a3a;
+        border-top: 1px solid rgba(212, 175, 119, 0.15);
     }
 
     .premium-title {
         font-family: 'Playfair Display', serif;
         font-size: 17.5px;
         font-weight: 700;
-        color: #f0f0f0;
-        line-height: 1.35;
+        color: #f5e8c7;
         margin-bottom: 10px;
+        line-height: 1.35;
         min-height: 48px;
         display: -webkit-box;
         -webkit-line-clamp: 2;
@@ -156,36 +176,40 @@ st.markdown("""
     }
 
     .premium-divider {
-        width: 42px;
+        width: 48px;
         height: 2.5px;
-        background: linear-gradient(90deg, transparent, #d4af37, transparent);
-        margin: 0 auto 12px auto;
+        background: linear-gradient(90deg, transparent, #d4af77, transparent);
+        margin: 0 auto 14px auto;
     }
 
     .premium-author {
-        font-size: 14px;
-        color: #b8b8b8;
+        font-size: 14.2px;
+        color: #b8a88a;
         font-style: italic;
         margin-bottom: 6px;
-        font-weight: 400;
     }
 
     .premium-year {
         font-size: 12.5px;
-        color: #777777;
+        color: #76654a;
         letter-spacing: 1.5px;
         font-weight: 500;
-        text-transform: uppercase;
     }
 
     .recommendation-header {
-        font-size: 18px;
-        font-weight: 600;
-        color: #d4af37;
-        margin: 30px 0 20px 0;
-        padding-bottom: 12px;
-        border-bottom: 2px solid #3a3a3a;
+        font-size: 21px;
+        color: #d4af77;
         font-family: 'Playfair Display', serif;
+        margin-bottom: 15px;
+        padding-left: 8px;
+        border-left: 4px solid #d4af77;
+    }
+
+    hr {
+        border: none;
+        height: 1px;
+        background: linear-gradient(90deg, transparent, rgba(212, 175, 119, 0.2), transparent);
+        margin: 45px 0;
     }
 
     .extra-space {
@@ -194,10 +218,13 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
+st.markdown("<h1>Book Recommendation System</h1>", unsafe_allow_html=True)
+st.markdown("<p class='subheader'>CURATED FOR DISCERNING READERS</p>", unsafe_allow_html=True)
+
 st.image('https://img.freepik.com/premium-vector/bookcase-with-books_182089-197.jpg', use_container_width=True)
 
 all_books = final_filtered_df['title'].unique().tolist()
-book_title = st.selectbox('Select a book title:', all_books, index=None, placeholder="Choose or search a book...", key='book_title')
+book_title = st.selectbox('Select a book you loved:', all_books, index=None, placeholder="Choose a book title...", key='book_title')
 
 num_recommendations = st.number_input('Number of recommendations:', min_value=1, max_value=50, value=10)
 
@@ -208,14 +235,15 @@ if 'recommended_book' not in st.session_state:
 if 'recommended_num' not in st.session_state:
     st.session_state.recommended_num = None
 
-if st.button('Get Recommendations', use_container_width=True):
+if st.button('Get Recommendations'):
     if book_title:
         similar_books = get_top_similar_books(book_title, num_recommendations)
         st.session_state.recommendations = similar_books
         st.session_state.recommended_book = book_title
         st.session_state.recommended_num = num_recommendations
     else:
-        st.warning("⚠️ Please select a book title.")
+        st.session_state.recommendations = None
+        st.error("Please select a book title.")
 
 if st.session_state.recommendations is not None:
     similar_books = st.session_state.recommendations
@@ -247,14 +275,13 @@ if st.session_state.recommendations is not None:
                             <div class='book-info'>
                                 <div class='premium-title' title="{safe_title}">{book}</div>
                                 <div class='premium-divider'></div>
-                                <div class='premium-author'>{book_info['Book-Author']}</div>
+                                <div class='premium-author'>by {book_info['Book-Author']}</div>
                                 <div class='premium-year'>{book_info['Year-Of-Publication']}</div>
                             </div>
                         </div>
                         """, unsafe_allow_html=True)
-            
             if i < len(similar_books) - 3:
-                st.markdown("<br>", unsafe_allow_html=True)
+                st.markdown("<hr>", unsafe_allow_html=True)
 
         st.markdown("<div class='extra-space'></div>", unsafe_allow_html=True)
         st.image('https://github.com/MarpakaPradeepSai/Employee-Churn-Prediction/blob/main/Data/Images%20&%20GIFs/thank-you-33.gif?raw=true', use_container_width=True)
