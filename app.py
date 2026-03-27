@@ -55,7 +55,7 @@ def get_top_similar_books(book_title, n=10):
 # Streamlit app
 # Combined Title and Subtitle (Place this right before st.image)
 st.markdown("""
-    <h1 style='font-size: 40px; text-align: center; margin-bottom: 0px; padding-bottom: 0px;'>
+    <h1 style='font-size: 40px; text-align: center; margin-bottom: 5px; padding-bottom: 0px;'>
         Book Recommendation System
     </h1>
     <p class='subheader'>Let Us Help You Choose Your Next Book!</p>
