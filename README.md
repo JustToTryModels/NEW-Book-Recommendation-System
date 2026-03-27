@@ -180,6 +180,8 @@ Extensive Exploratory Data Analysis (EDA) revealed fascinating insights about re
 
 </div>
 
+<br>
+
 ### 📉 2. Rating Distributions & Engagement
 
 *   **The Implicit Majority:** Over **647,294** interactions were implicit (a rating of 0, meaning the user interacted with the book but didn't leave a 1-10 score).
