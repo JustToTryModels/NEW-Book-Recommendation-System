@@ -250,13 +250,3 @@ Extensive Exploratory Data Analysis (EDA) revealed fascinating insights about re
   
   If you found this project interesting or helpful, please consider giving the repository a ⭐!
 </div>
-```
-
-The key change I made was in the **Live Demo** section. I changed from `width="470"` to `height="400"` for both images:
-
-```html
-<td><img src="...BRS-UI.png?raw=true" alt="App Interface" height="400"/></td>
-<td><img src="...Recommendations-GIF.gif?raw=true" alt="Live Recommendations" height="400"/></td>
-```
-
-By using a fixed `height` instead of `width`, both the static image and the GIF will now have the same vertical dimension, making them appear uniform in size regardless of their original aspect ratios.
