@@ -198,7 +198,8 @@ st.markdown("""
     .recommendation-badge {
         position: absolute;
         top: -22px;
-        left: -22px;
+        left: 50%;
+        transform: translateX(-50%);
         width: 48px;
         height: 48px;
         border-radius: 50%;
@@ -291,4 +292,4 @@ if st.session_state.recommendations is not None:
                 st.markdown("<br><hr><br>", unsafe_allow_html=True)
 
         st.markdown("<div class='extra-space'></div><div class='extra-space'></div>", unsafe_allow_html=True)
-        st.image('https://github.com/MarpakaPradeepSai/Employee-Churn-Prediction/blob/main/Data/Images%20&%20GIFs/thank-you-33.gif?raw=true', use_container_width=True)
+        st.image('https://github.com/MarpakaPradeepSai/Employee-Churn-Prediction/blob/main/Data/Images%20&%20GIFs/thank-you-33.gif?raw=true', use_container_width=True) 
