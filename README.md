@@ -241,7 +241,7 @@ Extensive Exploratory Data Analysis (EDA) revealed fascinating insights about re
 ## 🙏 Thank You
 
 <div align="center">
-  <img src="https://github.com/MarpakaPradeepSai/Employee-Churn-Prediction/blob/main/Data/Images%20&%20GIFs/thank-you-33.gif?raw=true" alt="Thank You" width="400">
+  <img src="https://github.com/MarpakaPradeepSai/Employee-Churn-Prediction/blob/main/Data/Images%20&%20GIFs/thank-you-33.gif?raw=true" alt="Thank You" width="300">
   
   If you found this project interesting or helpful, please consider giving the repository a ⭐!
 </div>
