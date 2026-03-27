@@ -88,8 +88,8 @@ Try the live recommendation engine here:
       <th>✨ Live Recommendations</th>
     </tr>
     <tr>
-      <td><img src="https://github.com/MarpakaPradeepSai/Book-Recommendation-system/blob/main/Data/Images%20&%20GIF/BRS-UI.png?raw=true" alt="App Interface" height="400"/></td>
-      <td><img src="https://github.com/MarpakaPradeepSai/Book-Recommendation-system/blob/main/Data/Images%20&%20GIF/Recommendations-GIF.gif?raw=true" alt="Live Recommendations" height="400"/></td>
+      <td><img src="https://github.com/MarpakaPradeepSai/Book-Recommendation-System/blob/main/Data/Images%20&%20GIF/BRS-UI.png?raw=true" alt="App Interface" height="400"/></td>
+      <td><img src="https://github.com/MarpakaPradeepSai/Book-Recommendation-System/blob/main/Data/Images%20&%20GIF/Recommendations-GIF.gif?raw=true" alt="Live Recommendations" height="400"/></td>
     </tr>
   </table>
 </div>
@@ -217,8 +217,8 @@ Extensive Exploratory Data Analysis (EDA) revealed fascinating insights about re
 
 1. **Clone the repository**
    ```bash
-   git clone https://github.com/yourusername/book-recommendation-system.git
-   cd book-recommendation-system
+   git clone https://github.com/MarpakaPradeepSai/Book-Recommendation-System.git
+   cd Book-Recommendation-System
    ```
 
 2. **Create and activate a virtual environment (Recommended)**
