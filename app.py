@@ -53,10 +53,15 @@ def get_top_similar_books(book_title, n=10):
     return similar_books
 
 # Streamlit app
-st.markdown(
-    "<h1 style='font-size: 40px; text-align: center; margin-bottom: 0;'>Book Recommendation System</h1>",
-    unsafe_allow_html=True
-)
+# Combined Title and Subtitle (Place this right before st.image)
+st.markdown("""
+    <h1 style='font-size: 40px; text-align: center; margin-bottom: 0px; padding-bottom: 0px;'>
+        Book Recommendation System
+    </h1>
+    <p class='subheader'>Let Us Help You Choose Your Next Book!</p>
+""", unsafe_allow_html=True)
+
+st.image('https://img.freepik.com/premium-vector/bookcase-with-books_182089-197.jpg', use_container_width=True)
 
 st.markdown("""
     <style>
@@ -230,9 +235,6 @@ st.markdown("""
     }
     </style>
 """, unsafe_allow_html=True)
-
-st.markdown("<p class='subheader'>Let Us Help You Choose Your Next Book!</p>", unsafe_allow_html=True)
-st.image('https://img.freepik.com/premium-vector/bookcase-with-books_182089-197.jpg', use_container_width=True)
 
 all_books = final_filtered_df['title'].unique().tolist()
 book_title = st.selectbox('Enter a book title:', all_books, index=None, placeholder="Choose or enter a book title...", key='book_title')
