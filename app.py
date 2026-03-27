@@ -68,6 +68,7 @@ st.markdown("""
         font-weight: bold;
         margin-bottom: 20px;
         color: #1a73e8;
+        text-align: center;
     }
     .stButton > button {
         font-family: 'Tiempos', 'Tiempos Text', Georgia, 'Times New Roman', serif !important;
