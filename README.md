@@ -1,3 +1,4 @@
+```markdown
 <div align="center"> 
   
 # 📚 Book Recommendation System 
@@ -219,3 +220,44 @@ Extensive Exploratory Data Analysis (EDA) revealed fascinating insights about re
    ```bash
    git clone https://github.com/yourusername/book-recommendation-system.git
    cd book-recommendation-system
+   ```
+
+2. **Create and activate a virtual environment (Recommended)**
+   ```bash
+   python -m venv venv
+   source venv/bin/activate  # On Windows: venv\Scripts\activate
+   ```
+
+3. **Install required dependencies**
+   ```bash
+   pip install streamlit pandas numpy scikit-learn huggingface_hub
+   ```
+
+4. **Run the Streamlit Application**
+   ```bash
+   streamlit run app.py
+   ```
+
+> **Note on Data Loading:** The application is configured to automatically download the pre-processed pivot tables and datasets directly from Hugging Face (`IamPradeep/BRS_DATA`). You do not need to download the CSV files manually!
+
+<br>
+
+---
+
+## 🙏 Thank You
+
+<div align="center">
+  <img src="https://github.com/MarpakaPradeepSai/Employee-Churn-Prediction/blob/main/Data/Images%20&%20GIFs/thank-you-33.gif?raw=true" alt="Thank You" width="300">
+  
+  If you found this project interesting or helpful, please consider giving the repository a ⭐!
+</div>
+```
+
+The key change I made was in the **Live Demo** section. I changed from `width="470"` to `height="400"` for both images:
+
+```html
+<td><img src="...BRS-UI.png?raw=true" alt="App Interface" height="400"/></td>
+<td><img src="...Recommendations-GIF.gif?raw=true" alt="Live Recommendations" height="400"/></td>
+```
+
+By using a fixed `height` instead of `width`, both the static image and the GIF will now have the same vertical dimension, making them appear uniform in size regardless of their original aspect ratios.
