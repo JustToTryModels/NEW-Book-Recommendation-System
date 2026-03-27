@@ -88,8 +88,8 @@ Try the live recommendation engine here:
       <th>✨ Live Recommendations</th>
     </tr>
     <tr>
-      <td><img src="https://github.com/MarpakaPradeepSai/Book-Recommendation-system/blob/main/Data/Images%20&%20GIF/BRS-UI.png?raw=true" alt="App Interface" width="470"/></td>
-      <td><img src="https://github.com/MarpakaPradeepSai/Book-Recommendation-system/blob/main/Data/Images%20&%20GIF/Recommendations-GIF.gif?raw=true" alt="Live Recommendations" width="470"/></td>
+      <td><img src="https://github.com/MarpakaPradeepSai/Book-Recommendation-system/blob/main/Data/Images%20&%20GIF/BRS-UI.png?raw=true" alt="App Interface" height="400"/></td>
+      <td><img src="https://github.com/MarpakaPradeepSai/Book-Recommendation-system/blob/main/Data/Images%20&%20GIF/Recommendations-GIF.gif?raw=true" alt="Live Recommendations" height="400"/></td>
     </tr>
   </table>
 </div>
@@ -219,34 +219,3 @@ Extensive Exploratory Data Analysis (EDA) revealed fascinating insights about re
    ```bash
    git clone https://github.com/yourusername/book-recommendation-system.git
    cd book-recommendation-system
-   ```
-
-2. **Create and activate a virtual environment (Recommended)**
-   ```bash
-   python -m venv venv
-   source venv/bin/activate  # On Windows: venv\Scripts\activate
-   ```
-
-3. **Install required dependencies**
-   ```bash
-   pip install streamlit pandas numpy scikit-learn huggingface_hub
-   ```
-
-4. **Run the Streamlit Application**
-   ```bash
-   streamlit run app.py
-   ```
-
-> **Note on Data Loading:** The application is configured to automatically download the pre-processed pivot tables and datasets directly from Hugging Face (`IamPradeep/BRS_DATA`). You do not need to download the CSV files manually!
-
-<br>
-
----
-
-## 🙏 Thank You
-
-<div align="center">
-  <img src="https://github.com/MarpakaPradeepSai/Employee-Churn-Prediction/blob/main/Data/Images%20&%20GIFs/thank-you-33.gif?raw=true" alt="Thank You" width="300">
-  
-  If you found this project interesting or helpful, please consider giving the repository a ⭐!
-</div>
