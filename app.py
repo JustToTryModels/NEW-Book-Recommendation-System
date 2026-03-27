@@ -198,8 +198,7 @@ st.markdown("""
     .recommendation-badge {
         position: absolute;
         top: -22px;
-        left: 50%;
-        transform: translateX(-50%);
+        left: -22px;
         width: 48px;
         height: 48px;
         border-radius: 50%;
