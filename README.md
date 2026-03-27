@@ -34,7 +34,7 @@ A machine learning-powered web application designed to recommend books to users 
 ## ❓ What is Collaborative Filtering?
 
 <div align="center">
-  <img src="https://miro.medium.com/v2/resize:fit:828/format:webp/1*3ALliiz9hG79_2xopzgyrQ.png" alt="Collaborative Filtering" width="600"/>
+  <img src="https://github.com/MarpakaPradeepSai/Book-Recommendation-System/blob/main/Data/Images%20&%20GIF/CF2.webp?raw=true" alt="Collaborative Filtering" width="600"/>
 </div>
 
 **Collaborative filtering** is a technique used by recommender systems to predict a user's interests by collecting preferences from a broader user base. 
