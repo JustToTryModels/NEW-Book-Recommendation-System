@@ -82,7 +82,16 @@ Try the live recommendation engine here:
 [![Open Streamlit App](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://new-book-recommendation-system.streamlit.app/) 
 
 <div align="center">
-  <img src="https://img.freepik.com/premium-vector/bookcase-with-books_182089-197.jpg" alt="App Interface" width="600" style="border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);"/>
+  <table>
+    <tr>
+      <th>🖥️ App Interface</th>
+      <th>✨ Live Recommendations</th>
+    </tr>
+    <tr>
+      <td><img src="https://github.com/MarpakaPradeepSai/Book-Recommendation-system/blob/main/Data/Images%20&%20GIF/BRS-UI.png?raw=true" alt="App Interface" width="470"/></td>
+      <td><img src="https://github.com/MarpakaPradeepSai/Book-Recommendation-system/blob/main/Data/Images%20&%20GIF/Recommendations-GIF.gif?raw=true" alt="Live Recommendations" width="470"/></td>
+    </tr>
+  </table>
 </div>
 
 > Simply select a book you've enjoyed, and the system will instantly generate a curated list of top recommendations complete with cover art, author details, and publication years!
