@@ -235,7 +235,8 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
-all_books = final_filtered_df['title'].unique().tolist()
+# THE ONLY CHANGE IS HERE: Added sorted() to alphabetize the dropdown list
+all_books = sorted(final_filtered_df['title'].unique().tolist())
 book_title = st.selectbox('Enter a book title:', all_books, index=None, placeholder="Choose or enter a book title...", key='book_title')
 
 num_recommendations = st.number_input('Enter the number of recommendations:', min_value=1, max_value=50, value=10)
