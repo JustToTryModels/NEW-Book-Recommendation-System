@@ -66,7 +66,7 @@ st.markdown("""
     .subheader {
         font-size: 22px;
         font-weight: bold;
-        margin-bottom: 0px;
+        margin-bottom: 20px;
         color: #1a73e8;
         text-align: center;
     }
