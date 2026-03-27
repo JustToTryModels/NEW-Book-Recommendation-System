@@ -54,7 +54,7 @@ def get_top_similar_books(book_title, n=10):
 
 # Streamlit app
 st.markdown(
-    "<h1 style='font-size: 40px; text-align: center;'>Book Recommendation System</h1>",
+    "<h1 style='font-size: 40px; text-align: center; margin-bottom: 0;'>Book Recommendation System</h1>",
     unsafe_allow_html=True
 )
 
