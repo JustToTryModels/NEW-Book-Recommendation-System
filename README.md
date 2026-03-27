@@ -188,6 +188,8 @@ Extensive Exploratory Data Analysis (EDA) revealed fascinating insights about re
 *   **Positivity Bias:** Among explicit ratings (1-10), **8 is the most common score**, indicating users are more likely to rate books they actually enjoyed.
 *   **The "Wild Animus" Anomaly:** The book *Wild Animus* had the highest total occurrences (2,502) but overwhelmingly dominated the **"1-star"** rating category. High visibility does not equal high satisfaction!
 
+<br>
+
 ### ✍️ 3. Industry Insights (Authors & Publishers)
 
 <div align="center">
@@ -200,6 +202,8 @@ Extensive Exploratory Data Analysis (EDA) revealed fascinating insights about re
 | **Peak Publishing Era** | **1999 - 2002** | ~17k/year | The "Golden Era" of book releases within this specific dataset timeline. |
 
 </div>
+
+<br>
 
 ### 🌍 4. User Demographics
 *   **Location:** The dataset is heavily skewed toward North America. **Toronto (13.3%)**, Seattle (11.7%), and Portland (11.2%) are the top user locations. London (8.7%) is the only non-North American city in the top 10.
