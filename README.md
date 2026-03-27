@@ -79,7 +79,7 @@ Build a robust recommendation engine capable of processing millions of user inte
 
 Try the live recommendation engine here:
 
-[![Open Streamlit App](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://new-book-recommendation-system.streamlit.app/) 
+[![Open Streamlit App](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://book-recommendation-systemm.streamlit.app/) 
 
 <div align="center">
   <table>
