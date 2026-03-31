@@ -83,16 +83,8 @@ This project uses **LoRA**, one of the most popular PEFT techniques. LoRA works 
 
 <div style="text-align: center;">
     
-  <img src="https://www.dailydoseofds.com/content/images/size/w1000/2024/02/image-283.png" width="700"/>
+  <img src="https://www.dailydoseofds.com/content/images/size/w1000/2024/02/image-283.png" width="500"/>
   
-</div>
-
-<div>
-  <img 
-    src="https://www.dailydoseofds.com/content/images/size/w1000/2024/02/image-283.png" 
-    width="700"
-    style="display: block; margin: 0 auto;"
-  />
 </div>
 
 **How it Works Mathematically:**
