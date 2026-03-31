@@ -81,10 +81,8 @@ Examples include: **LoRA**, Adapters, Prefix Tuning, and BitFit.
 
 This project uses **LoRA**, one of the most popular PEFT techniques. LoRA works on the hypothesis that the change in weights during fine-tuning has a "low intrinsic rank." Therefore, instead of learning a large weight update matrix `ΔW`, LoRA learns two smaller, low-rank matrices `A` and `B` whose product approximates `ΔW`.
 
-<div style="text-align: center;">
-    
+<div align="center">
   <img src="https://www.dailydoseofds.com/content/images/size/w1000/2024/02/image-283.png" width="500"/>
-  
 </div>
 
 **How it Works Mathematically:**
