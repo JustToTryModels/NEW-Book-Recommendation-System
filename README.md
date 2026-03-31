@@ -13,7 +13,7 @@ The primary focus is the **methodology of fine-tuning**, covering everything fro
 <br>
 
 <div style="text-align: center;">
-  <img src="https://www.mygreatlearning.com/blog/wp-content/uploads/2023/04/fine-tuning-banner.jpg" width="700"/>
+  <img src="https://www.mygreatlearning.com/blog/wp-content/uploads/2025/04/fine-tuning-banner.jpg" width="700"/>
 </div>
 
 ---
