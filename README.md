@@ -208,8 +208,8 @@ The saved `output_path` will contain only the trained adapter weights (a few meg
 
 1.  **Clone the repository:**
     ```bash
-    git clone https://github.com/MarpakaPradeepSai/Fine-tuning-HuggingFaceTB-SmolLM2-1.7B-Instruct.git
-    cd Fine-tuning-HuggingFaceTB-SmolLM2-1.7B-Instruct
+    git clone https://github.com/MarpakaPradeepSai/Fine-tuning-HuggingFaceTB-SmolLM2-1.7B-Instruct-with-LoRA.git
+    cd Fine-tuning-HuggingFaceTB-SmolLM2-1.7B-Instruct-with-LoRA
     ```
 
 2.  **Install dependencies:**
