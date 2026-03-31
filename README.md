@@ -201,6 +201,8 @@ tokenizer.save_pretrained(output_path)
 ```
 The saved `output_path` will contain only the trained adapter weights (a few megabytes), not the entire 1.7B parameter model.
 
+<br>
+
 ---
 
 ## 4. How to Run This Project
@@ -225,6 +227,8 @@ The saved `output_path` will contain only the trained adapter weights (a few meg
 
 4.  **Run the Notebook:**
     Open the `Fine-Tuning-SmolLM.ipynb` notebook in a Jupyter or Colab environment and execute the cells sequentially.
+
+<br>
 
 ---
 
@@ -251,8 +255,12 @@ After fine-tuning, the model is significantly better at handling domain-specific
 
 This demonstrates the model has successfully specialized its function, a direct result of the fine-tuning process.
 
+<br>
+
 ---
 
 ## 6. License
 
-This project is licensed under the [Apache 2.0 License](LICENSE), consistent with the license of the base model and libraries used.
+This project is licensed under the MIT License.
+
+Note: This project uses the SmolLM2-1.7B-Instruct model, which is licensed under the Apache 2.0 License. Any use of the model and its derivatives must comply with its original license.
