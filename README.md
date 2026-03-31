@@ -42,6 +42,8 @@ The primary focus is the **methodology of fine-tuning**, covering everything fro
 5.  [**Results: In-Domain vs. Out-of-Domain Performance**](#5-results-in-domain-vs-out-of-domain-performance)
 6.  [**License**](#6-license)
 
+<br>
+
 ---
 
 ## 1. Introduction to Fine-Tuning
@@ -61,6 +63,8 @@ Fine-tuning bridges this gap, leading to:
 -   ✅ **Higher Accuracy:** More relevant and factually correct responses for your specific domain.
 -   ✅ **Improved Performance:** Faster, more personalized answers tailored to user needs.
 -   ✅ **Reduced Off-Topic Replies:** The model learns to stay within the bounds of its intended function.
+
+<br>
 
 ---
 
@@ -93,6 +97,8 @@ This project uses **LoRA**, one of the most popular PEFT techniques. LoRA works 
 -   **Massive Parameter Reduction:** We train `r * (d + k)` parameters instead of `d * k`, drastically reducing VRAM requirements.
 -   **Faster Training:** Fewer parameters mean quicker convergence.
 -   **Easy Deployment:** The original model remains unchanged. The small `A` and `B` matrices can be saved separately and loaded on top of the base model as needed, allowing for multiple task-specific adapters for a single base model.
+
+<br>
 
 ---
 
