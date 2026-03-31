@@ -6,7 +6,6 @@
 [![License: Apache 2.0](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 [![Hugging Face](https://img.shields.io/badge/%F0%9F%A4%97%20Hugging%20Face-Model-yellow)](https://huggingface.co/HuggingFaceTB/SmolLM2-1.7B-Instruct)
 [![PEFT](https://img.shields.io/badge/PEFT-LoRA-orange)](https://github.com/huggingface/peft)
-[![Made with](https://img.shields.io/badge/Made%20with-Colab-f9ab00.svg)](https://colab.research.google.com/)
 
 </div>
     
