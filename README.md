@@ -1,256 +1,250 @@
-<div align="center"> 
-  
-# 📚 Book Recommendation System 
-  
-[![Python](https://img.shields.io/badge/Python-3.10%2B-blue?style=for-the-badge&logo=python&logoColor=white)](https://www.python.org/)
-[![Streamlit](https://img.shields.io/badge/Streamlit-App-FF4B4B?style=for-the-badge&logo=Streamlit&logoColor=white)](https://streamlit.io/)
-[![Scikit-Learn](https://img.shields.io/badge/scikit--learn-F7931E?style=for-the-badge&logo=scikit-learn&logoColor=white)](https://scikit-learn.org/)
-[![Hugging Face](https://img.shields.io/badge/Hugging%20Face-Datasets-F9AB00?style=for-the-badge&logo=huggingface&logoColor=white)](https://huggingface.co/)
-[![License](https://img.shields.io/badge/License-MIT-green.svg?style=for-the-badge)](LICENSE)
-
-</div>
-  
-A machine learning-powered web application designed to recommend books to users based on collaborative filtering techniques. By analyzing underlying patterns in user reading histories and ratings, the system identifies similarities between books to provide highly accurate, personalized reading recommendations. 
-
-<br>
+Of course. Here is a highly professional GitHub README file, crafted from the provided notebook content, with a strong emphasis on the process of fine-tuning a language model rather than the specific chatbot application.
 
 ---
 
-## 📋 Table of Contents
+# Fine-Tuning SmolLM-1.7B-Instruct with LoRA for Domain Adaptation
 
-- [What is Collaborative Filtering?](#-what-is-collaborative-filtering)
-- [Project Overview](#-project-overview)
-- [Live Demo](#-live-demo)
-- [Dataset Overview](#-dataset-overview)
-- [Methodology & Data Processing](#-methodology--data-processing)
-- [Model Architecture & Evaluation](#-model-architecture--evaluation)
-- [Key EDA Findings](#-key-eda-findings)
-- [Installation & Usage](#-installation--usage)
+[![Python Version](https://img.shields.io/badge/Python-3.10%2B-blue.svg)](https://www.python.org/)
+[![License: Apache 2.0](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
+[![Hugging Face](https://img.shields.io/badge/%F0%9F%A4%97%20Hugging%20Face-Model-yellow)](https://huggingface.co/HuggingFaceTB/SmolLM2-1.7B-Instruct)
+[![PEFT](https://img.shields.io/badge/PEFT-LoRA-orange)](https://github.com/huggingface/peft)
+[![Made with](https://img.shields.io/badge/Made%20with-Colab-f9ab00.svg)](https://colab.research.google.com/)
+
+This repository provides a comprehensive guide and implementation for fine-tuning a pre-trained language model, **`SmolLM2-1.7B-Instruct`**, using Parameter-Efficient Fine-Tuning (PEFT), specifically Low-Rank Adaptation (LoRA). The project demonstrates how to adapt a general-purpose model to a specialized domain—in this case, an event-ticketing assistant—making it more accurate, context-aware, and efficient.
+
+The primary focus is the **methodology of fine-tuning**, covering everything from data preparation and cleaning to the theoretical underpinnings of LoRA and its practical application.
 
 <br>
 
----
-
-## ❓ What is Collaborative Filtering?
-
-<div align="center">
-  <img src="https://github.com/MarpakaPradeepSai/Book-Recommendation-System/blob/main/Data/Images%20&%20GIF/CF2.webp?raw=true" alt="Collaborative Filtering" width="600"/>
+<div style="text-align: center;">
+  <img src="https://www.mygreatlearning.com/blog/wp-content/uploads/2023/04/fine-tuning-banner.jpg" width="700"/>
 </div>
 
-**Collaborative filtering** is a technique used by recommender systems to predict a user's interests by collecting preferences from a broader user base. 
+---
 
-This project specifically utilizes **Item-Based Collaborative Filtering**, which recommends items to a target user based on the similarities between the items themselves. If User A likes *Harry Potter 1*, and the system identifies that *Harry Potter 1* is mathematically similar to *Harry Potter 2* (because users who read the first almost always read the second), it will recommend the latter.
+## 📜 Table of Contents
 
-**Advantages:**
-- 🎯 **User-Centric:** Adapts to complex, nuanced user behaviors.
-- 🚫 **No Item Metadata Needed:** Doesn't rely on tags or genres.
-- ✨ **Serendipity:** Helps users discover unexpected but highly relevant books.
-
-<br>
+1.  [**Introduction to Fine-Tuning**](#1-introduction-to-fine-tuning)
+    -   [What is Fine-Tuning?](#what-is-fine-tuning)
+    -   [Why Fine-Tune a Language Model?](#why-fine-tune-a-language-model)
+2.  [**Core Concepts: PEFT and LoRA**](#2-core-concepts-peft-and-lora)
+    -   [What is PEFT?](#what-is-peft)
+    -   [Deep Dive: LoRA (Low-Rank Adaptation)](#deep-dive-lora-low-rank-adaptation)
+3.  [**The Fine-Tuning Workflow**](#3-the-fine-tuning-workflow)
+    -   [Step 1: Environment Setup](#step-1-environment-setup)
+    -   [Step 2: Data Preparation & Cleaning](#step-2-data-preparation--cleaning)
+    -   [Step 3: Model and Tokenizer Loading](#step-3-model-and-tokenizer-loading)
+    -   [Step 4: Configuring LoRA and the Trainer](#step-4-configuring-lora-and-the-trainer)
+    -   [Step 5: Training and Saving the Model](#step-5-training-and-saving-the-model)
+4.  [**How to Run This Project**](#4-how-to-run-this-project)
+5.  [**Results: In-Domain vs. Out-of-Domain Performance**](#5-results-in-domain-vs-out-of-domain-performance)
+6.  [**License**](#6-license)
 
 ---
 
-## 🎯 Project Overview
+## 1. Introduction to Fine-Tuning
 
-### Objective
+### What is Fine-Tuning?
 
-Build a robust recommendation engine capable of processing millions of user interactions to suggest highly relevant books, deployed as a user-friendly web application.
+Fine-tuning is the process of taking a pre-trained model—one that has already been trained on a vast amount of general data—and training it further on a smaller, task-specific dataset. This adapts the model's general knowledge to excel at a particular task, such as understanding medical terminology, writing in a specific legal style, or, in this case, handling event ticketing queries.
 
-<div align="center">
+### Why Fine-Tune a Language Model?
 
-### 🛣️ Approach
+Pre-trained models like GPT or Llama are powerful but have limitations:
+-   **Lack of Domain-Specific Knowledge:** They don't know your company's internal jargon, product names, or specific policies.
+-   **Generic Tone and Style:** Their responses may not align with your brand's voice.
+-   **Potential for Hallucinations:** When faced with niche queries, they might generate plausible but incorrect information.
 
-| Component | Description |
-|-----------|-------------|
-| **Core Algorithm** | Item-Based Collaborative Filtering |
-| **Similarity Metric** | Cosine Similarity |
-| **Sparsity Handling** | Threshold filtering (Active Users > 100 ratings, Popular Books > 50 ratings) |
-| **Alternative Models Tested** | k-Nearest Neighbors (kNN), K-Means Clustering |
-| **Data Storage** | Hugging Face Datasets (`IamPradeep/BRS_DATA`) |
-| **Deployment** | Streamlit Web Application |
+Fine-tuning bridges this gap, leading to:
+-   ✅ **Higher Accuracy:** More relevant and factually correct responses for your specific domain.
+-   ✅ **Improved Performance:** Faster, more personalized answers tailored to user needs.
+-   ✅ **Reduced Off-Topic Replies:** The model learns to stay within the bounds of its intended function.
 
+---
+
+## 2. Core Concepts: PEFT and LoRA
+
+Training all the parameters of a massive LLM (full fine-tuning) is computationally expensive and requires significant hardware. **Parameter-Efficient Fine-Tuning (PEFT)** methods offer a solution by only updating a small subset of the model's parameters.
+
+### What is PEFT?
+
+PEFT is a collection of techniques that dramatically reduce the computational and storage costs of fine-tuning. Instead of modifying billions of parameters, PEFT methods freeze the original weights and insert small, trainable modules or "adapters" into the model.
+
+Examples include: **LoRA**, Adapters, Prefix Tuning, and BitFit.
+
+### Deep Dive: LoRA (Low-Rank Adaptation)
+
+This project uses **LoRA**, one of the most popular PEFT techniques. LoRA works on the hypothesis that the change in weights during fine-tuning has a "low intrinsic rank." Therefore, instead of learning a large weight update matrix `ΔW`, LoRA learns two smaller, low-rank matrices `A` and `B` whose product approximates `ΔW`.
+
+<div style="text-align: center;">
+  <img src="https://substackcdn.com/image/fetch/w_1456,c_limit,f_webp,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F1e56a73c-7389-4b21-872f-68e7b998a1a3_1396x786.webp" width="700"/>
 </div>
 
-<br>
+**How it Works Mathematically:**
+
+-   A pre-trained weight matrix `W` is frozen.
+-   The update `ΔW` is represented by a low-rank decomposition: `ΔW = A * B`, where `A` is a `d x r` matrix and `B` is an `r x k` matrix. The rank `r` is much smaller than `d` or `k`.
+-   During training, only `A` and `B` are updated.
+-   The forward pass is modified: `W'x = Wx + α * (AB)x`, where `α` is a scaling factor.
+
+**Benefits of LoRA:**
+-   **Massive Parameter Reduction:** We train `r * (d + k)` parameters instead of `d * k`, drastically reducing VRAM requirements.
+-   **Faster Training:** Fewer parameters mean quicker convergence.
+-   **Easy Deployment:** The original model remains unchanged. The small `A` and `B` matrices can be saved separately and loaded on top of the base model as needed, allowing for multiple task-specific adapters for a single base model.
 
 ---
 
-## 🚀 Live Demo
+## 3. The Fine-Tuning Workflow
 
-Try the live recommendation engine here:
+This project follows a standard, reproducible workflow for fine-tuning an LLM.
 
-[![Open Streamlit App](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://book-recommendation-systemm.streamlit.app/) 
+### Step 1: Environment Setup
 
-<div align="center">
-  <table>
-    <tr>
-      <th>🖥️ App Interface</th>
-      <th>✨ Live Recommendations</th>
-    </tr>
-    <tr>
-      <td><img src="https://github.com/MarpakaPradeepSai/Book-Recommendation-System/blob/main/Data/Images%20&%20GIF/BRS-UI.png?raw=true" alt="App Interface" height="400"/></td>
-      <td><img src="https://github.com/MarpakaPradeepSai/Book-Recommendation-System/blob/main/Data/Images%20&%20GIF/Recommendations-GIF.gif?raw=true" alt="Live Recommendations" height="400"/></td>
-    </tr>
-  </table>
-</div>
+First, install the necessary libraries from the Hugging Face ecosystem and other data handling tools.
 
-> Simply select a book you've enjoyed, and the system will instantly generate a curated list of top recommendations complete with cover art, author details, and publication years!
+```bash
+pip install -q transformers datasets peft trl wandb torch
+```
 
-<br>
+### Step 2: Data Preparation & Cleaning
 
----
+A high-quality dataset is the key to successful fine-tuning. The data should be in an instruction-response format.
 
-## 📊 Dataset Overview
+1.  **Load Data:** Start with a structured dataset (e.g., CSV) containing columns for `instruction`, `intent`, and `response`.
+2.  **Clean Data:**
+    -   Remove duplicate samples.
+    -   Sanitize text by removing profanity or irrelevant artifacts.
+    -   Standardize formatting (e.g., capitalization, placeholder consistency).
+3.  **Augment Data:** To make the model more robust, we concatenate our domain-specific data with a set of **out-of-domain** queries. For these, the desired response is a polite refusal, teaching the model to stay on task.
+4.  **Format for Training:** Convert the data into the chat template required by the model.
 
-The project utilizes a comprehensive Book-Crossing dataset comprising three main components:
+```python
+# Example of formatting a row into a chat template
+def format_chat(row):
+    messages = [
+        {"role": "user", "content": row["instruction"]},
+        {"role": "assistant", "content": row["response"]},
+    ]
+    return tokenizer.apply_chat_template(messages, tokenize=False)
 
-<div align="center">
+df["text"] = df.apply(format_chat, axis=1)
+```
 
-| Component | Description | Volume |
-|--------|-------|-------|
-| **Users** | Anonymized user IDs and demographic data (Location, Age). | 278,858 records |
-| **Books** | ISBN, Title, Author, Year, Publisher, and Cover Image URLs. | 271,360 records |
-| **Ratings** | Explicit ratings (1-10) and implicit ratings (0). | 1,149,780 records |
+### Step 3: Model and Tokenizer Loading
 
-</div>
+Load the pre-trained model and its corresponding tokenizer. We use `SmolLM2-1.7B-Instruct`, a compact but powerful model suitable for fine-tuning on consumer-grade hardware.
 
+```python
+from transformers import AutoModelForCausalLM, AutoTokenizer
 
-Find the Datasets here:
+model_name = "HuggingFaceTB/SmolLM2-1.7B-Instruct"
 
-[![Hugging Face Dataset](https://img.shields.io/badge/Dataset-HuggingFace-yellow?logo=huggingface)](https://huggingface.co/datasets/IamPradeep/BRS_DATA/tree/main)
+model = AutoModelForCausalLM.from_pretrained(
+    model_name,
+    device_map="auto",
+    torch_dtype=torch.float16
+)
+tokenizer = AutoTokenizer.from_pretrained(model_name, use_fast=True)
+tokenizer.pad_token = tokenizer.eos_token
+```
 
----
+### Step 4: Configuring LoRA and the Trainer
 
-## 🔬 Methodology & Data Processing
+This is where we define the LoRA parameters and set up the training process using `SFTTrainer` from the TRL library.
 
-### 🧹 1. Data Cleaning
-- **Handling Outliers:** Detected and removed extreme outliers in the `Age` demographic using the IQR (Interquartile Range) method to ensure clean demographic analysis.
-- **Type Casting:** Cleaned invalid string entries in the `Year-Of-Publication` column and converted it to integer formats.
-- **Missing Values:** Dropped rows with null `Book-Title` or `Book-Author` entries to ensure the final UI displays complete information.
+```python
+from peft import LoraConfig
+from trl import SFTTrainer
 
-### ⚖️ 2. Sparsity Reduction (The "Cold Start" Fix)
-Recommendation matrices are notoriously sparse. To ensure high-quality recommendations and computational efficiency, the dataset was rigorously filtered:
-1. **Active Users Only:** Filtered out users who rated fewer than **100 books**.
-2. **Popular Books Only:** Filtered out books that received fewer than **50 ratings**.
-3. **Result:** A dense, high-signal user-item pivot table ready for mathematical similarity calculations.
+# Configure LoRA
+peft_config = LoraConfig(
+    r=32,                     # LoRA rank (low-rank dimension)
+    lora_alpha=64,            # Scaling factor for LoRA weights
+    lora_dropout=0.01,        # Dropout for regularization
+    bias="none",
+    task_type="CAUSAL_LM",
+    target_modules="all-linear" # Apply LoRA to all linear layers
+)
 
-<br>
+# Configure Training Arguments
+training_arguments = TrainingArguments(...)
 
----
+# Initialize the Trainer
+trainer = SFTTrainer(
+    model=model,
+    args=training_arguments,
+    train_dataset=tokenized_dataset,
+    peft_config=peft_config,
+)
+```
 
-## ⚔️ Model Architecture & Evaluation
+### Step 5: Training and Saving the Model
 
-Three distinct approaches were evaluated to find the optimal recommendation engine:
+Start the training process and save the resulting LoRA adapters.
 
-### 🚀 1. Cosine Similarity (Deployed Model)
-- **Mechanism:** Calculates the cosine of the angle between two projected vectors (books) in a multi-dimensional user space.
-- **Why it was chosen:** Highly efficient, deterministic, and scales beautifully within Streamlit. Automatically normalizes for users who rate books more generously than others.
+```python
+# Start training
+trainer.train()
 
-### 🤖 2. k-Nearest Neighbors (kNN)
-- **Mechanism:** Utilized `sklearn.neighbors.NearestNeighbors` with `metric='cosine'` and `algorithm='brute'`.
-- **Evaluation Metrics:**
-  - **Mean Absolute Error (MAE):** `2.145`
-  - **Root Mean Squared Error (RMSE):** `3.958`
-
-### 📊 3. K-Means Clustering
-- **Mechanism:** Unsupervised grouping of similar books.
-- **Optimization:** Used the **Silhouette Score** to find the optimal number of clusters ($k=2$, score = `0.6518`).
-- **Verdict:** While mathematically interesting, hard-clustering limits the nuanced, ranked recommendations required for a consumer-facing app compared to continuous similarity scoring.
-
-<br>
-
----
-
-## 💡 Key EDA Findings
-
-Extensive Exploratory Data Analysis (EDA) revealed fascinating insights about reader behavior:
-
-### 🏆 1. The Most Loved Books
-
-<div align="center">
-
-| Rank | Book Title | Perfect "10" Ratings | Insight |
-|:---:|:---|:---:|:---|
-| 1 | **The Da Vinci Code** | **160** | The undisputed highest-rated book in the dataset. |
-| 2 | Harry Potter & the Sorcerer's Stone | 152 | The *Harry Potter* series dominates the top 10, showing massive fan loyalty. |
-| 3 | Harry Potter & the Prisoner of Azkaban | 150 | Consistent high ratings across the franchise. |
-| 4 | The Lovely Bones | 148 | Highest-rated standalone fiction (non-franchise). |
-
-</div>
-
-<br>
-
-### 📉 2. Rating Distributions & Engagement
-
-*   **The Implicit Majority:** Over **647,294** interactions were implicit (a rating of 0, meaning the user interacted with the book but didn't leave a 1-10 score).
-*   **Positivity Bias:** Among explicit ratings (1-10), **8 is the most common score**, indicating users are more likely to rate books they actually enjoyed.
-*   **The "Wild Animus" Anomaly:** The book *Wild Animus* had the highest total occurrences (2,502) but overwhelmingly dominated the **"1-star"** rating category. High visibility does not equal high satisfaction!
-
-<br>
-
-### ✍️ 3. Industry Insights (Authors & Publishers)
-
-<div align="center">
-
-| Category | Top Entity | Volume | Observation |
-|---|---|---|---|
-| **Top Author** | **William Shakespeare** | 495 Books | Classic literature remains highly published. |
-| **Top Contemp. Author** | **Agatha Christie** | 476 Books | Closely followed by Stephen King (332). |
-| **Top Publisher** | **Harlequin** | 7,499 Books | Romance dominates mass-market publishing, far exceeding the #2 publisher (Silhouette at 4,183). |
-| **Peak Publishing Era** | **1999 - 2002** | ~17k/year | The "Golden Era" of book releases within this specific dataset timeline. |
-
-</div>
-
-<br>
-
-### 🌍 4. User Demographics
-*   **Location:** The dataset is heavily skewed toward North America. **Toronto (13.3%)**, Seattle (11.7%), and Portland (11.2%) are the top user locations. London (8.7%) is the only non-North American city in the top 10.
-
-<br>
+# Save the LoRA adapters and tokenizer
+output_path = "./SmolLM2-finetuned-adapters"
+trainer.model.save_pretrained(output_path)
+tokenizer.save_pretrained(output_path)
+```
+The saved `output_path` will contain only the trained adapter weights (a few megabytes), not the entire 1.7B parameter model.
 
 ---
 
-## 🛠️ Installation & Usage
+## 4. How to Run This Project
 
-### Prerequisites
+1.  **Clone the repository:**
+    ```bash
+    git clone https://github.com/your-username/your-repo-name.git
+    cd your-repo-name
+    ```
 
-- Python 3.8+
-- pip package manager
+2.  **Install dependencies:**
+    ```bash
+    pip install -r requirements.txt
+    ```
 
-### Local Setup Instructions
+3.  **Set Up Weights & Biases (Optional):**
+    For logging metrics and training progress, log in to W&B.
+    ```python
+    import wandb
+    wandb.login(key="YOUR_WANDB_API_KEY")
+    ```
 
-1. **Clone the repository**
-   ```bash
-   git clone https://github.com/MarpakaPradeepSai/Book-Recommendation-System.git
-   cd Book-Recommendation-System
-   ```
-
-2. **Create and activate a virtual environment (Recommended)**
-   ```bash
-   python -m venv venv
-   source venv/bin/activate  # On Windows: venv\Scripts\activate
-   ```
-
-3. **Install required dependencies**
-   ```bash
-   pip install streamlit pandas numpy scikit-learn huggingface_hub
-   ```
-
-4. **Run the Streamlit Application**
-   ```bash
-   streamlit run app.py
-   ```
-
-> **Note on Data Loading:** The application is configured to automatically download the pre-processed pivot tables and datasets directly from Hugging Face (`IamPradeep/BRS_DATA`). You do not need to download the CSV files manually!
-
-<br>
+4.  **Run the Notebook:**
+    Open the `Fine-Tuning-SmolLM.ipynb` notebook in a Jupyter or Colab environment and execute the cells sequentially.
 
 ---
 
-## 🙏 Thank You
+## 5. Results: In-Domain vs. Out-of-Domain Performance
 
-<div align="center">
-  <img src="https://github.com/MarpakaPradeepSai/Employee-Churn-Prediction/blob/main/Data/Images%20&%20GIFs/thank-you-33.gif?raw=true" alt="Thank You" width="300">
-  
-  If you found this project interesting or helpful, please consider giving the repository a ⭐!
-</div>
+After fine-tuning, the model is significantly better at handling domain-specific queries while politely deflecting out-of-domain requests.
+
+#### **✅ In-Domain Query**
+
+> **User:** "How can I cancel my ticket for the upcoming cricket event in India?"
+
+> **Fine-Tuned Assistant:** "To cancel your ticket for the upcoming cricket event in India, please adhere to the following steps:
+> 1. Access [website] and sign in to your account.
+> 2. Proceed to the <b>Ticket Cancellation</b> section.
+> 3. Locate your scheduled events and choose the cricket event in India.
+> 4. Select the <b>Cancel Ticket</b> option.
+> 5. Complete the process by following the on-screen instructions for cancellation."
+
+#### **❌ Out-of-Domain Query**
+
+> **User:** "Explain the working of Large Language Models."
+
+> **Fine-Tuned Assistant:** "I'm sorry, but I can't offer assistance on this topic. If you have questions about event ticketing, please let me know."
+
+This demonstrates the model has successfully specialized its function, a direct result of the fine-tuning process.
+
+---
+
+## 6. License
+
+This project is licensed under the [Apache 2.0 License](LICENSE), consistent with the license of the base model and libraries used.
