@@ -1,7 +1,3 @@
-Of course. Here is a highly professional GitHub README file, crafted from the provided notebook content, with a strong emphasis on the process of fine-tuning a language model rather than the specific chatbot application.
-
----
-
 # Fine-Tuning SmolLM-1.7B-Instruct with LoRA for Domain Adaptation
 
 [![Python Version](https://img.shields.io/badge/Python-3.10%2B-blue.svg)](https://www.python.org/)
