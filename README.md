@@ -9,8 +9,6 @@
 [![Made with](https://img.shields.io/badge/Made%20with-Colab-f9ab00.svg)](https://colab.research.google.com/)
 
 </div>
-
-<div align="center">
     
 This repository provides a comprehensive guide and implementation for fine-tuning a pre-trained language model, **`SmolLM2-1.7B-Instruct`**, using Parameter-Efficient Fine-Tuning (PEFT), specifically Low-Rank Adaptation (LoRA). The project demonstrates how to adapt a general-purpose model to a specialized domain—in this case, an event-ticketing assistant—making it more accurate, context-aware, and efficient.
 
@@ -18,6 +16,8 @@ The primary focus is the **methodology of fine-tuning**, covering everything fro
 
 <br>
 
+<div align="center">
+    
 <img src="https://www.mygreatlearning.com/blog/wp-content/uploads/2025/04/fine-tuning-banner.jpg" width="700"/>
 
 </div>
