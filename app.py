@@ -68,6 +68,9 @@ def get_user_recommendations(user_id, df, sim_matrix, k=10):
     # Get User's History
     user_history_all = df[df['userId'] == user_id]['title'].tolist()
     user_history_rated = df[(df['userId'] == user_id) & (df['rating'] > 0)][['title', 'rating']].sort_values(by='rating', ascending=False)
+    
+    # Remove duplicates from user history
+    user_history_rated = user_history_rated.drop_duplicates(subset=['title'])
 
     if len(user_history_all) == 0:
         return None, None
@@ -302,27 +305,10 @@ st.markdown("""
         margin-left: 5px;
     }
     
-    /* User History Styling */
-    .user-history-card {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        padding: 15px;
-        border-radius: 10px;
-        margin-bottom: 10px;
-        color: white;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    }
-    .user-history-title {
-        font-size: 16px;
-        font-weight: bold;
-        margin-bottom: 5px;
-    }
-    .user-history-rating {
-        font-size: 14px;
-        color: #FFD700;
-    }
-    
+    /* Center the tabs */
     .stTabs [data-baseweb="tab-list"] {
         gap: 24px;
+        justify-content: center;
     }
     
     .stTabs [data-baseweb="tab"] {
@@ -445,34 +431,22 @@ with tab2:
         recommendations = st.session_state.user_recommendations
         user_history = st.session_state.user_history_display
         
-        st.markdown(f"<div class='recommendation-header'>Recommendations for User ID: <strong>{user_id_display}</strong></div>", 
-                   unsafe_allow_html=True)
-        st.write("")
-        
         # Display User's Reading History
         if user_history is not None and len(user_history) > 0:
-            with st.expander("📖 View User's Reading History", expanded=False):
-                st.markdown("#### Books Previously Rated by This User:")
+            with st.expander("📖 View User's Reading History"):
+                # Create a simple table
+                history_df = user_history.copy()
+                history_df.reset_index(drop=True, inplace=True)
+                history_df.index = history_df.index + 1
+                history_df.columns = ['Book Title', 'Rating']
                 
-                # Show top 10 rated books
-                display_limit = min(10, len(user_history))
-                for idx, row in user_history.head(display_limit).iterrows():
-                    rating_stars = "⭐" * int(row['rating'])
-                    st.markdown(f"""
-                        <div class='user-history-card'>
-                            <div class='user-history-title'>{row['title']}</div>
-                            <div class='user-history-rating'>{rating_stars} ({row['rating']}/10)</div>
-                        </div>
-                    """, unsafe_allow_html=True)
-                
-                if len(user_history) > display_limit:
-                    st.info(f"... and {len(user_history) - display_limit} more books.")
+                st.dataframe(history_df, use_container_width=True)
         
         st.markdown("<br>", unsafe_allow_html=True)
         
-        # Display Recommendations
+        # Display Recommendations with combined heading
         if len(recommendations) > 0:
-            st.markdown(f"<div class='recommendation-header'>Top {len(recommendations)} Personalized Recommendations:</div>", 
+            st.markdown(f"<div class='recommendation-header'>Top {len(recommendations)} Personalized Recommendations for User ID: <strong>{user_id_display}</strong></div>", 
                        unsafe_allow_html=True)
             st.write("")
             
