@@ -33,8 +33,11 @@ def load_and_prepare_data():
     final_filtered_df.loc[final_filtered_df['title'] == 'All Creatures Great and Small', 'Image-URL-L'] = url3
     final_filtered_df.loc[final_filtered_df['title'] == "The Kitchen God's Wife", 'Image-URL-L'] = url4
 
-    # Create the book-user matrix
-    book_user_mat = final_filtered_df.pivot_table(index='title', columns='userId', values='rating').fillna(0)
+    # -------------------------------------------------------------------------
+    #  BUILD SIMILARITY MATRIX USING ONLY EXPLICIT RATINGS (>0)               
+    # -------------------------------------------------------------------------
+    explicit_ratings_df = final_filtered_df[final_filtered_df['rating'] > 0]
+    book_user_mat = explicit_ratings_df.pivot_table(index='title', columns='userId', values='rating').fillna(0)
 
     # Calculate the cosine similarity matrix
     cosine_sim = cosine_similarity(book_user_mat)
@@ -299,4 +302,4 @@ if st.session_state.recommendations is not None:
                 st.markdown("<br><hr><br>", unsafe_allow_html=True)
 
         st.markdown("<div class='extra-space'></div><div class='extra-space'></div>", unsafe_allow_html=True)
-        st.image('https://github.com/MarpakaPradeepSai/Employee-Churn-Prediction/blob/main/Data/Images%20&%20GIFs/thank-you-33.gif?raw=true', use_container_width=True) 
+        st.image('https://github.com/MarpakaPradeepSai/Employee-Churn-Prediction/blob/main/Data/Images%20&%20GIFs/thank-you-33.gif?raw=true', use_container_width=True)
