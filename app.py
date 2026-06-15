@@ -138,21 +138,10 @@ st.image('https://img.freepik.com/premium-vector/bookcase-with-books_182089-197.
 # CSS Styling
 st.markdown("""
     <style>
-    /* Exclude material icons and symbols to prevent the ligature text overlap issue */
-    html, body, [class*="css"]:not(.material-icons):not(.material-symbols-rounded), 
-    [class*="st-"]:not(.material-icons):not(.material-symbols-rounded), 
-    h1, h2, h3, h4, h5, h6, p, 
-    div:not(.material-icons):not(.material-symbols-rounded), 
-    span:not(.material-icons):not(.material-symbols-rounded), 
-    label, input, button, select, option, textarea {
+    /* Targeted elements for font application to prevent breaking core UI icon elements */
+    h1, h2, h3, h4, h5, h6, p, label, .subheader, .premium-title, .premium-author, .premium-year, .book-info, .recommendation-header {
         font-family: 'Tiempos', 'Tiempos Text', Georgia, 'Times New Roman', serif !important;
     }
-    
-    /* Ensure Streamlit Material Icons correctly retain their native font-family */
-    .material-icons, .material-symbols-rounded {
-        font-family: 'Material Symbols Rounded', 'Material Icons', sans-serif !important;
-    }
-
     .subheader {
         font-size: 22px;
         font-weight: bold;
@@ -324,6 +313,7 @@ st.markdown("""
     }
     
     .stTabs [data-baseweb="tab"] {
+        font-family: 'Tiempos', 'Tiempos Text', Georgia, 'Times New Roman', serif !important;
         height: 50px;
         background-color: #f0f2f6;
         border-radius: 10px 10px 0px 0px;
@@ -385,7 +375,7 @@ with tab1:
             st.write(similar_books)
         else:
             st.markdown(f"<div class='recommendation-header'>Top {rec_num} recommendations for '<strong>{rec_book}</strong>':</div>", 
-                       unsafe_allow_html=True)
+                        unsafe_allow_html=True)
             st.write("")
             
             books_list = similar_books.index.tolist()
@@ -459,7 +449,7 @@ with tab2:
         # Display Recommendations with combined heading
         if len(recommendations) > 0:
             st.markdown(f"<div class='recommendation-header'>Top {len(recommendations)} Personalized Recommendations for User ID: <strong>{user_id_display}</strong></div>", 
-                       unsafe_allow_html=True)
+                        unsafe_allow_html=True)
             st.write("")
             
             display_book_cards(recommendations)
