@@ -1,4 +1,3 @@
-# Code-2
 import streamlit as st
 import pandas as pd
 import numpy as np
@@ -321,13 +320,13 @@ st.markdown("""
         padding: 0px 20px;
         font-size: 16px;
         font-weight: bold;
-        color: #e52e71 !important;
+        color: #FF1493 !important;
         border: 2px solid #ddd !important;
         border-bottom: none !important;
     }
     
     .stTabs [data-baseweb="tab"] p {
-        color: #e52e71 !important;
+        color: #FF1493 !important;
     }
     
     .stTabs [data-baseweb="tab"]:hover {
@@ -335,9 +334,9 @@ st.markdown("""
     }
     
     .stTabs [aria-selected="true"] {
-        background: linear-gradient(135deg, #ff8a00 0%, #e52e71 100%) !important;
+        background: linear-gradient(135deg, #FF1493 0%, #FF69B4 100%) !important;
         color: white !important;
-        border: 2px solid #e52e71 !important;
+        border: 2px solid #FF1493 !important;
         border-bottom: none !important;
     }
     
