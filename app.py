@@ -324,6 +324,16 @@ st.markdown("""
         background: linear-gradient(90deg, #ff8a00, #e52e71);
         color: white;
     }
+
+    /* Fix for selectbox overlap issues */
+    div[data-baseweb="select"] input {
+        padding-right: 35px !important;
+    }
+    div[data-baseweb="form-field"] > label {
+        margin-bottom: 8px !important;
+        display: block !important;
+        position: relative !important;
+    }
     </style>
 """, unsafe_allow_html=True)
 
@@ -393,7 +403,7 @@ with tab2:
     # Get all unique user IDs
     all_user_ids = sorted(final_filtered_df['userId'].unique().tolist())
     
-    col1, col2 = st.columns([2, 1], gap="medium")
+    col1, col2 = st.columns([2, 1])
     
     with col1:
         user_id_input = st.selectbox('Select or enter a User ID:', all_user_ids, 
