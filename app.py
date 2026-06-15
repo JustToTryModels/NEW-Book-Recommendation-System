@@ -320,36 +320,11 @@ st.markdown("""
         padding: 0px 20px;
         font-size: 16px;
         font-weight: bold;
-        color: #FF1493 !important;
-        border: 2px solid #ddd !important;
-        border-bottom: none !important;
-    }
-    
-    .stTabs [data-baseweb="tab"] p {
-        color: #FF1493 !important;
-    }
-    
-    .stTabs [data-baseweb="tab"]:hover {
-        background-color: #e0e5ec !important;
     }
     
     .stTabs [aria-selected="true"] {
-        background: linear-gradient(135deg, #FF1493 0%, #FF69B4 100%) !important;
-        color: white !important;
-        border: 2px solid #FF1493 !important;
-        border-bottom: none !important;
-    }
-    
-    .stTabs [aria-selected="true"] p {
-        color: white !important;
-    }
-    
-    .stTabs [data-baseweb="tab-border"] {
-        display: none !important;
-    }
-    
-    .stTabs [data-baseweb="tab-highlight"] {
-        display: none !important;
+        background: linear-gradient(90deg, #ff8a00, #e52e71);
+        color: white;
     }
     </style>
 """, unsafe_allow_html=True)
