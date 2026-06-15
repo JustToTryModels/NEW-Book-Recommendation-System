@@ -393,7 +393,7 @@ with tab2:
     # Get all unique user IDs
     all_user_ids = sorted(final_filtered_df['userId'].unique().tolist())
     
-    col1, col2 = st.columns([2, 1])
+    col1, col2 = st.columns([2, 1], gap="medium")
     
     with col1:
         user_id_input = st.selectbox('Select or enter a User ID:', all_user_ids, 
