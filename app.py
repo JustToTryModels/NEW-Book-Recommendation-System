@@ -138,8 +138,24 @@ st.image('https://img.freepik.com/premium-vector/bookcase-with-books_182089-197.
 # CSS Styling
 st.markdown("""
     <style>
+    /* ADDED CSS: Light pink shade for the expander dropdown */
+    [data-testid="stExpander"] details summary {
+        background-color: #FFC0CB !important; /* Light Pink */
+        border-radius: 8px;
+    }
+    [data-testid="stExpander"] details summary p {
+        color: #000000 !important;
+        font-weight: bold !important;
+    }
+
+    /* ADDED CSS: Light pink styling for fallback table headings */
+    thead tr th {
+        background-color: #FFC0CB !important;
+        color: #000000 !important;
+    }
+
     /* Targeted elements for font application to prevent breaking core UI icon elements */
-    h1, h2, h3, h4, h5, h6, p, label, .subheader, .premium-title, .premium-author, .premium-year, .book-info, .recommendation-header, [data-testid="stTable"], [data-testid="stDataFrame"] * {
+    h1, h2, h3, h4, h5, h6, p, label, .subheader, .premium-title, .premium-author, .premium-year, .book-info, .recommendation-header {
         font-family: 'Tiempos', 'Tiempos Text', Georgia, 'Times New Roman', serif !important;
     }
     .subheader {
@@ -326,22 +342,6 @@ st.markdown("""
         background: linear-gradient(90deg, #ff8a00, #e52e71);
         color: white;
     }
-
-    /* Style the drop-down (expander) header to light pink */
-    .stExpander {
-        background-color: #FFD1DC !important;
-        border-radius: 8px;
-    }
-    .stExpander > details > summary {
-        background-color: #FFD1DC !important;
-        border-radius: 8px;
-    }
-
-    /* Style dataframe/table column headers to light pink */
-    [data-testid="stDataFrame"] thead tr th, [data-testid="stTable"] thead tr th {
-        background-color: #FFD1DC !important;
-        color: black !important;
-    }
     </style>
 """, unsafe_allow_html=True)
 
@@ -363,7 +363,7 @@ with tab1:
                               placeholder="Choose or enter a book title...", key='book_title')
     
     num_recommendations = st.number_input('Enter the number of recommendations:', 
-                                         min_value=1, max_value=50, value=10, key='num_recs_book')
+                                          min_value=1, max_value=50, value=10, key='num_recs_book')
     
     if 'recommendations' not in st.session_state:
         st.session_state.recommendations = None
@@ -419,7 +419,7 @@ with tab2:
     
     with col2:
         num_user_recs = st.number_input('Number of recommendations:', 
-                                       min_value=1, max_value=50, value=10, key='num_recs_user')
+                                        min_value=1, max_value=50, value=10, key='num_recs_user')
     
     if 'user_recommendations' not in st.session_state:
         st.session_state.user_recommendations = None
@@ -458,8 +458,14 @@ with tab2:
                 history_df.index = history_df.index + 1
                 history_df.columns = ['Book Title', 'Rating']
                 
-                st.dataframe(history_df, use_container_width=True)
-                st.markdown("<p style='color: gray; font-size: 14px; font-style: italic; margin-top: 8px;'>ℹ️ Note: A rating of 0 indicates an interacted but unrated book.</p>", unsafe_allow_html=True)
+                # ADDED CODE: Pandas Style configuration to color table headers light pink
+                styled_history_df = history_df.style.set_table_styles(
+                    [{'selector': 'th', 'props': [('background-color', '#FFC0CB !important'), ('color', '#000000 !important')]}]
+                )
+                
+                # Render using the styled dataframe
+                st.dataframe(styled_history_df, use_container_width=True)
+                st.caption("ℹ️ *Note: A rating of 0 indicates an interacted but unrated book.*")
         
         st.markdown("<br>", unsafe_allow_html=True)
         
