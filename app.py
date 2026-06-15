@@ -320,13 +320,13 @@ st.markdown("""
         padding: 0px 20px;
         font-size: 16px;
         font-weight: bold;
-        color: #1E3A5F !important;
+        color: #C2185B !important; /* Changed from Blue to Pink */
         border: 2px solid #ddd !important;
         border-bottom: none !important;
     }
     
     .stTabs [data-baseweb="tab"] p {
-        color: #1E3A5F !important;
+        color: #C2185B !important; /* Changed from Blue to Pink */
     }
     
     .stTabs [data-baseweb="tab"]:hover {
@@ -334,9 +334,9 @@ st.markdown("""
     }
     
     .stTabs [aria-selected="true"] {
-        background: linear-gradient(135deg, #1E3A5F 0%, #2E5A8F 100%) !important;
+        background: linear-gradient(135deg, #E91E63 0%, #C2185B 100%) !important; /* Changed Blue Gradient to Pink Gradient */
         color: white !important;
-        border: 2px solid #1E3A5F !important;
+        border: 2px solid #C2185B !important; /* Changed Border to Pink */
         border-bottom: none !important;
     }
     
