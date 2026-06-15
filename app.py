@@ -125,65 +125,45 @@ def display_book_cards(books_list, start_index=0):
 # STREAMLIT APP UI
 # -------------------------------------------------------------------------
 
-# Combined Animated Title and Subtitle
+# Combined Title and Subtitle with Custom Wave 3D Display
 st.markdown("""
-    <div style="text-align: center; margin-bottom: 5px; padding-bottom: 0px;">
-        <h1 id="animated-title" style="font-size: 40px; display: inline-flex; justify-content: center; flex-wrap: wrap; gap: 0px; margin: 0; padding: 0;">
-            Book Recommendation System
-        </h1>
+    <div style='text-align: center; margin-bottom: 5px; padding-bottom: 0px;'>
+        <span class="wave-container">
+            <span class="wave-word">
+                <span class="wave-char" style="--char-index: 1;"><span class="front">B</span><span class="back">B</span></span>
+                <span class="wave-char" style="--char-index: 2;"><span class="front">o</span><span class="back">o</span></span>
+                <span class="wave-char" style="--char-index: 3;"><span class="front">o</span><span class="back">o</span></span>
+                <span class="wave-char" style="--char-index: 4;"><span class="front">k</span><span class="back">k</span></span>
+            </span>
+            <span class="wave-space">&nbsp;</span>
+            <span class="wave-word">
+                <span class="wave-char" style="--char-index: 5;"><span class="front">R</span><span class="back">R</span></span>
+                <span class="wave-char" style="--char-index: 6;"><span class="front">e</span><span class="back">e</span></span>
+                <span class="wave-char" style="--char-index: 7;"><span class="front">c</span><span class="back">c</span></span>
+                <span class="wave-char" style="--char-index: 8;"><span class="front">o</span><span class="back">o</span></span>
+                <span class="wave-char" style="--char-index: 9;"><span class="front">m</span><span class="back">m</span></span>
+                <span class="wave-char" style="--char-index: 10;"><span class="front">m</span><span class="back">m</span></span>
+                <span class="wave-char" style="--char-index: 11;"><span class="front">e</span><span class="back">e</span></span>
+                <span class="wave-char" style="--char-index: 12;"><span class="front">n</span><span class="back">n</span></span>
+                <span class="wave-char" style="--char-index: 13;"><span class="front">d</span><span class="back">d</span></span>
+                <span class="wave-char" style="--char-index: 14;"><span class="front">a</span><span class="back">a</span></span>
+                <span class="wave-char" style="--char-index: 15;"><span class="front">t</span><span class="back">t</span></span>
+                <span class="wave-char" style="--char-index: 16;"><span class="front">i</span><span class="back">i</span></span>
+                <span class="wave-char" style="--char-index: 17;"><span class="front">o</span><span class="back">o</span></span>
+                <span class="wave-char" style="--char-index: 18;"><span class="front">n</span><span class="back">n</span></span>
+            </span>
+            <span class="wave-space">&nbsp;</span>
+            <span class="wave-word">
+                <span class="wave-char" style="--char-index: 19;"><span class="front">S</span><span class="back">S</span></span>
+                <span class="wave-char" style="--char-index: 20;"><span class="front">y</span><span class="back">y</span></span>
+                <span class="wave-char" style="--char-index: 21;"><span class="front">s</span><span class="back">s</span></span>
+                <span class="wave-char" style="--char-index: 22;"><span class="front">t</span><span class="back">t</span></span>
+                <span class="wave-char" style="--char-index: 23;"><span class="front">e</span><span class="back">e</span></span>
+                <span class="wave-char" style="--char-index: 24;"><span class="front">m</span><span class="back">m</span></span>
+            </span>
+        </span>
     </div>
     <p class='subheader'>Let Us Help You Choose Your Next Book!</p>
-
-    <style>
-        .wave-letter-wrapper {
-            display: inline-block;
-            perspective: 1000px;
-            transform-style: preserve-3d;
-        }
-        .wave-letter {
-            display: inline-block;
-            transform-style: preserve-3d;
-            animation: textWaveFlip 3s infinite ease-in-out;
-            transform-origin: center center;
-        }
-        @keyframes textWaveFlip {
-            0%, 70%, 100% {
-                transform: rotateX(0deg) rotateY(0deg);
-            }
-            35% {
-                transform: rotateX(360deg) rotateY(0deg);
-            }
-        }
-    </style>
-
-    <script>
-        const titleContainer = document.getElementById('animated-title');
-        if (titleContainer && !titleContainer.dataset.animated) {
-            const text = titleContainer.textContent.trim();
-            titleContainer.innerHTML = '';
-            
-            // Loop over characters to build individual letter nodes with a staggered delay
-            let delay = 0;
-            for (let i = 0; i < text.length; i++) {
-                const char = text[i];
-                const spanWrapper = document.createElement('span');
-                spanWrapper.className = 'wave-letter-wrapper';
-                
-                if (char === ' ') {
-                    spanWrapper.innerHTML = '&nbsp;';
-                } else {
-                    const spanLetter = document.createElement('span');
-                    spanLetter.className = 'wave-letter';
-                    spanLetter.textContent = char;
-                    spanLetter.style.animationDelay = delay + 's';
-                    spanWrapper.appendChild(spanLetter);
-                    delay += 0.08; // Stagger index increment
-                }
-                titleContainer.appendChild(spanWrapper);
-            }
-            titleContainer.dataset.animated = "true";
-        }
-    </script>
 """, unsafe_allow_html=True)
 
 st.image('https://img.freepik.com/premium-vector/bookcase-with-books_182089-197.jpg', use_container_width=True)
@@ -191,8 +171,48 @@ st.image('https://img.freepik.com/premium-vector/bookcase-with-books_182089-197.
 # CSS Styling
 st.markdown("""
     <style>
+    /* 3D Wave Title Animations */
+    .wave-container {
+        display: inline-flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        cursor: default;
+    }
+    .wave-word {
+        display: inline-flex;
+    }
+    .wave-space {
+        white-space: pre;
+    }
+    .wave-char {
+        position: relative;
+        display: inline-block;
+        font-size: 40px;
+        font-weight: bold;
+        line-height: 150%;
+        height: 1.5lh;
+        transform-style: preserve-3d;
+        transition: transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        /* Stagger delays dynamically with custom properties */
+        transition-delay: calc(var(--char-index) * 0.03s);
+    }
+    .wave-char .front, .wave-char .back {
+        display: block;
+        backface-visibility: hidden;
+    }
+    .wave-char .back {
+        position: absolute;
+        top: 0;
+        left: 0;
+        transform: rotateX(-90deg) translateZ(0.5lh);
+    }
+    /* When user hovers over the entire header layout, trigger staggered rotation */
+    .wave-container:hover .wave-char {
+        transform: rotateX(90deg);
+    }
+
     /* Targeted elements for font application to prevent breaking core UI icon elements */
-    h1, h2, h3, h4, h5, h6, p, label, .subheader, .premium-title, .premium-author, .premium-year, .book-info, .recommendation-header {
+    h1, h2, h3, h4, h5, h6, p, label, .subheader, .premium-title, .premium-author, .premium-year, .book-info, .recommendation-header, .wave-char {
         font-family: 'Tiempos', 'Tiempos Text', Georgia, 'Times New Roman', serif !important;
     }
     .subheader {
@@ -456,7 +476,7 @@ with tab2:
     
     with col2:
         num_user_recs = st.number_input('Number of recommendations:', 
-                                       min_value=1, max_value=50, value=10, key='num_recs_user')
+                                        min_value=1, max_value=50, value=10, key='num_recs_user')
     
     if 'user_recommendations' not in st.session_state:
         st.session_state.user_recommendations = None
