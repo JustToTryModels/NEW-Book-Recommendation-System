@@ -339,7 +339,7 @@ tab1, tab2 = st.tabs(["📚 Book-to-Book Recommendations", "👤 User-Specific R
 # TAB 1: BOOK-TO-BOOK RECOMMENDATIONS
 # -------------------------------------------------------------------------
 with tab1:
-    st.markdown("### Find Similar Books")
+    st.markdown("<h3 style='text-align: center;'>Find Similar Books</h3>", unsafe_allow_html=True)
     st.write("Select a book and discover similar titles based on user preferences and ratings.")
     
     all_books = sorted(final_filtered_df['title'].unique().tolist())
@@ -389,7 +389,7 @@ with tab1:
 # TAB 2: USER-SPECIFIC RECOMMENDATIONS
 # -------------------------------------------------------------------------
 with tab2:
-    st.markdown("### Personalized Recommendations for Users")
+    st.markdown("<h3 style='text-align: center;'>Personalized Recommendations for Users</h3>", unsafe_allow_html=True)
     st.write("Enter a User ID to get personalized book recommendations based on their reading history.")
     
     # Get all unique user IDs
