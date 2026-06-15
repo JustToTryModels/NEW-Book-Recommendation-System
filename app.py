@@ -139,7 +139,7 @@ st.image('https://img.freepik.com/premium-vector/bookcase-with-books_182089-197.
 st.markdown("""
     <style>
     /* Targeted elements for font application to prevent breaking core UI icon elements */
-    h1, h2, h3, h4, h5, h6, p, label, .subheader, .premium-title, .premium-author, .premium-year, .book-info, .recommendation-header, [data-testid="stTable"] *, [data-testid="stDataFrame"] * {
+    h1, h2, h3, h4, h5, h6, p, label, .subheader, .premium-title, .premium-author, .premium-year, .book-info, .recommendation-header, [data-testid="stTable"], [data-testid="stDataFrame"] * {
         font-family: 'Tiempos', 'Tiempos Text', Georgia, 'Times New Roman', serif !important;
     }
     .subheader {
@@ -327,15 +327,19 @@ st.markdown("""
         color: white;
     }
 
-    /* Light Pink Shading for Expander Dropdown Header */
-    .stExpander [data-baseweb="accordion-toggle-button"] {
-        background-color: #FFF0F5 !important;
+    /* Style the drop-down (expander) header to light pink */
+    .stExpander {
+        background-color: #FFD1DC !important;
+        border-radius: 8px;
+    }
+    .stExpander > details > summary {
+        background-color: #FFD1DC !important;
         border-radius: 8px;
     }
 
-    /* Light Pink Shading for Dataframe/Table Headers */
-    [data-testid="stDataFrame"] th, [data-testid="stTable"] th {
-        background-color: #FFE4E1 !important;
+    /* Style dataframe/table column headers to light pink */
+    [data-testid="stDataFrame"] thead tr th, [data-testid="stTable"] thead tr th {
+        background-color: #FFD1DC !important;
         color: black !important;
     }
     </style>
