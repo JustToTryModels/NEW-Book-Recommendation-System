@@ -67,7 +67,7 @@ def get_user_recommendations(user_id, df, sim_matrix, k=10):
     """
     # Get User's History
     user_history_all = df[df['userId'] == user_id]['title'].tolist()
-    user_history_rated = df[(df['userId'] == user_id) & (df['rating'] > 0)][['title', 'rating']].sort_values(by='rating', ascending=False)
+    user_history_rated = df[df['userId'] == user_id][['title', 'rating']].sort_values(by='rating', ascending=False)
     
     # Remove duplicates from user history
     user_history_rated = user_history_rated.drop_duplicates(subset=['title'])
@@ -443,6 +443,7 @@ with tab2:
                 history_df.columns = ['Book Title', 'Rating']
                 
                 st.dataframe(history_df, use_container_width=True)
+                st.caption("ℹ️ *Note: A rating of 0 indicates an interacted but unrated book.*")
         
         st.markdown("<br>", unsafe_allow_html=True)
         
