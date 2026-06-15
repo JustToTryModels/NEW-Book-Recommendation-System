@@ -139,7 +139,7 @@ st.image('https://img.freepik.com/premium-vector/bookcase-with-books_182089-197.
 st.markdown("""
     <style>
     /* Targeted elements for font application to prevent breaking core UI icon elements */
-    h1, h2, h3, h4, h5, h6, p, label, .subheader, .premium-title, .premium-author, .premium-year, .book-info, .recommendation-header {
+    h1, h2, h3, h4, h5, h6, p, label, .subheader, .premium-title, .premium-author, .premium-year, .book-info, .recommendation-header, [data-testid="stTable"], [data-testid="stDataFrame"] * {
         font-family: 'Tiempos', 'Tiempos Text', Georgia, 'Times New Roman', serif !important;
     }
     .subheader {
@@ -443,7 +443,7 @@ with tab2:
                 history_df.columns = ['Book Title', 'Rating']
                 
                 st.dataframe(history_df, use_container_width=True)
-                st.caption("ℹ️ *Note: A rating of 0 indicates an interacted but unrated book.*")
+                st.markdown("<p style='color: gray; font-size: 14px; font-style: italic; margin-top: 8px;'>ℹ️ Note: A rating of 0 indicates an interacted but unrated book.</p>", unsafe_allow_html=True)
         
         st.markdown("<br>", unsafe_allow_html=True)
         
