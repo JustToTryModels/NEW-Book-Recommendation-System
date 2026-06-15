@@ -125,12 +125,65 @@ def display_book_cards(books_list, start_index=0):
 # STREAMLIT APP UI
 # -------------------------------------------------------------------------
 
-# Combined Title and Subtitle
+# Combined Animated Title and Subtitle
 st.markdown("""
-    <h1 style='font-size: 40px; text-align: center; margin-bottom: 5px; padding-bottom: 0px;'>
-        Book Recommendation System
-    </h1>
+    <div style="text-align: center; margin-bottom: 5px; padding-bottom: 0px;">
+        <h1 id="animated-title" style="font-size: 40px; display: inline-flex; justify-content: center; flex-wrap: wrap; gap: 0px; margin: 0; padding: 0;">
+            Book Recommendation System
+        </h1>
+    </div>
     <p class='subheader'>Let Us Help You Choose Your Next Book!</p>
+
+    <style>
+        .wave-letter-wrapper {
+            display: inline-block;
+            perspective: 1000px;
+            transform-style: preserve-3d;
+        }
+        .wave-letter {
+            display: inline-block;
+            transform-style: preserve-3d;
+            animation: textWaveFlip 3s infinite ease-in-out;
+            transform-origin: center center;
+        }
+        @keyframes textWaveFlip {
+            0%, 70%, 100% {
+                transform: rotateX(0deg) rotateY(0deg);
+            }
+            35% {
+                transform: rotateX(360deg) rotateY(0deg);
+            }
+        }
+    </style>
+
+    <script>
+        const titleContainer = document.getElementById('animated-title');
+        if (titleContainer && !titleContainer.dataset.animated) {
+            const text = titleContainer.textContent.trim();
+            titleContainer.innerHTML = '';
+            
+            // Loop over characters to build individual letter nodes with a staggered delay
+            let delay = 0;
+            for (let i = 0; i < text.length; i++) {
+                const char = text[i];
+                const spanWrapper = document.createElement('span');
+                spanWrapper.className = 'wave-letter-wrapper';
+                
+                if (char === ' ') {
+                    spanWrapper.innerHTML = '&nbsp;';
+                } else {
+                    const spanLetter = document.createElement('span');
+                    spanLetter.className = 'wave-letter';
+                    spanLetter.textContent = char;
+                    spanLetter.style.animationDelay = delay + 's';
+                    spanWrapper.appendChild(spanLetter);
+                    delay += 0.08; // Stagger index increment
+                }
+                titleContainer.appendChild(spanWrapper);
+            }
+            titleContainer.dataset.animated = "true";
+        }
+    </script>
 """, unsafe_allow_html=True)
 
 st.image('https://img.freepik.com/premium-vector/bookcase-with-books_182089-197.jpg', use_container_width=True)
@@ -347,7 +400,7 @@ with tab1:
                               placeholder="Choose or enter a book title...", key='book_title')
     
     num_recommendations = st.number_input('Enter the number of recommendations:', 
-                                         min_value=1, max_value=50, value=10, key='num_recs_book')
+                                          min_value=1, max_value=50, value=10, key='num_recs_book')
     
     if 'recommendations' not in st.session_state:
         st.session_state.recommendations = None
