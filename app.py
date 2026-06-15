@@ -67,7 +67,7 @@ def get_user_recommendations(user_id, df, sim_matrix, k=10):
     """
     # Get User's History
     user_history_all = df[df['userId'] == user_id]['title'].tolist()
-    user_history_rated = df[(df['userId'] == user_id) & (df['rating'] > 0)][['title', 'rating']].sort_values(by='rating', ascending=False)
+    user_history_rated = df[df['userId'] == user_id][['title', 'rating']].sort_values(by='rating', ascending=False)
     
     # Remove duplicates from user history
     user_history_rated = user_history_rated.drop_duplicates(subset=['title'])
@@ -139,7 +139,7 @@ st.image('https://img.freepik.com/premium-vector/bookcase-with-books_182089-197.
 st.markdown("""
     <style>
     /* Targeted elements for font application to prevent breaking core UI icon elements */
-    h1, h2, h3, h4, h5, h6, p, label, .subheader, .premium-title, .premium-author, .premium-year, .book-info, .recommendation-header {
+    h1, h2, h3, h4, h5, h6, p, label, .subheader, .premium-title, .premium-author, .premium-year, .book-info, .recommendation-header, [data-testid="stTable"] *, [data-testid="stDataFrame"] * {
         font-family: 'Tiempos', 'Tiempos Text', Georgia, 'Times New Roman', serif !important;
     }
     .subheader {
@@ -326,6 +326,18 @@ st.markdown("""
         background: linear-gradient(90deg, #ff8a00, #e52e71);
         color: white;
     }
+
+    /* Light Pink Shading for Expander Dropdown Header */
+    .stExpander [data-baseweb="accordion-toggle-button"] {
+        background-color: #FFF0F5 !important;
+        border-radius: 8px;
+    }
+
+    /* Light Pink Shading for Dataframe/Table Headers */
+    [data-testid="stDataFrame"] th, [data-testid="stTable"] th {
+        background-color: #FFE4E1 !important;
+        color: black !important;
+    }
     </style>
 """, unsafe_allow_html=True)
 
@@ -443,6 +455,7 @@ with tab2:
                 history_df.columns = ['Book Title', 'Rating']
                 
                 st.dataframe(history_df, use_container_width=True)
+                st.markdown("<p style='color: gray; font-size: 14px; font-style: italic; margin-top: 8px;'>ℹ️ Note: A rating of 0 indicates an interacted but unrated book.</p>", unsafe_allow_html=True)
         
         st.markdown("<br>", unsafe_allow_html=True)
         
