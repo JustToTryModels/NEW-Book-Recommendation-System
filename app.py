@@ -138,9 +138,21 @@ st.image('https://img.freepik.com/premium-vector/bookcase-with-books_182089-197.
 # CSS Styling
 st.markdown("""
     <style>
-    html, body, [class*="css"], [class*="st-"], h1, h2, h3, h4, h5, h6, p, div, span, label, input, button, select, option, textarea {
+    /* Exclude material icons and symbols to prevent the ligature text overlap issue */
+    html, body, [class*="css"]:not(.material-icons):not(.material-symbols-rounded), 
+    [class*="st-"]:not(.material-icons):not(.material-symbols-rounded), 
+    h1, h2, h3, h4, h5, h6, p, 
+    div:not(.material-icons):not(.material-symbols-rounded), 
+    span:not(.material-icons):not(.material-symbols-rounded), 
+    label, input, button, select, option, textarea {
         font-family: 'Tiempos', 'Tiempos Text', Georgia, 'Times New Roman', serif !important;
     }
+    
+    /* Ensure Streamlit Material Icons correctly retain their native font-family */
+    .material-icons, .material-symbols-rounded {
+        font-family: 'Material Symbols Rounded', 'Material Icons', sans-serif !important;
+    }
+
     .subheader {
         font-size: 22px;
         font-weight: bold;
@@ -323,16 +335,6 @@ st.markdown("""
     .stTabs [aria-selected="true"] {
         background: linear-gradient(90deg, #ff8a00, #e52e71);
         color: white;
-    }
-
-    /* Fix for selectbox overlap issues */
-    div[data-baseweb="select"] input {
-        padding-right: 35px !important;
-    }
-    div[data-baseweb="form-field"] > label {
-        margin-bottom: 8px !important;
-        display: block !important;
-        position: relative !important;
     }
     </style>
 """, unsafe_allow_html=True)
