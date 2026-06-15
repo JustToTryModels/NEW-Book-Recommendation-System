@@ -7,6 +7,9 @@ import warnings
 
 warnings.filterwarnings('ignore')
 
+# -------------------------------------------------------------------------
+# DATA LOADING & SIMILARITY MATRIX (Explicit ratings only for IBCF)
+# -------------------------------------------------------------------------
 @st.cache_data
 def load_and_prepare_data():
     # Load your final filtered dataframe from Hugging Face
@@ -21,25 +24,20 @@ def load_and_prepare_data():
     # Merge the dataframes on the title
     final_filtered_df = final_filtered_df.merge(book_urls_df, on='title', how='left')
 
-    # URL to replace
-    url1 = 'http://images.amazon.com/images/P/0690040784.01.LZZZZZZZ.jpg'
-    url2 = 'http://images.amazon.com/images/P/0451172817.01.LZZZZZZZ.jpg'
-    url3 = 'http://images.amazon.com/images/P/0312084986.01.LZZZZZZZ.jpg'
-    url4 = 'http://images.amazon.com/images/P/1590400356.01.LZZZZZZZ.jpg'
+    # Fix some image URLs
+    replacements = {
+        'Jacob Have I Loved': 'http://images.amazon.com/images/P/0690040784.01.LZZZZZZZ.jpg',
+        'Needful Things': 'http://images.amazon.com/images/P/0451172817.01.LZZZZZZZ.jpg',
+        'All Creatures Great and Small': 'http://images.amazon.com/images/P/0312084986.01.LZZZZZZZ.jpg',
+        "The Kitchen God's Wife": 'http://images.amazon.com/images/P/1590400356.01.LZZZZZZZ.jpg'
+    }
+    for title, url in replacements.items():
+        final_filtered_df.loc[final_filtered_df['title'] == title, 'Image-URL-L'] = url
 
-    # Replace URL based on condition
-    final_filtered_df.loc[final_filtered_df['title'] == 'Jacob Have I Loved', 'Image-URL-L'] = url1
-    final_filtered_df.loc[final_filtered_df['title'] == 'Needful Things', 'Image-URL-L'] = url2
-    final_filtered_df.loc[final_filtered_df['title'] == 'All Creatures Great and Small', 'Image-URL-L'] = url3
-    final_filtered_df.loc[final_filtered_df['title'] == "The Kitchen God's Wife", 'Image-URL-L'] = url4
-
-    # -------------------------------------------------------------------------
-    #  BUILD SIMILARITY MATRIX USING ONLY EXPLICIT RATINGS (>0)               
-    # -------------------------------------------------------------------------
+    # Build similarity matrix using ONLY explicit ratings (>0)
     explicit_ratings_df = final_filtered_df[final_filtered_df['rating'] > 0]
     book_user_mat = explicit_ratings_df.pivot_table(index='title', columns='userId', values='rating').fillna(0)
 
-    # Calculate the cosine similarity matrix
     cosine_sim = cosine_similarity(book_user_mat)
     cosine_sim_df = pd.DataFrame(cosine_sim, index=book_user_mat.index, columns=book_user_mat.index)
 
@@ -47,6 +45,9 @@ def load_and_prepare_data():
 
 final_filtered_df, cosine_sim_df = load_and_prepare_data()
 
+# -------------------------------------------------------------------------
+# ITEM-TO-ITEM SIMILARITY (for the "similar books" feature)
+# -------------------------------------------------------------------------
 def get_top_similar_books(book_title, n=10):
     if book_title not in cosine_sim_df.index:
         return "⚠️ Book not found in the database."
@@ -55,8 +56,43 @@ def get_top_similar_books(book_title, n=10):
     similar_books = similar_scores.sort_values(ascending=False)[1:n+1]
     return similar_books
 
-# Streamlit app
-# Combined Title and Subtitle (Place this right before st.image)
+# -------------------------------------------------------------------------
+# USER-BASED RECOMMENDATIONS (IBCF logic with explicit/implicit handling)
+# -------------------------------------------------------------------------
+def get_recommendations_for_user(user_id, df, sim_matrix, k=10):
+    """
+    Generate top-K recommendations for a user.
+    Uses all interactions (explicit & implicit) to seed candidates, but
+    excludes already interacted items from final list.
+    """
+    # 1. All items the user interacted with (both rated and zero‑rated)
+    user_history_all = df[df['userId'] == user_id]['title'].tolist()
+    if not user_history_all:
+        return [], None
+
+    # 2. Get user's explicit ratings for display
+    user_history_rated = df[(df['userId'] == user_id) & (df['rating'] > 0)][['title', 'rating']] \
+                         .sort_values(by='rating', ascending=False)
+
+    # 3. Generate candidate scores from similar items
+    scores = {}
+    for item in user_history_all:
+        if item in sim_matrix.index:
+            # Top 50 similar items (excluding the item itself)
+            similar_items = sim_matrix[item].sort_values(ascending=False)[1:51]
+            for sim_item, score in similar_items.items():
+                if sim_item not in user_history_all:
+                    scores[sim_item] = scores.get(sim_item, 0) + score
+
+    # 4. Sort and pick top K
+    sorted_scores = sorted(scores.items(), key=lambda x: x[1], reverse=True)
+    top_recommendations = [x[0] for x in sorted_scores[:k]]
+
+    return top_recommendations, user_history_rated
+
+# -------------------------------------------------------------------------
+# STREAMLIT UI
+# -------------------------------------------------------------------------
 st.markdown("""
     <h1 style='font-size: 40px; text-align: center; margin-bottom: 5px; padding-bottom: 0px;'>
         Book Recommendation System
@@ -66,6 +102,7 @@ st.markdown("""
 
 st.image('https://img.freepik.com/premium-vector/bookcase-with-books_182089-197.jpg', use_container_width=True)
 
+# CSS (same as original)
 st.markdown("""
     <style>
     html, body, [class*="css"], [class*="st-"], h1, h2, h3, h4, h5, h6, p, div, span, label, input, button, select, option, textarea {
@@ -105,7 +142,6 @@ st.markdown("""
         transform: scale(0.98);
     }
     
-    /* Updated Premium Book Info Block */
     .book-info {
         background: #1e1e1e;
         padding: 20px 15px;
@@ -117,7 +153,7 @@ st.markdown("""
         justify-content: flex-start;
         align-items: center;
         min-height: 150px;
-        height: 150px; /* FIX: keep all cards same height */
+        height: 150px;
         box-sizing: border-box;
     }
     
@@ -133,7 +169,7 @@ st.markdown("""
         overflow-y: hidden;
         display: block;
         padding-bottom: 5px;
-        height: 38px; /* FIX: reserve scrollbar/title space equally for all cards */
+        height: 38px;
         box-sizing: border-box;
     }
 
@@ -238,68 +274,170 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
-# THE ONLY CHANGE IS HERE: Added sorted() to alphabetize the dropdown list
-all_books = sorted(final_filtered_df['title'].unique().tolist())
-book_title = st.selectbox('Enter a book title:', all_books, index=None, placeholder="Choose or enter a book title...", key='book_title')
+# -------------------------------------------------------------------------
+# CREATE TABS
+# -------------------------------------------------------------------------
+tab1, tab2 = st.tabs(["📖 Find Similar Books", "👤 Personalised Recommendations"])
 
-num_recommendations = st.number_input('Enter the number of recommendations:', min_value=1, max_value=50, value=10)
+# ================== TAB 1: ITEM-ITEM SIMILARITY ==========================
+with tab1:
+    st.subheader("Discover books similar to a title you love")
 
-if 'recommendations' not in st.session_state:
-    st.session_state.recommendations = None
-if 'recommended_book' not in st.session_state:
-    st.session_state.recommended_book = None
-if 'recommended_num' not in st.session_state:
-    st.session_state.recommended_num = None
+    all_books = sorted(final_filtered_df['title'].unique().tolist())
+    book_title = st.selectbox(
+        'Enter a book title:',
+        all_books,
+        index=None,
+        placeholder="Choose or enter a book title...",
+        key='book_title'
+    )
+    num_recommendations = st.number_input(
+        'Number of similar books:',
+        min_value=1, max_value=50, value=10,
+        key='num_similar'
+    )
 
-if st.button('Recommend books'):
-    if book_title:
-        similar_books = get_top_similar_books(book_title, num_recommendations)
-        st.session_state.recommendations = similar_books
-        st.session_state.recommended_book = book_title
-        st.session_state.recommended_num = num_recommendations
-    else:
-        st.session_state.recommendations = None
-        st.write("⚠️ Please select or enter a book title.")
+    if 'similar_books' not in st.session_state:
+        st.session_state.similar_books = None
+        st.session_state.similar_book_query = None
 
-if st.session_state.recommendations is not None:
-    similar_books = st.session_state.recommendations
-    rec_book = st.session_state.recommended_book
-    rec_num = st.session_state.recommended_num
+    if st.button('Find Similar Books', key='similar_btn'):
+        if book_title:
+            similar = get_top_similar_books(book_title, num_recommendations)
+            st.session_state.similar_books = similar
+            st.session_state.similar_book_query = book_title
+        else:
+            st.warning("⚠️ Please select or enter a book title.")
+            st.session_state.similar_books = None
 
-    if isinstance(similar_books, str):
-        st.write(similar_books)
-    else:
-        st.markdown(f"<div class='recommendation-header'>Top {rec_num} recommendations for '<strong>{rec_book}</strong>':</div>", unsafe_allow_html=True)
-        st.write("")
-        
-        for i in range(0, len(similar_books), 3):
-            cols = st.columns(3)
-            for j in range(3):
-                if i + j < len(similar_books):
-                    book = similar_books.index[i + j]
-                    book_info = final_filtered_df[final_filtered_df['title'] == book].iloc[0]
-                    
-                    # Prevent quotes in variables from breaking HTML attributes occasionally
-                    safe_title = str(book).replace('"', '&quot;').replace("'", "&#39;")
-                    safe_author = str(book_info['Book-Author']).replace('"', '&quot;').replace("'", "&#39;")
-                    
-                    with cols[j]:
-                        st.markdown(f"""
-                        <div class='book-column'>
-                            <div class='recommendation-badge'>{i + j + 1}</div>
-                            <div class='book-image-area'>
-                                <img src='{book_info['Image-URL-L']}' style='height:290px; width:auto; display:block;'>
+    if st.session_state.similar_books is not None:
+        similar_books = st.session_state.similar_books
+        query_title = st.session_state.similar_book_query
+
+        if isinstance(similar_books, str):
+            st.write(similar_books)
+        else:
+            st.markdown(
+                f"<div class='recommendation-header'>Top {len(similar_books)} books similar to '<strong>{query_title}</strong>':</div>",
+                unsafe_allow_html=True
+            )
+            st.write("")
+
+            # Display in rows of 3
+            for i in range(0, len(similar_books), 3):
+                cols = st.columns(3)
+                for j in range(3):
+                    if i + j < len(similar_books):
+                        book = similar_books.index[i + j]
+                        book_info = final_filtered_df[final_filtered_df['title'] == book].iloc[0]
+                        safe_title = str(book).replace('"', '&quot;').replace("'", "&#39;")
+                        safe_author = str(book_info['Book-Author']).replace('"', '&quot;').replace("'", "&#39;")
+                        with cols[j]:
+                            st.markdown(f"""
+                            <div class='book-column'>
+                                <div class='recommendation-badge'>{i + j + 1}</div>
+                                <div class='book-image-area'>
+                                    <img src='{book_info['Image-URL-L']}' style='height:290px; width:auto; display:block;'>
+                                </div>
+                                <div class='book-info'>
+                                    <div class='premium-title' title="{safe_title}">{book}</div>
+                                    <div class='premium-divider'></div>
+                                    <div class='premium-author' title="{safe_author}">{book_info['Book-Author']}</div>
+                                    <div class='premium-year'>{book_info['Year-Of-Publication']}</div>
+                                </div>
                             </div>
-                            <div class='book-info'>
-                                <div class='premium-title' title="{safe_title}">{book}</div>
-                                <div class='premium-divider'></div>
-                                <div class='premium-author' title="{safe_author}">{book_info['Book-Author']}</div>
-                                <div class='premium-year'>{book_info['Year-Of-Publication']}</div>
-                            </div>
-                        </div>
-                        """, unsafe_allow_html=True)
-            if i < len(similar_books) - 3:
-                st.markdown("<br><hr><br>", unsafe_allow_html=True)
+                            """, unsafe_allow_html=True)
+                if i < len(similar_books) - 3:
+                    st.markdown("<br><hr><br>", unsafe_allow_html=True)
 
-        st.markdown("<div class='extra-space'></div><div class='extra-space'></div>", unsafe_allow_html=True)
-        st.image('https://github.com/MarpakaPradeepSai/Employee-Churn-Prediction/blob/main/Data/Images%20&%20GIFs/thank-you-33.gif?raw=true', use_container_width=True)
+# ================== TAB 2: PERSONALISED RECOMMENDATIONS ==================
+with tab2:
+    st.subheader("Get personalised recommendations based on your reading history")
+
+    user_id_input = st.text_input(
+        "Enter your User ID:",
+        placeholder="e.g., 277427",
+        key='user_id_input'
+    )
+    top_k = st.number_input(
+        "Number of recommendations:",
+        min_value=1, max_value=50, value=10,
+        key='user_k'
+    )
+
+    if st.button('Get Recommendations', key='user_rec_btn'):
+        if user_id_input:
+            try:
+                uid = int(user_id_input)
+            except ValueError:
+                st.error("❌ User ID must be a numeric value.")
+                st.session_state.user_recs = None
+                st.session_state.user_history = None
+            else:
+                recs, history = get_recommendations_for_user(uid, final_filtered_df, cosine_sim_df, k=top_k)
+                st.session_state.user_recs = recs
+                st.session_state.user_history = history
+        else:
+            st.warning("⚠️ Please enter a User ID.")
+            st.session_state.user_recs = None
+            st.session_state.user_history = None
+
+    # Display results if available
+    if 'user_recs' in st.session_state and st.session_state.user_recs is not None:
+        recs = st.session_state.user_recs
+        history = st.session_state.user_history
+
+        # Show user's history
+        st.markdown("---")
+        st.markdown("#### 📚 Your Reading History (Top Rated)")
+        if history is not None and len(history) > 0:
+            for _, row in history.head(5).iterrows():
+                st.write(f"- **{row['title']}** (Rating: {row['rating']})")
+            if len(history) > 5:
+                st.caption(f"... and {len(history) - 5} more books.")
+        else:
+            st.write("No explicit ratings found (only implicit interactions).")
+
+        # Show recommendations
+        st.markdown("---")
+        if len(recs) == 0:
+            st.info("No recommendations could be generated. You may have already explored all similar books, or your history is too limited.")
+        else:
+            st.markdown(f"<div class='recommendation-header'>✨ Top {len(recs)} Recommendations for You</div>", unsafe_allow_html=True)
+            st.write("")
+
+            for i in range(0, len(recs), 3):
+                cols = st.columns(3)
+                for j in range(3):
+                    idx = i + j
+                    if idx < len(recs):
+                        book = recs[idx]
+                        book_info = final_filtered_df[final_filtered_df['title'] == book].iloc[0]
+                        safe_title = str(book).replace('"', '&quot;').replace("'", "&#39;")
+                        safe_author = str(book_info['Book-Author']).replace('"', '&quot;').replace("'", "&#39;")
+                        with cols[j]:
+                            st.markdown(f"""
+                            <div class='book-column'>
+                                <div class='recommendation-badge'>{idx + 1}</div>
+                                <div class='book-image-area'>
+                                    <img src='{book_info['Image-URL-L']}' style='height:290px; width:auto; display:block;'>
+                                </div>
+                                <div class='book-info'>
+                                    <div class='premium-title' title="{safe_title}">{book}</div>
+                                    <div class='premium-divider'></div>
+                                    <div class='premium-author' title="{safe_author}">{book_info['Book-Author']}</div>
+                                    <div class='premium-year'>{book_info['Year-Of-Publication']}</div>
+                                </div>
+                            </div>
+                            """, unsafe_allow_html=True)
+                if i < len(recs) - 3:
+                    st.markdown("<br><hr><br>", unsafe_allow_html=True)
+
+    # Reset button to clear session state (optional)
+    if st.button("Clear User Recommendations", key='clear_user'):
+        st.session_state.user_recs = None
+        st.session_state.user_history = None
+        st.rerun()
+
+st.markdown("<div class='extra-space'></div><div class='extra-space'></div>", unsafe_allow_html=True)
+st.image('https://github.com/MarpakaPradeepSai/Employee-Churn-Prediction/blob/main/Data/Images%20&%20GIFs/thank-you-33.gif?raw=true', use_container_width=True)
