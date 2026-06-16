@@ -468,7 +468,7 @@ with tab2:
                 history_df.columns = ['Book Title', 'Rating']
                 
                 st.dataframe(history_df, use_container_width=True)
-                st.caption("ℹ️ *Note: A rating of 0 indicates an **interacted** but **unrated** book.*")
+                st.caption("ℹ️ *Note: A rating of \"0\" indicates an **interacted** but **unrated** book.*")
         
         st.markdown("<br>", unsafe_allow_html=True)
         
