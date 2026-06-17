@@ -1,3 +1,4 @@
+# Deployment Code
 import streamlit as st
 import pandas as pd
 import numpy as np
@@ -371,25 +372,25 @@ st.markdown("""
         background-color: #ffe6ea !important; /* Light pink with soft intensity */
     }
 
-    /* History Table Enforced Black Borders */
-    table.history-table {
-        width: 100%;
-        border-collapse: collapse !important;
-        border: 2px solid black !important;
-        margin-bottom: 1rem;
-    }
-    table.history-table th, 
-    table.history-table td {
+    /* Reading History Table - Black borders, rows and column lines */
+    [data-testid="stExpander"] [data-testid="stDataFrame"] table,
+    [data-testid="stExpander"] .stDataFrame table {
         border: 1px solid black !important;
-        padding: 10px !important;
-        text-align: left !important;
-        font-family: 'Tiempos', 'Tiempos Text', Georgia, 'Times New Roman', serif !important;
-        color: #333333 !important;
+        border-collapse: collapse !important;
     }
-    table.history-table thead th {
-        background-color: #f0f2f6 !important;
-        font-weight: bold !important;
-        color: black !important;
+
+    [data-testid="stExpander"] [data-testid="stDataFrame"] th,
+    [data-testid="stExpander"] [data-testid="stDataFrame"] td,
+    [data-testid="stExpander"] .stDataFrame th,
+    [data-testid="stExpander"] .stDataFrame td {
+        border: 1px solid black !important;
+    }
+
+    [data-testid="stExpander"] [data-testid="stDataFrame"] thead tr,
+    [data-testid="stExpander"] [data-testid="stDataFrame"] tbody tr,
+    [data-testid="stExpander"] .stDataFrame thead tr,
+    [data-testid="stExpander"] .stDataFrame tbody tr {
+        border: 1px solid black !important;
     }
     </style>
 """, unsafe_allow_html=True)
@@ -507,8 +508,7 @@ with tab2:
                 history_df.index = history_df.index + 1
                 history_df.columns = ['Book Title', 'Rating']
                
-                # ✅ Render as an HTML table with targeted black borders and rows
-                st.markdown(history_df.to_html(classes="history-table"), unsafe_allow_html=True)
+                st.dataframe(history_df, use_container_width=True)
                 st.caption("ℹ️ *Note: A rating of \"0\" indicates an **interacted** but **unrated** book.*")
        
         st.markdown("<br>", unsafe_allow_html=True)
