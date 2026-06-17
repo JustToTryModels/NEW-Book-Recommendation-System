@@ -365,7 +365,7 @@ st.markdown("""
     }
     
     [data-testid="stExpander"] details[open] {
-        border: 1px solid #e75480 !important; /* 1px light pink border when open */
+        border: 1px solid #e91e8c !important; /* 1px light pink border when open */
     }
     
     [data-testid="stExpander"] summary {
