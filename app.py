@@ -371,6 +371,21 @@ st.markdown("""
     [data-testid="stExpander"] summary {
         background-color: #ffe6ea !important; /* Light pink with soft intensity */
     }
+
+    /* Table borders, rows and column lines within User's Reading History dropdown */
+    [data-testid="stExpander"] [data-testid="stDataFrame"] table,
+    [data-testid="stExpander"] [data-testid="stDataFrame"] th,
+    [data-testid="stExpander"] [data-testid="stDataFrame"] td {
+        border: 1px solid black !important;
+    }
+    [data-testid="stExpander"] [data-testid="stDataFrame"] thead tr,
+    [data-testid="stExpander"] [data-testid="stDataFrame"] tbody tr {
+        border-top: 1px solid black !important;
+        border-bottom: 1px solid black !important;
+    }
+    [data-testid="stExpander"] [data-testid="stDataFrame"] thead th {
+        border-bottom: 1px solid black !important;
+    }
     </style>
 """, unsafe_allow_html=True)
 
@@ -505,4 +520,3 @@ with tab2:
                     use_container_width=True)
         else:
             st.info("No recommendations available for this user at the moment.")
-
