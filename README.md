@@ -23,6 +23,7 @@ A machine learning-powered web application designed to recommend books to users 
 - [Live Demo](#-live-demo)
 - [Dataset Overview](#-dataset-overview)
 - [Methodology & Data Processing](#-methodology--data-processing)
+- [Personalized User Recommendations](#-personalized-user-recommendations)
 - [Model Architecture & Evaluation](#-model-architecture--evaluation)
 - [Key EDA Findings](#-key-eda-findings)
 - [Installation & Usage](#-installation--usage)
@@ -64,7 +65,7 @@ Build a robust recommendation engine capable of processing millions of user inte
 |-----------|-------------|
 | **Core Algorithm** | Item-Based Collaborative Filtering |
 | **Similarity Metric** | Cosine Similarity |
-| **Sparsity Handling** | Threshold filtering (Active Users > 100 ratings, Popular Books > 50 ratings) |
+| **Data Optimization** | Isolation of explicit ratings (`explicit_ratings_df`) |
 | **Alternative Models Tested** | k-Nearest Neighbors (kNN), K-Means Clustering |
 | **Data Storage** | Hugging Face Datasets (`IamPradeep/BRS_DATA`) |
 | **Deployment** | Streamlit Web Application |
@@ -110,7 +111,7 @@ The project utilizes a comprehensive Book-Crossing dataset comprising three main
 |--------|-------|-------|
 | **Users** | Anonymized user IDs and demographic data (Location, Age). | 278,858 records |
 | **Books** | ISBN, Title, Author, Year, Publisher, and Cover Image URLs. | 271,360 records |
-| **Ratings** | Explicit ratings (1-10) and implicit ratings (0). | 1,149,780 records |
+| **Ratings** | Explicit ratings (1-10) and implicit interactions (0). | 1,149,780 records |
 
 </div>
 
@@ -132,7 +133,26 @@ Find the Datasets here:
 Recommendation matrices are notoriously sparse. To ensure high-quality recommendations and computational efficiency, the dataset was rigorously filtered:
 1. **Active Users Only:** Filtered out users who rated fewer than **100 books**.
 2. **Popular Books Only:** Filtered out books that received fewer than **50 ratings**.
-3. **Result:** A dense, high-signal user-item pivot table ready for mathematical similarity calculations.
+
+### 🌟 3. Explicit Ratings Optimization (`explicit_ratings_df`)
+A major optimization in this build was separating explicit ratings (1-10) from implicit interactions (0). 
+- We created an isolated `explicit_ratings_df` where `rating > 0`.
+- **Why?** Treating a '0' (meaning the user interacted with the book but left no score) as a true zero rating heavily corrupts mathematical similarity calculations. By utilizing only true explicit ratings for the item-user pivot table, we drastically improved the model's Mean Absolute Error (MAE) from ~4.6 down to ~1.05!
+
+<br>
+
+---
+
+## 🧑‍💻 Personalized User Recommendations
+
+Beyond finding "Similar Books" on an item-to-item basis, the system is engineered to provide fully **Personalized Recommendations** tailored to a specific `User ID`. 
+
+The pipeline for generating a personalized feed works as follows:
+1. **Fetch User History:** Extract all books the specific user has highly rated.
+2. **Generate Candidates:** Query the similarity matrix to pull the nearest neighbors (similar books) for *every* book in the user's history.
+3. **Aggregate Scores:** Accumulate and weight the similarity scores. If multiple books the user likes all point to a specific unread book, that book's recommendation score multiplies.
+4. **Critical Filtering:** The system checks the final candidate list against the user's interaction history and completely filters out books the user has already read.
+5. **Final Output:** Returns the Top-K customized, unread books for that specific user.
 
 <br>
 
@@ -140,46 +160,47 @@ Recommendation matrices are notoriously sparse. To ensure high-quality recommend
 
 ## ⚔️ Model Architecture & Evaluation
 
-Three distinct approaches were evaluated to find the optimal recommendation engine:
+Three distinct approaches were evaluated using a Unified Evaluation Framework. The metric improvements below highlight the success of the `explicit_ratings_df` optimization.
 
 ### 🚀 1. Cosine Similarity (Deployed Model)
 - **Mechanism:** Calculates the cosine of the angle between two projected vectors (books) in a multi-dimensional user space.
 - **Why it was chosen:** Highly efficient, deterministic, and scales beautifully within Streamlit. Automatically normalizes for users who rate books more generously than others.
-- **Evaluation Metrics:**
-  - **MAE:** 4.6691
-  - **RMSE:** 5.9147
-  - **Precision@K:** 0.0323
-  - **Recall@K:** 0.0847
-  - **NDCG@K:** 0.1313
-  - **HitRate@K:** 0.2261
-  - **Coverage:** 0.764
-  - **Predictions evaluated:** 4,821 over 1,571 users
+- **Evaluation Metrics (@10):**
+  - **MAE:** 1.0577 *(Massive improvement)*
+  - **RMSE:** 1.6181
+  - **Precision:** 0.0326
+  - **Recall:** 0.0868
+  - **NDCG:** 0.1323
+  - **HitRate:** 0.2293
+  - **Coverage:** 0.7397
+  - **Predictions evaluated:** 2,233 over 1,571 users
 
 ### 🤖 2. k-Nearest Neighbors (kNN)
 - **Mechanism:** Utilized `sklearn.neighbors.NearestNeighbors` with `metric='cosine'` and `algorithm='brute'`.
-- **Evaluation Metrics:**
-  - **MAE:** 4.7456
-  - **RMSE:** 5.9767
-  - **Precision@K:** 0.0323
-  - **Recall@K:** 0.0847
-  - **NDCG@K:** 0.1313
-  - **HitRate@K:** 0.2261
-  - **Coverage:** 0.764
-  - **Predictions evaluated:** 5,102 over 1,571 users
+- **Evaluation Metrics (@10):**
+  - **MAE:** 1.0577
+  - **RMSE:** 1.6181
+  - **Precision:** 0.0326
+  - **Recall:** 0.0868
+  - **NDCG:** 0.1323
+  - **HitRate:** 0.2293
+  - **Coverage:** 0.7388
+  - **Predictions evaluated:** 2,233 over 1,571 users
+> *Note: Cosine Similarity and kNN yielded nearly identical performance, but standard Cosine matrix multiplication is more memory-efficient for deployment.*
 
 ### 📊 3. K-Means Clustering
 - **Mechanism:** Unsupervised grouping of similar books.
-- **Optimization:** Used the **Silhouette Score** to find the optimal number of clusters ($k=2$, score = `0.6518`).
-- **Evaluation Metrics:**
-  - **MAE:** 5.9205
-  - **RMSE:** 6.7444
-  - **Precision@K:** 0.0271
-  - **Recall@K:** 0.0743
-  - **NDCG@K:** 0.1170
-  - **HitRate@K:** 0.2060
-  - **Coverage:** 0.611
-  - **Predictions evaluated:** 18,171 over 1,571 users
-> **Verdict:** While mathematically interesting, hard-clustering limits the nuanced, ranked recommendations required for a consumer-facing app compared to continuous similarity scoring.
+- **Optimization:** Used the **Silhouette Score** to find the optimal number of clusters ($k=2$, score = `0.3588`).
+- **Evaluation Metrics (@10):**
+  - **MAE:** 1.1627
+  - **RMSE:** 1.5868
+  - **Precision:** 0.0258
+  - **Recall:** 0.0712
+  - **NDCG:** 0.1123
+  - **HitRate:** 0.2003
+  - **Coverage:** 0.6017
+  - **Predictions evaluated:** 5,268 over 1,571 users
+> **Verdict:** While K-Means successfully grouped similar books, hard-clustering limits the nuanced, ranked precision required for a consumer-facing app compared to continuous similarity scoring.
 
 <br>
 
