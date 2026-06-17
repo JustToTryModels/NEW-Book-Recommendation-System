@@ -55,7 +55,9 @@ This project specifically utilizes **Item-Based Collaborative Filtering**, which
 
 ### Objective
 
-Build a robust recommendation engine capable of processing millions of user interactions to suggest highly relevant books. The system evaluates different clustering and similarity algorithms to deliver context-aware, user-specific suggestions via a deployed web application.
+The primary objective of this project is to develop an **Item-Based Collaborative Filtering** recommendation engine capable of processing millions of user interactions to accurately suggest books. 
+
+By calculating similarity metrics between books, the system identifies hidden relationships between different titles rather than relying on standard demographic profiles. Ultimately, the goal is to build a scalable model that predicts user preferences, evaluates different clustering algorithms, and enhances the discovery of relevant literature via a live, deployed web application.
 
 <div align="center">
 
