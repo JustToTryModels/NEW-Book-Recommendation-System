@@ -489,4 +489,4 @@ with tab2:
             st.image('https://github.com/MarpakaPradeepSai/Employee-Churn-Prediction/blob/main/Data/Images%20&%20GIFs/thank-you-33.gif?raw=true', 
                     use_container_width=True)
         else:
-            st.info("No recommendations available for this user at the moment.")
+            st.info("No recommendations available for this user at the moment.") 
