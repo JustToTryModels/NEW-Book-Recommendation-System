@@ -1,3 +1,4 @@
+# Deployment Code
 import streamlit as st
 import pandas as pd
 import numpy as np
@@ -18,14 +19,11 @@ def load_and_prepare_data():
     book_urls_df = pd.read_csv(book_urls_df_path)
     book_urls_df.rename(columns={'Book-Title': 'title'}, inplace=True)
 
-    # =========================================================================
-    # FIX 1: Drop duplicate titles in Books.csv BEFORE merging to prevent 
-    # a many-to-many merge explosion which breaks the math.
-    # =========================================================================
-    book_urls_df = book_urls_df.drop_duplicates(subset=['title'])
+    # ✅ FIX 1: Drop duplicate titles before merging to prevent row multiplication!
+    book_urls_df = book_urls_df.drop_duplicates(subset=['title'], keep='first')
 
     # Merge the dataframes on the title
-    final_filtered_df = final_filtered_df.merge(book_urls_df, on='title', how='left')
+    final_filtered_df = final_filtered_df.merge(book_urls_df[['title', 'Book-Author', 'Year-Of-Publication', 'Image-URL-L']], on='title', how='left')
 
     # URL to replace
     url1 = 'http://images.amazon.com/images/P/0690040784.01.LZZZZZZZ.jpg'
@@ -71,15 +69,12 @@ def get_user_recommendations(user_id, df, sim_matrix, k=10):
     Generates personalized recommendations for a specific user.
     Returns: (recommendations_list, user_history_dataframe)
     """
-    # =========================================================================
-    # FIX 2: Use .unique() so we don't process the same book multiple times 
-    # if it accidentally exists in the DB more than once.
-    # This also naturally captures ALL interactions (including '0' unrated).
-    # =========================================================================
+    # Get User's History
+    # ✅ FIX 2: Use .unique().tolist() to guarantee no duplicate scoring
     user_history_all = df[df['userId'] == user_id]['title'].unique().tolist()
-    
-    # Get User's History (for display purposes)
     user_history_rated = df[df['userId'] == user_id][['title', 'rating']].sort_values(by='rating', ascending=False)
+    
+    # Remove duplicates from user history
     user_history_rated = user_history_rated.drop_duplicates(subset=['title'])
 
     if len(user_history_all) == 0:
@@ -92,8 +87,6 @@ def get_user_recommendations(user_id, df, sim_matrix, k=10):
             similar_items = sim_matrix[item].sort_values(ascending=False)[1:50] 
             
             for sim_item, score in similar_items.items():
-                # This naturally BLOCKS unrated ('0') books from being recommended 
-                # back to the user because they exist in user_history_all.
                 if sim_item not in user_history_all:
                     scores[sim_item] = scores.get(sim_item, 0) + score
 
@@ -120,7 +113,7 @@ def display_book_cards(books_list, start_index=0):
                     <div class='book-column'>
                         <div class='recommendation-badge'>{start_index + i + j + 1}</div>
                         <div class='book-image-area'>
-                            <img src='{book_info['Image-URL-L']}' style='height:290px; width:auto; display:block;' onerror="this.onerror=null;this.src='https://via.placeholder.com/200x290?text=No+Cover';">
+                            <img src='{book_info['Image-URL-L']}' style='height:290px; width:auto; display:block;'>
                         </div>
                         <div class='book-info'>
                             <div class='premium-title' title="{safe_title}">{book}</div>
@@ -379,7 +372,7 @@ with tab1:
     st.markdown("<h3 style='text-align: center;'>Find Similar Books</h3>", unsafe_allow_html=True)
     st.write("Select a book and discover similar titles based on user preferences and ratings.")
     
-    all_books = sorted(final_filtered_df['title'].dropna().unique().tolist())
+    all_books = sorted(final_filtered_df['title'].unique().tolist())
     book_title = st.selectbox('Enter a book title:', all_books, index=None, 
                               placeholder="Choose or enter a book title...", key='book_title')
     
