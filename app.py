@@ -371,21 +371,25 @@ st.markdown("""
         background-color: #ffe6ea !important; /* Light pink with soft intensity */
     }
 
-    /* Added CSS: Strict Black Borders Table Styling for User History Expander */
-    .history-table {
+    /* History Table Enforced Black Borders */
+    table.history-table {
         width: 100%;
         border-collapse: collapse !important;
+        border: 2px solid black !important;
+        margin-bottom: 1rem;
     }
-    .history-table th, .history-table td {
+    table.history-table th, 
+    table.history-table td {
         border: 1px solid black !important;
-        padding: 8px 12px;
-        text-align: left;
+        padding: 10px !important;
+        text-align: left !important;
+        font-family: 'Tiempos', 'Tiempos Text', Georgia, 'Times New Roman', serif !important;
+        color: #333333 !important;
     }
-    .history-table thead tr th {
-        background-color: rgba(128, 128, 128, 0.15); /* Slight contrast for headers */
-        position: sticky;
-        top: 0;
-        z-index: 1;
+    table.history-table thead th {
+        background-color: #f0f2f6 !important;
+        font-weight: bold !important;
+        color: black !important;
     }
     </style>
 """, unsafe_allow_html=True)
@@ -503,11 +507,8 @@ with tab2:
                 history_df.index = history_df.index + 1
                 history_df.columns = ['Book Title', 'Rating']
                
-                # Converting dataframe to HTML explicitly allows us to fully apply CSS strictly enforcing black borders 
-                # (Streamlit's default st.dataframe functions via an unstylable UI canvas)
-                html_table = history_df.to_html(classes='history-table')
-                st.markdown(f"<div style='max-height: 400px; overflow-y: auto; margin-bottom: 10px;'>{html_table}</div>", unsafe_allow_html=True)
-                
+                # ✅ Render as an HTML table with targeted black borders and rows
+                st.markdown(history_df.to_html(classes="history-table"), unsafe_allow_html=True)
                 st.caption("ℹ️ *Note: A rating of \"0\" indicates an **interacted** but **unrated** book.*")
        
         st.markdown("<br>", unsafe_allow_html=True)
