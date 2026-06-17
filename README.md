@@ -163,37 +163,61 @@ Three distinct approaches were evaluated using a unified framework, predicting r
 ### 🚀 1. Cosine Similarity (Deployed Model)
 - **Mechanism:** Calculates the cosine of the angle between two projected vectors (books) in the explicit multi-dimensional user space.
 - **Evaluation Metrics (K=10):**
-  - **MAE:** 1.0577
-  - **RMSE:** 1.6181
-  - **Precision@10:** 0.0326
-  - **Recall@10:** 0.0868
-  - **NDCG@10:** 0.1323
-  - **HitRate@10:** 0.2293
-  - **Coverage:** 0.7397
+
+<div align="center">
+
+| Metric | Score |
+|:---|:---|
+| **MAE** | 1.0577 |
+| **RMSE** | 1.6181 |
+| **Precision@10** | 0.0326 |
+| **Recall@10** | 0.0868 |
+| **NDCG@10** | 0.1323 |
+| **HitRate@10** | 0.2293 |
+| **Coverage** | 0.7397 |
+
+</div>
+
 - **Why it was deployed:** Offered the highest item coverage and exact determinism matching kNN, but scaled perfectly for real-time Streamlit deployment. 
 
 ### 🤖 2. k-Nearest Neighbors (kNN)
 - **Mechanism:** Utilized `sklearn.neighbors.NearestNeighbors` with `metric='cosine'` and `algorithm='brute'` on the explicit pivot table.
 - **Evaluation Metrics (K=10):**
-  - **MAE:** 1.0577
-  - **RMSE:** 1.6181
-  - **Precision@10:** 0.0326
-  - **Recall@10:** 0.0868
-  - **NDCG@10:** 0.1323
-  - **HitRate@10:** 0.2293
-  - **Coverage:** 0.7388
+
+<div align="center">
+
+| Metric | Score |
+|:---|:---|
+| **MAE** | 1.0577 |
+| **RMSE** | 1.6181 |
+| **Precision@10** | 0.0326 |
+| **Recall@10** | 0.0868 |
+| **NDCG@10** | 0.1323 |
+| **HitRate@10** | 0.2293 |
+| **Coverage** | 0.7388 |
+
+</div>
+
 - **Verdict:** Yielded practically identical predictive performance to direct Cosine calculation, but with marginally less catalog coverage.
 
 ### 📊 3. K-Means Clustering
 - **Mechanism:** Unsupervised grouping of similar books. Used Silhouette Score to find the optimal number of clusters ($k=2$, score = `0.3588`).
 - **Evaluation Metrics (K=10):**
-  - **MAE:** 1.1627
-  - **RMSE:** 1.5868
-  - **Precision@10:** 0.0258
-  - **Recall@10:** 0.0712
-  - **NDCG@10:** 0.1123
-  - **HitRate@10:** 0.2003
-  - **Coverage:** 0.6017
+
+<div align="center">
+
+| Metric | Score |
+|:---|:---|
+| **MAE** | 1.1627 |
+| **RMSE** | 1.5868 |
+| **Precision@10** | 0.0258 |
+| **Recall@10** | 0.0712 |
+| **NDCG@10** | 0.1123 |
+| **HitRate@10** | 0.2003 |
+| **Coverage** | 0.6017 |
+
+</div>
+
 - **Verdict:** Hard-clustering forces books into strict groups, lowering hit rates and coverage compared to continuous neighborhood scoring.
 
 <br>
