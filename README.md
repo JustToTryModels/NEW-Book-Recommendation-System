@@ -1,3 +1,6 @@
+Here is the complete, finalized README with the minor polish added to the Data Cleaning section. Everything else remains exactly as you had it!
+
+```markdown
 <div align="center"> 
   
 # 📚 Book Recommendation System 
@@ -125,7 +128,7 @@ Find the Datasets here:
 ## 🔬 Methodology & Data Processing
 
 ### 🧹 1. Data Cleaning & Engineering
-- **Missing Values & Invalid Formats:** Cleaned invalid string entries in the `Year-Of-Publication` column and safely coerced them to numeric. Dropped rows with null `Book-Title` or `Book-Author` entries.
+- **Missing Values & Invalid Formats:** Addressed formatting errors in the `Year-Of-Publication` column where string values (e.g., publisher names like DK Publishing or Gallimard) had incorrectly shifted into the year column. These misaligned rows were isolated and shifted back into their correct positions before safely coercing the column to numeric. Dropped rows with null `Book-Title` or `Book-Author` entries.
 - **Handling Demographics:** Detected and assessed extreme outliers in the `Age` demographic using the IQR method to ensure accurate visualization of the user base.
 
 ### ⚖️ 2. Sparsity Reduction (The "Cold Start" Fix)
@@ -318,3 +321,4 @@ Extensive Exploratory Data Analysis (EDA) revealed fascinating insights about re
   
   If you found this project interesting or helpful, please consider giving the repository a ⭐!
 </div>
+```
