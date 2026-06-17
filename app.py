@@ -372,25 +372,20 @@ st.markdown("""
         background-color: #ffe6ea !important; /* Light pink with soft intensity */
     }
 
-    /* Reading History Table - Black borders, rows and column lines */
-    [data-testid="stExpander"] [data-testid="stDataFrame"] table,
-    [data-testid="stExpander"] .stDataFrame table {
-        border: 1px solid black !important;
+    /* Black borders for the reading history table inside the expander */
+    [data-testid="stExpander"] [data-testid="stTable"] table {
         border-collapse: collapse !important;
+        width: 100% !important;
     }
-
-    [data-testid="stExpander"] [data-testid="stDataFrame"] th,
-    [data-testid="stExpander"] [data-testid="stDataFrame"] td,
-    [data-testid="stExpander"] .stDataFrame th,
-    [data-testid="stExpander"] .stDataFrame td {
+    [data-testid="stExpander"] [data-testid="stTable"] th,
+    [data-testid="stExpander"] [data-testid="stTable"] td {
         border: 1px solid black !important;
+        padding: 8px !important;
+        color: black !important;
     }
-
-    [data-testid="stExpander"] [data-testid="stDataFrame"] thead tr,
-    [data-testid="stExpander"] [data-testid="stDataFrame"] tbody tr,
-    [data-testid="stExpander"] .stDataFrame thead tr,
-    [data-testid="stExpander"] .stDataFrame tbody tr {
-        border: 1px solid black !important;
+    [data-testid="stExpander"] [data-testid="stTable"] th {
+        background-color: #f0f2f6 !important;
+        font-weight: bold !important;
     }
     </style>
 """, unsafe_allow_html=True)
@@ -508,7 +503,8 @@ with tab2:
                 history_df.index = history_df.index + 1
                 history_df.columns = ['Book Title', 'Rating']
                
-                st.dataframe(history_df, use_container_width=True)
+                # Using st.table to allow CSS styling of rows, columns and borders
+                st.table(history_df)
                 st.caption("ℹ️ *Note: A rating of \"0\" indicates an **interacted** but **unrated** book.*")
        
         st.markdown("<br>", unsafe_allow_html=True)
