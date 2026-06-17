@@ -371,22 +371,6 @@ st.markdown("""
     [data-testid="stExpander"] summary {
         background-color: #ffe6ea !important; /* Light pink with soft intensity */
     }
-
-    /* Black borders for the reading history table inside the expander */
-    [data-testid="stExpander"] [data-testid="stTable"] table {
-        border-collapse: collapse !important;
-        width: 100% !important;
-    }
-    [data-testid="stExpander"] [data-testid="stTable"] th,
-    [data-testid="stExpander"] [data-testid="stTable"] td {
-        border: 1px solid black !important;
-        padding: 8px !important;
-        color: black !important;
-    }
-    [data-testid="stExpander"] [data-testid="stTable"] th {
-        background-color: #f0f2f6 !important;
-        font-weight: bold !important;
-    }
     </style>
 """, unsafe_allow_html=True)
 
@@ -503,8 +487,7 @@ with tab2:
                 history_df.index = history_df.index + 1
                 history_df.columns = ['Book Title', 'Rating']
                
-                # Using st.table to allow CSS styling of rows, columns and borders
-                st.table(history_df)
+                st.dataframe(history_df, use_container_width=True)
                 st.caption("ℹ️ *Note: A rating of \"0\" indicates an **interacted** but **unrated** book.*")
        
         st.markdown("<br>", unsafe_allow_html=True)
@@ -522,3 +505,4 @@ with tab2:
                     use_container_width=True)
         else:
             st.info("No recommendations available for this user at the moment.")
+
