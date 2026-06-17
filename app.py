@@ -372,19 +372,24 @@ st.markdown("""
         background-color: #ffe6ea !important; /* Light pink with soft intensity */
     }
 
-    /* Table borders, rows and column lines within User's Reading History dropdown */
-    [data-testid="stExpander"] [data-testid="stDataFrame"] table,
-    [data-testid="stExpander"] [data-testid="stDataFrame"] th,
-    [data-testid="stExpander"] [data-testid="stDataFrame"] td {
+    /* Table Styling for User History to enforce Black Borders */
+    .custom-history-table {
+        width: 100%;
+        border-collapse: collapse !important;
+        font-family: 'Tiempos', 'Tiempos Text', Georgia, 'Times New Roman', serif !important;
+    }
+    .custom-history-table th, 
+    .custom-history-table td {
         border: 1px solid black !important;
+        padding: 8px 12px;
+        text-align: left;
     }
-    [data-testid="stExpander"] [data-testid="stDataFrame"] thead tr,
-    [data-testid="stExpander"] [data-testid="stDataFrame"] tbody tr {
-        border-top: 1px solid black !important;
-        border-bottom: 1px solid black !important;
-    }
-    [data-testid="stExpander"] [data-testid="stDataFrame"] thead th {
-        border-bottom: 1px solid black !important;
+    .custom-history-table thead th {
+        border-bottom: 2px solid black !important;
+        background-color: rgba(128, 128, 128, 0.15);
+        position: sticky;
+        top: 0;
+        z-index: 1;
     }
     </style>
 """, unsafe_allow_html=True)
@@ -502,7 +507,10 @@ with tab2:
                 history_df.index = history_df.index + 1
                 history_df.columns = ['Book Title', 'Rating']
                
-                st.dataframe(history_df, use_container_width=True)
+                # Display table as HTML with a scrollable Div to strictly enforce black CSS borders 
+                table_html = history_df.to_html(classes="custom-history-table")
+                st.markdown(f'<div style="max-height: 400px; overflow-y: auto; margin-bottom: 10px;">{table_html}</div>', unsafe_allow_html=True)
+                
                 st.caption("ℹ️ *Note: A rating of \"0\" indicates an **interacted** but **unrated** book.*")
        
         st.markdown("<br>", unsafe_allow_html=True)
