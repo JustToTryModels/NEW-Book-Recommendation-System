@@ -359,13 +359,9 @@ st.markdown("""
     
     /* Expander Border and Background Styling */
     [data-testid="stExpander"] details {
-        border: none !important; /* No border when closed */
+        border: 1px solid #000000 !important;
         border-radius: 8px !important;
         overflow: hidden !important;
-    }
-    
-    [data-testid="stExpander"] details[open] {
-        border: 1px solid #000000 !important; /* 1px black border when open */
     }
     
     [data-testid="stExpander"] summary {
