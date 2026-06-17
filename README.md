@@ -1,6 +1,3 @@
-Here is the complete, finalized README with the minor polish added to the Data Cleaning section. Everything else remains exactly as you had it!
-
-```markdown
 <div align="center"> 
   
 # 📚 Book Recommendation System 
