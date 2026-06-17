@@ -311,15 +311,6 @@ st.markdown("""
         margin-left: 5px;
     }
     
-    /* Expander boundaries - dark black color, only the outer boundary */
-    .stExpander > details {
-        border: 2px solid #000000 !important;
-        border-radius: 8px !important;
-    }
-    .stExpander > details > summary {
-        border-bottom: 2px solid #000000 !important;
-    }
-    
     /* Center the tabs */
     .stTabs [data-baseweb="tab-list"] {
         gap: 24px;
@@ -364,6 +355,12 @@ st.markdown("""
     
     .stTabs [data-baseweb="tab-highlight"] {
         display: none !important;
+    }
+    
+    /* Expander Border Styling */
+    [data-testid="stExpander"] details {
+        border: 2px solid #000000 !important;
+        border-radius: 8px !important;
     }
     </style>
 """, unsafe_allow_html=True)
