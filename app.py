@@ -357,10 +357,15 @@ st.markdown("""
         display: none !important;
     }
     
-    /* Expander Border Styling */
+    /* Expander Border and Background Styling */
     [data-testid="stExpander"] details {
         border: 2px solid #000000 !important;
         border-radius: 8px !important;
+        overflow: hidden !important;
+    }
+    
+    [data-testid="stExpander"] summary {
+        background-color: #f0f2f6 !important;
     }
     </style>
 """, unsafe_allow_html=True)
