@@ -1,4 +1,3 @@
-# Deployment Code
 import streamlit as st
 import pandas as pd
 import numpy as np
@@ -19,11 +18,8 @@ def load_and_prepare_data():
     book_urls_df = pd.read_csv(book_urls_df_path)
     book_urls_df.rename(columns={'Book-Title': 'title'}, inplace=True)
 
-    # ✅ FIX 1: Drop duplicate titles before merging to prevent row multiplication!
-    book_urls_df = book_urls_df.drop_duplicates(subset=['title'], keep='first')
-
     # Merge the dataframes on the title
-    final_filtered_df = final_filtered_df.merge(book_urls_df[['title', 'Book-Author', 'Year-Of-Publication', 'Image-URL-L']], on='title', how='left')
+    final_filtered_df = final_filtered_df.merge(book_urls_df, on='title', how='left')
 
     # URL to replace
     url1 = 'http://images.amazon.com/images/P/0690040784.01.LZZZZZZZ.jpg'
@@ -70,8 +66,7 @@ def get_user_recommendations(user_id, df, sim_matrix, k=10):
     Returns: (recommendations_list, user_history_dataframe)
     """
     # Get User's History
-    # ✅ FIX 2: Use .unique().tolist() to guarantee no duplicate scoring
-    user_history_all = df[df['userId'] == user_id]['title'].unique().tolist()
+    user_history_all = df[df['userId'] == user_id]['title'].tolist()
     user_history_rated = df[df['userId'] == user_id][['title', 'rating']].sort_values(by='rating', ascending=False)
     
     # Remove duplicates from user history
