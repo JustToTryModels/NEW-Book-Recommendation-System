@@ -371,26 +371,6 @@ st.markdown("""
     [data-testid="stExpander"] summary {
         background-color: #ffe6ea !important; /* Light pink with soft intensity */
     }
-
-    /* Table Styling for User History to enforce Black Borders */
-    .custom-history-table {
-        width: 100%;
-        border-collapse: collapse !important;
-        font-family: 'Tiempos', 'Tiempos Text', Georgia, 'Times New Roman', serif !important;
-    }
-    .custom-history-table th, 
-    .custom-history-table td {
-        border: 1px solid black !important;
-        padding: 8px 12px;
-        text-align: left;
-    }
-    .custom-history-table thead th {
-        border-bottom: 2px solid black !important;
-        background-color: rgba(128, 128, 128, 0.15);
-        position: sticky;
-        top: 0;
-        z-index: 1;
-    }
     </style>
 """, unsafe_allow_html=True)
 
@@ -507,10 +487,7 @@ with tab2:
                 history_df.index = history_df.index + 1
                 history_df.columns = ['Book Title', 'Rating']
                
-                # Display table as HTML with a scrollable Div to strictly enforce black CSS borders 
-                table_html = history_df.to_html(classes="custom-history-table")
-                st.markdown(f'<div style="max-height: 400px; overflow-y: auto; margin-bottom: 10px;">{table_html}</div>', unsafe_allow_html=True)
-                
+                st.dataframe(history_df, use_container_width=True)
                 st.caption("ℹ️ *Note: A rating of \"0\" indicates an **interacted** but **unrated** book.*")
        
         st.markdown("<br>", unsafe_allow_html=True)
@@ -528,3 +505,4 @@ with tab2:
                     use_container_width=True)
         else:
             st.info("No recommendations available for this user at the moment.")
+
