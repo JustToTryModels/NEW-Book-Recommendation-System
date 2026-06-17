@@ -369,7 +369,7 @@ st.markdown("""
     }
     
     [data-testid="stExpander"] summary {
-        background-color: #f0f2f6 !important;
+        background-color: #ffe6ea !important; /* Light pink with soft intensity */
     }
     </style>
 """, unsafe_allow_html=True)
