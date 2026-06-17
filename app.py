@@ -359,7 +359,7 @@ st.markdown("""
     
     /* Expander Border and Background Styling */
     [data-testid="stExpander"] details {
-        border: 2px solid #000000 !important;
+        border: 5px solid #000000 !important;
         border-radius: 8px !important;
         overflow: hidden !important;
     }
